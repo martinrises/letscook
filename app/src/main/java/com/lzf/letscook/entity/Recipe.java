@@ -23,6 +23,16 @@ public class Recipe {
 
     private List<CookStep> steps;
 
+    private String cook_time;
+
+    private String cook_difficulty;
+
+    private String clicks;
+
+    private List<Material> major;
+
+    private List<Material> minor;
+
     private String create_time = "";
 
     private int recommended; // 推荐数
@@ -227,6 +237,46 @@ public class Recipe {
         this.dish_count = dish_count;
     }
 
+    public List<Material> getMinor() {
+        return minor;
+    }
+
+    public void setMinor(List<Material> minor) {
+        this.minor = minor;
+    }
+
+    public String getCook_time() {
+        return cook_time;
+    }
+
+    public void setCook_time(String cook_time) {
+        this.cook_time = cook_time;
+    }
+
+    public String getCook_difficulty() {
+        return cook_difficulty;
+    }
+
+    public void setCook_difficulty(String cook_difficulty) {
+        this.cook_difficulty = cook_difficulty;
+    }
+
+    public String getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(String clicks) {
+        this.clicks = clicks;
+    }
+
+    public List<Material> getMajor() {
+        return major;
+    }
+
+    public void setMajor(List<Material> major) {
+        this.major = major;
+    }
+
     @Override
     public String toString() {
         return "Recipe{" +
@@ -240,6 +290,11 @@ public class Recipe {
                 ", tips='" + tips + '\'' +
                 ", cookstory='" + cookstory + '\'' +
                 ", steps=" + steps +
+                ", cook_time='" + cook_time + '\'' +
+                ", cook_difficulty='" + cook_difficulty + '\'' +
+                ", clicks='" + clicks + '\'' +
+                ", major=" + major +
+                ", minor=" + minor +
                 ", create_time='" + create_time + '\'' +
                 ", recommended=" + recommended +
                 ", act_des='" + act_des + '\'' +

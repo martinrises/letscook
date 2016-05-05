@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -89,5 +90,21 @@ public class Utils {
             break;
         }
         return "";
+    }
+
+    public static int parseInt(String s){
+        if(TextUtils.isEmpty(s)){
+            return 0;
+        }
+
+        try{
+            return Integer.valueOf(s);
+        }catch (Exception e){
+            return 0;
+        }
+    }
+
+    public static boolean isCollectionEmpty(Collection c){
+        return c == null || c.isEmpty();
     }
 }

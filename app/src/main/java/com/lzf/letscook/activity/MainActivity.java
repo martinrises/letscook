@@ -1,11 +1,13 @@
 package com.lzf.letscook.activity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.lzf.letscook.R;
+import com.lzf.letscook.db.RecipeOpenHelper;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.system.CookSystem;
 import com.lzf.letscook.util.Logger;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
+
+        RecipeOpenHelper instance = RecipeOpenHelper.getInstance();
+        SQLiteDatabase db = instance.getWritableDatabase();
 
         final Button btn = (Button) findViewById(R.id.btn_get);
         Observable<View> btnGetObservable = Observable.create(new Observable.OnSubscribe<View>() {

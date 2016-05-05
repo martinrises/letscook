@@ -15,6 +15,13 @@ public class CookStep {
         this.content = content;
     }
 
+    public CookStep(String position, String content, String thumb, String image) {
+        this.position = position;
+        this.content = content;
+        this.thumb = thumb;
+        this.image = image;
+    }
+
     public String getPosition() {
         return position;
     }

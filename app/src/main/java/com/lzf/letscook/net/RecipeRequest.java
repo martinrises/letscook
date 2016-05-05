@@ -27,7 +27,11 @@ public class RecipeRequest extends Request<List<Recipe>> {
 
     @Override
     protected Response<List<Recipe>> parseNetworkResponse(NetworkResponse response) {
-        return null;
+
+        String json = new String(response.data);
+        // 序列化List<Recipe>
+        List<Recipe> recipes = ParseUtils.parseRecipes(json);
+        return Response.success(recipes, null);
     }
 
     @Override
