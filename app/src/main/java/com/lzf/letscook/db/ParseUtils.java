@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.lzf.letscook.db.contract.MajorContract;
+import com.lzf.letscook.db.contract.QueryOrderContract;
 import com.lzf.letscook.db.contract.RecipeContract;
 import com.lzf.letscook.db.contract.StepContract;
 import com.lzf.letscook.db.contract.TagContract;
@@ -23,6 +24,9 @@ public class ParseUtils {
     public static Recipe parseRecipe(Cursor recipeC, Cursor tagC, Cursor stepC, Cursor majorC, Cursor minorC) {
 
         Recipe recipe = parseRecipeMain(recipeC);
+        if(recipe == null){
+            return null;
+        }
 
         List<String> tags = parseTags(tagC);
         recipe.setTags(tags);
@@ -42,7 +46,7 @@ public class ParseUtils {
     private static List<Material> parseMaterial(Cursor c) {
 
         List<Material> materials = new ArrayList<>();
-        while(c.moveToNext()){
+        while (c.moveToNext()) {
             String title = c.getString(c.getColumnIndex(MajorContract.TITLE));
             String note = c.getString(c.getColumnIndex(MajorContract.NOTE));
             String image = c.getString(c.getColumnIndex(MajorContract.IMAGE));
@@ -57,7 +61,7 @@ public class ParseUtils {
     private static List<CookStep> parseSteps(Cursor stepC) {
 
         List<CookStep> steps = new ArrayList<>();
-        while(stepC.moveToNext()){
+        while (stepC.moveToNext()) {
             String position = stepC.getString(stepC.getColumnIndex(StepContract.POSITION));
             String content = stepC.getString(stepC.getColumnIndex(StepContract.CONTENT));
             String thumb = stepC.getString(stepC.getColumnIndex(StepContract.THUMB));
@@ -73,7 +77,7 @@ public class ParseUtils {
     private static List<String> parseTags(Cursor tagC) {
 
         List<String> tags = new ArrayList<>();
-        while(tagC.moveToNext()){
+        while (tagC.moveToNext()) {
             String tag = tagC.getString(tagC.getColumnIndex(TagContract.TEXT));
             tags.add(tag);
         }
@@ -84,6 +88,11 @@ public class ParseUtils {
 
     @NonNull
     private static Recipe parseRecipeMain(Cursor recipeC) {
+
+        if(!recipeC.moveToFirst()){
+            return null;
+        }
+
         String recipeID = recipeC.getString(recipeC.getColumnIndex(RecipeContract.COOK_ID));
         Recipe recipe = new Recipe(recipeID);
 
@@ -134,7 +143,7 @@ public class ParseUtils {
     }
 
     public static ContentValues getRecipeValues(Recipe recipe) {
-        if(recipe == null){
+        if (recipe == null) {
             return null;
         }
 
@@ -163,6 +172,43 @@ public class ParseUtils {
         cv.put(RecipeContract.FAVO_COUNTS, recipe.getFavo_counts());
         cv.put(RecipeContract.DISH_COUNT, recipe.getDish_count());
 
+        return cv;
+    }
+
+    public static ContentValues getQueryOrderValues(String query, String order, int start, int size, String cook_id) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(QueryOrderContract.QUERY_ORDER, query + "_" + order);
+        cv.put(QueryOrderContract.START_SIZE, start + "_" + size);
+        cv.put(QueryOrderContract.RECIPE_ID, cook_id);
+        return cv;
+    }
+
+    public static ContentValues getTagValues(String cook_id, String tag) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(TagContract.RECIPE_ID, cook_id);
+        cv.put(TagContract.TEXT, tag);
+        return cv;
+    }
+
+    public static ContentValues getStepValues(String cook_id, CookStep step) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(StepContract.RECIPE_ID, cook_id);
+        cv.put(StepContract.CONTENT, step.getContent());
+        cv.put(StepContract.POSITION, step.getPosition());
+        cv.put(StepContract.IMAGE, step.getImage());
+        cv.put(StepContract.THUMB, step.getThumb());
+        return cv;
+    }
+
+    public static ContentValues getMaterialValues(String cook_id, Material material) {
+        ContentValues cv = new ContentValues();
+        cv.put(MajorContract.RECIPE_ID, cook_id);
+        cv.put(MajorContract.IMAGE, material.getImage());
+        cv.put(MajorContract.NOTE, material.getNote());
+        cv.put(MajorContract.TITLE, material.getTitle());
         return cv;
     }
 }

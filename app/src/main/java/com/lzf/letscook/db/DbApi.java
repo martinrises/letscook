@@ -1,20 +1,21 @@
-package com.lzf.letscook.db.contract;
+package com.lzf.letscook.db;
 
 import android.os.AsyncTask;
 
-import com.lzf.letscook.db.RecipeDao;
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.net.future.RecipesFuture;
+import com.lzf.letscook.net.SubscriberHolder;
 import com.lzf.letscook.util.Utils;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by liuzhaofeng on 16/5/4.
@@ -36,28 +37,39 @@ public class DbApi {
     private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(128);
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(MIN_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue);
 
-    public static List<Recipe> getRecipes(final String query, final String order, final int start, final int size) throws ExecutionException, InterruptedException {
+    public static Observable<List<Recipe>> getRecipes(final String query, final String order, final int start, final int size){
 
-        final RecipesFuture future = new RecipesFuture();
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<List<Recipe>> ob = Observable.create(new Observable.OnSubscribe<List<Recipe>>() {
+            @Override
+            public void call(Subscriber<? super List<Recipe>> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
 
         new AsyncTask<Void, Void, List<Recipe>>(){
 
             @Override
             protected List<Recipe> doInBackground(Void... params) {
-                return RecipeDao.getInstance().getRecipes(query, order, start, size);
+                List<Recipe> recipes = RecipeDao.getInstance().getRecipes(query, order, start, size);
+
+                return recipes;
             }
 
             @Override
             protected void onPostExecute(List<Recipe> recipes) {
-                future.setRecipes(recipes);
-                future.notifyAll();
+
+                Subscriber subscriber = holder.getSubscriber();
+                if(subscriber != null){
+                    subscriber.onNext(recipes);
+                }
             }
         }.executeOnExecutor(EXECUTOR);
 
-        return future.get();
+        return ob;
     }
 
-    public static void writeRecipes(final String query, final String order, final List<Recipe> recipes) {
+    public static void writeRecipes(final String query, final String order, final int start, final int size, final List<Recipe> recipes) {
         if(Utils.isCollectionEmpty(recipes)){
             return;
         }
@@ -67,7 +79,7 @@ public class DbApi {
             @Override
             protected Void doInBackground(Void... params) {
 
-                RecipeDao.getInstance().writeRecipes(query, order, recipes);
+                RecipeDao.getInstance().writeRecipes(query, order, start, size, recipes);
                 return null;
             }
         }.executeOnExecutor(EXECUTOR);

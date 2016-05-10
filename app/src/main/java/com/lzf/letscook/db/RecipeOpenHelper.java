@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.db.contract.MajorContract;
 import com.lzf.letscook.db.contract.MinorContract;
+import com.lzf.letscook.db.contract.QueryOrderContract;
 import com.lzf.letscook.db.contract.RecipeContract;
 import com.lzf.letscook.db.contract.StepContract;
 import com.lzf.letscook.db.contract.TagContract;
@@ -74,12 +75,18 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             MajorContract.RECIPE_ID + " TEXT" +
             ")";
 
+    private static final String CREATE_QUERY_ORDER_TABLE = "CREATE TABLE IF NOT EXISTS " + QueryOrderContract.TABLE_NAME + "(" + QueryOrderContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            QueryOrderContract.RECIPE_ID + " TEXT, " +
+            QueryOrderContract.START_SIZE + " TEXT, " +
+            QueryOrderContract.QUERY_ORDER + " TEXT" +
+            ")";
+
 
 //    private static final String CREATE_MAJOR_TABLE = "CREATE TABLE IF NOT EXISTS " + ;
 
     private static RecipeOpenHelper sInstance;
 
-    public static RecipeOpenHelper getInstance(){
+    public static RecipeOpenHelper getInstance() {
         if (sInstance == null) {
             sInstance = new RecipeOpenHelper(LetsCook.getApp());
         }
@@ -97,6 +104,7 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_STEP_TABLE);
         db.execSQL(CREATE_MAJOR_TABLE);
         db.execSQL(CREATE_MINOR_TABLE);
+        db.execSQL(CREATE_QUERY_ORDER_TABLE);
     }
 
     @Override

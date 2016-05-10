@@ -1,4 +1,4 @@
-package com.lzf.letscook.net.future;
+package com.lzf.letscook.db.future;
 
 import com.lzf.letscook.entity.Recipe;
 
@@ -35,13 +35,21 @@ public final class RecipesFuture implements Future<List<Recipe>> {
     }
 
     @Override
-    public List<Recipe> get() throws InterruptedException, ExecutionException {
-        this.wait();
+    public List<Recipe> get() throws ExecutionException, InterruptedException {
+        return doGet();
+    }
+
+    private synchronized List<Recipe> doGet() throws InterruptedException, ExecutionException {
+        wait(0);
         return recipes;
     }
 
     @Override
     public List<Recipe> get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return null;
+    }
+
+    public synchronized void release() {
+        notifyAll();
     }
 }

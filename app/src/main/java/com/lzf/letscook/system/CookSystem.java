@@ -1,15 +1,14 @@
 package com.lzf.letscook.system;
 
-import android.os.Handler;
-import android.os.Message;
-
-import com.lzf.letscook.db.contract.DbApi;
+import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.net.NetApi;
 import com.lzf.letscook.util.Utils;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by liuzhaofeng on 16/4/30.
@@ -17,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 public class CookSystem {
 
     private static CookSystem sInstance;
-    private Handler mHandler = new CookHandler();
 
     public static CookSystem getInstance() {
         if (sInstance == null) {
@@ -29,27 +27,34 @@ public class CookSystem {
     private CookSystem() {
     }
 
-    public List<Recipe> getRecipes(String query, String order, int start, int size) throws ExecutionException, InterruptedException {
+    public Observable<List<Recipe>> getRecipes(final String query, final String order, final int start, final int size) {
 
         // 异步查询数据库；
-        List<Recipe> recipes = DbApi.getRecipes(query, order, start, size);
-        if(!Utils.isCollectionEmpty(recipes)){
-            return recipes;
-        }
+        return DbApi.getRecipes(query, order, start, size)
+                .flatMap(new Func1<List<Recipe>, Observable<List<Recipe>>>() {
+                             @Override
+                             public Observable<List<Recipe>> call(List<Recipe> recipes) {
 
-        // 没有就访问网络
-        recipes = NetApi.getRecipesOnline(query, order, start, size);
+                                 if (recipes == null || Utils.isCollectionEmpty(recipes)) {
 
-        // 将网络数据存入DB
-        DbApi.writeRecipes(query, order, recipes);
+                                     return NetApi.getRecipesOnline(query, order, start, size);
+                                 } else {
 
-        return recipes;
+                                     return Observable.just(recipes);
+                                 }
+                             }
+                         }
+
+                        // 缓存数据
+                ).map(new Func1<List<Recipe>, List<Recipe>>() {
+                    @Override
+                    public List<Recipe> call(List<Recipe> recipes) {
+
+                        DbApi.writeRecipes(query, order, start, size, recipes);
+                        return recipes;
+                    }
+                });
+
     }
 
-    private static final class CookHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-    }
 }

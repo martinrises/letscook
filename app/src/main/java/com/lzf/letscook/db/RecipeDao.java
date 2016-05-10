@@ -7,9 +7,12 @@ import android.text.TextUtils;
 
 import com.lzf.letscook.db.contract.MajorContract;
 import com.lzf.letscook.db.contract.MinorContract;
+import com.lzf.letscook.db.contract.QueryOrderContract;
 import com.lzf.letscook.db.contract.RecipeContract;
 import com.lzf.letscook.db.contract.StepContract;
 import com.lzf.letscook.db.contract.TagContract;
+import com.lzf.letscook.entity.CookStep;
+import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.util.Utils;
 
@@ -46,16 +49,15 @@ public class RecipeDao {
 
         List<Recipe> recipes = new  ArrayList<>();
 
-        String tableName = query + "_" + order;
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_id TEXT)");
-
         Cursor recipeC = null;
         try {
-            recipeC = db.rawQuery("select * from table ? where limit limit ?, ?", new String[]{tableName, start + "", size + ""});
+            String selection = QueryOrderContract.QUERY_ORDER + " = ? and " + QueryOrderContract.START_SIZE + " = ?";
+            String[] args = new String[]{query + "_" + order, start + "_" + size};
+            recipeC = db.query(QueryOrderContract.TABLE_NAME, null, selection, args, null, null, null);
 
             while(recipeC.moveToNext()){
 
-                String recipe_id = recipeC.getString(recipeC.getColumnIndex("recipe_id"));
+                String recipe_id = recipeC.getString(recipeC.getColumnIndex(QueryOrderContract.RECIPE_ID));
                 Recipe recipe = getRecipe(recipe_id);
 
                 if(recipe != null){
@@ -70,7 +72,7 @@ public class RecipeDao {
         }
 
 
-        return null;
+        return recipes;
     }
 
     private Recipe getRecipe(String recipe_id) {
@@ -115,7 +117,7 @@ public class RecipeDao {
         }
     }
 
-    public void writeRecipes(String query, String order, List<Recipe> recipes) {
+    public void writeRecipes(String query, String order, int start, int size, List<Recipe> recipes) {
 
         if(Utils.isCollectionEmpty(recipes))
             return;
@@ -124,8 +126,75 @@ public class RecipeDao {
 
         // 数据插入DB
         for (Recipe recipe : recipes){
-            ContentValues cv = ParseUtils.getRecipeValues(recipe);
+
+            writeRecipe(query, order, start, size, recipe);
+        }
+    }
+
+    private void writeRecipe(String query, String order, int start, int size, Recipe recipe) {
+
+        ContentValues queryOrderValues = ParseUtils.getQueryOrderValues(query, order, start, size, recipe.getCook_id());
+        String where = QueryOrderContract.QUERY_ORDER +" = ? and " + QueryOrderContract.START_SIZE + " = ?";
+        String[] args = {query + "_" + order, start + "_" + size};
+        int cnt = db.update(QueryOrderContract.TABLE_NAME, queryOrderValues, where, args);
+        if (cnt <= 0) {
+            db.insert(QueryOrderContract.TABLE_NAME, null, queryOrderValues);
+        }
+
+        ContentValues cv = ParseUtils.getRecipeValues(recipe);
+        String recipeWhere = RecipeContract.COOK_ID + " = ?";
+        String[] recipeArgs = {recipe.getCook_id()};
+        int recipeCnt = db.update(RecipeContract.TABLE_NAME, cv, recipeWhere, recipeArgs);
+        if (recipeCnt <= 0) {
             db.insert(RecipeContract.TABLE_NAME, null, cv);
+        }
+
+        List<String> tags = recipe.getTags();
+        String cook_id = recipe.getCook_id();
+        if (tags != null) {
+            for(String tag : tags){
+
+                ContentValues tagCv = ParseUtils.getTagValues(cook_id, tag);
+                String tagWhere = TagContract.RECIPE_ID + "=? and " + TagContract.TEXT + "=?";
+                String[] tagArgs = {recipe.getCook_id(), tag};
+                int tagCnt = db.update(TagContract.TABLE_NAME, tagCv, tagWhere, tagArgs);
+                if (tagCnt <= 0) {
+                    db.insert(TagContract.TABLE_NAME, null, tagCv);
+                }
+            }
+        }
+
+        List<CookStep> steps = recipe.getSteps();
+        if(steps != null){
+            for (CookStep step : steps){
+                ContentValues stepCv = ParseUtils.getStepValues(cook_id, step);
+                String stepWhere = StepContract.RECIPE_ID + "= ? and " + StepContract.POSITION + "=?";
+                String[] stepArgs = {recipe.getCook_id(), step.getPosition()};
+                int stepCnt = db.update(StepContract.TABLE_NAME, stepCv, stepWhere, stepArgs);
+                if (stepCnt <= 0) {
+                    db.insert(StepContract.TABLE_NAME , null, stepCv);
+                }
+            }
+        }
+
+        writeMaterial(cook_id, recipe.getMajor(), MajorContract.TABLE_NAME);
+
+        writeMaterial(cook_id, recipe.getMinor(), MinorContract.TABLE_NAME);
+    }
+
+    private void writeMaterial(String cook_id, List<Material> major, String tableName) {
+        if(major != null){
+
+            for(Material material : major){
+
+                ContentValues materialCv = ParseUtils.getMaterialValues(cook_id, material);
+                String where = MajorContract.RECIPE_ID + " = ? and " + MajorContract.TITLE  + "= ?";
+                String[] args = {cook_id, material.getTitle()};
+                int cnt = db.update(tableName, materialCv, where, args);
+                if (cnt <= 0) {
+                    db.insert(tableName, null, materialCv);
+                }
+            }
         }
     }
 }
