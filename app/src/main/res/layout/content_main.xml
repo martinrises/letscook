@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
    >
 
-    <Button
-        android:id="@+id/btn_get"
-        android:layout_width="100dip"
-        android:layout_height="50dip"
-        android:text="get"
+    <fragment
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.lzf.letscook.ui.fragment.RecipeListFragment"
         />
-</RelativeLayout>
+
+</LinearLayout>

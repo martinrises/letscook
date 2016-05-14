@@ -5,7 +5,7 @@ package com.lzf.letscook.db.contract;
  */
 public class QueryOrderContract {
 
-    public static final String TABLE_NAME = "RECIPE_QUERY";
+    public static final String TABLE_NAME = "recipe_query";
 
     public static final String _ID = "_id";
     public static final String QUERY_ORDER = "query_order";

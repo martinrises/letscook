@@ -3,6 +3,7 @@ package com.lzf.letscook;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -20,6 +21,7 @@ public class LetsCook extends Application {
         super.onCreate();
 
         sApp = this;
+        Fresco.initialize(this);
 
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());

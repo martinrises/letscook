@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="118dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:background="@android:color/white">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/recipe_img_iv"
+        android:layout_width="120dip"
+        android:layout_height="100dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dip"/>
+    
+    <TextView
+        android:id="@+id/recipe_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/recipe_img_iv"
+        android:layout_alignTop="@id/recipe_img_iv"
+        android:text="testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textSize="18dip"
+        />
+
+    <TextView
+        android:id="@+id/recipe_desc_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/recipe_img_iv"
+        android:layout_alignBottom="@id/recipe_img_iv"
+        android:layout_below="@id/recipe_title_tv"
+        android:textSize="16dp"
+        android:layout_marginTop="8dip"
+        android:ellipsize="end"
+        android:text="descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
+        />
+
+
+</RelativeLayout>

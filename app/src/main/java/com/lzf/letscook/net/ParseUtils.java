@@ -173,7 +173,7 @@ public class ParseUtils {
 
     private static Material parseMaterial(JSONObject jMaterial) {
 
-        if (jMaterial != null) {
+        if (jMaterial == null) {
             return null;
         }
 
