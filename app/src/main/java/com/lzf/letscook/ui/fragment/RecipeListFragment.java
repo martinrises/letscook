@@ -7,27 +7,37 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.system.CookSystem;
 import com.lzf.letscook.ui.RecipeAdapter;
+import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
+import com.lzf.letscook.ui.mvp.contract.RecipeListView;
+import com.lzf.letscook.ui.mvp.impl.RecipeListPresenterImpl;
 import com.lzf.letscook.util.Logger;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Action1;
-
 /**
  * Created by liuzhaofeng on 16/5/14.
  */
-public class RecipeListFragment extends BaseFragment {
+public class RecipeListFragment extends BaseFragment implements RecipeListView {
 
     public static final String TAG = RecipeListFragment.class.getSimpleName();
 
     private RecyclerView recipeList;
-    private SwipeRefreshLayout refreshRecipeLayout;
+    private SwipeRefreshLayout mRefreshLayout;
+    private RecipeAdapter mAdapter;
+    private ProgressBar loadMorePb;
+
+    private RecipeListPresenter mPresenter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPresenter = new RecipeListPresenterImpl(this, "减肥食谱", "1");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,30 +50,71 @@ public class RecipeListFragment extends BaseFragment {
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recipeList.setLayoutManager(llm);
-        refreshRecipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+        mAdapter = new RecipeAdapter();
+        recipeList.setAdapter(mAdapter);
+        recipeList.addOnScrollListener(mPresenter);
 
-        refreshRecipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Observable<List<Recipe>> recipesOb = CookSystem.getInstance().getRecipes("减肥食谱", "1", 0, 10);
-                recipesOb.subscribe(new Action1<List<Recipe>>() {
-                    @Override
-                    public void call(List<Recipe> recipes) {
-                        Logger.v(TAG, recipes == null ? "recipe is null ###" : recipes.toString());
+        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
 
-                        RecipeAdapter adapter = new RecipeAdapter();
-                        adapter.setData(recipes);
-                        recipeList.setAdapter(adapter);
+        loadMorePb = (ProgressBar) view.findViewById(R.id.progress_load_more);
 
-                        refreshRecipeLayout.setRefreshing(false);
-                    }
-                });
-            }
-        });
+        mRefreshLayout.setOnRefreshListener(mPresenter);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                mPresenter.onRefresh();
+            }
+        });
+    }
+
+    @Override
+    public void onSetRecipes(List<Recipe> recipes) {
+        mAdapter.setData(recipes);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAppendRecipes(List<Recipe> recipes) {
+        List<Recipe> cooks = mAdapter.getRecipes();
+        if(cooks == null){
+            cooks = recipes;
+        }else{
+            cooks.addAll(recipes);
+        }
+        mAdapter.setData(cooks);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void stopFresh() {
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void startLoad() {
+        loadMorePb.post(new Runnable() {
+            @Override
+            public void run() {
+                Logger.v(TAG, "startLoad()");
+                loadMorePb.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void stopLoad() {
+        loadMorePb.post(new Runnable() {
+            @Override
+            public void run() {
+                Logger.v(TAG, " ###### stopLoad()");
+                loadMorePb.setVisibility(View.GONE);
+            }
+        });
     }
 }

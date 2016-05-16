@@ -5,6 +5,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.util.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class RecipeRequest extends Request<List<Recipe>> {
     protected Response<List<Recipe>> parseNetworkResponse(NetworkResponse response) {
 
         String json = new String(response.data);
+        Logger.v("responseTag", json);
         // 序列化List<Recipe>
         List<Recipe> recipes = ParseUtils.parseRecipes(json);
         return Response.success(recipes, null);

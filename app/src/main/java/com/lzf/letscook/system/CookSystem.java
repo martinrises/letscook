@@ -3,6 +3,7 @@ package com.lzf.letscook.system;
 import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.net.NetApi;
+import com.lzf.letscook.util.Logger;
 import com.lzf.letscook.util.Utils;
 
 import java.util.List;
@@ -35,7 +36,9 @@ public class CookSystem {
                              @Override
                              public Observable<List<Recipe>> call(List<Recipe> recipes) {
 
-                                 if (recipes == null || Utils.isCollectionEmpty(recipes)) {
+                                 Logger.v("test", "DbApi >>>>>>>>>> " + start + "   " + (Utils.isCollectionEmpty(recipes) ? "" : recipes.get(0).getCook_id()));
+
+                                 if (Utils.isCollectionEmpty(recipes)) {
 
                                      return NetApi.getRecipesOnline(query, order, start, size);
                                  } else {
@@ -50,6 +53,7 @@ public class CookSystem {
                     @Override
                     public List<Recipe> call(List<Recipe> recipes) {
 
+                        Logger.v("test", "write >>> " + start);
                         DbApi.writeRecipes(query, order, start, size, recipes);
                         return recipes;
                     }

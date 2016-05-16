@@ -51,6 +51,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         mRecipes = recipes;
     }
 
+    public List<Recipe> getRecipes(){
+        return mRecipes;
+    }
+
     static final class RecipeHolder extends RecyclerView.ViewHolder{
 
         public SimpleDraweeView imgIv;
