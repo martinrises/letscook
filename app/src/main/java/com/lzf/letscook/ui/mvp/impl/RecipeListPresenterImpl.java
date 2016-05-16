@@ -13,6 +13,7 @@ import com.lzf.letscook.util.Utils;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -34,57 +35,82 @@ public class RecipeListPresenterImpl extends RecipeListPresenter {
     private boolean isLoading;
     private boolean isRefreshing;
 
+    private Subscriber<? super RecyclerView> loadMoreSub;
+    private Subscriber refreshSub;
+
     public RecipeListPresenterImpl(RecipeListView view, String type, String order) {
         this.mView = view;
         this.mType = type;
         this.mOrder = order;
+
+        initLoadMoreOb();
+        initRefreshOb();
     }
 
-    @Override
-    public void onRefresh() {
-
-        // 停止loading的动画，标志位置为false
-        mView.stopLoad();
-        isLoading = false;
-
-        // 开启refresh的动画，重新获取recipes
-        cursor = 0;
-        isRefreshing = true;
-        Observable<List<Recipe>> recipesOb = CookSystem.getInstance().getRecipes(mType, mOrder, cursor, PAGE_SIZE);
-        recipesOb.subscribe(new Action1<List<Recipe>>() {
+    private void initRefreshOb() {
+        Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+                refreshSub = subscriber;
+            }
+        }).map(new Func1<Object, Object>() {
+            @Override
+            public Object call(Object aVoid) {
+                // 停止loading的动画，标志位置为false
+                mView.stopLoad();
+                isLoading = false;
+                cursor = 0;
+                isRefreshing = true;
+                return aVoid;
+            }
+        }).flatMap(new Func1<Object, Observable<List<Recipe>>>() {
+            @Override
+            public Observable<List<Recipe>> call(Object aVoid) {
+                return CookSystem.getInstance().getRecipes(mType, mOrder, cursor, PAGE_SIZE);
+            }
+        }).subscribe(new Action1<List<Recipe>>() {
             @Override
             public void call(List<Recipe> recipes) {
                 isRefreshing = false;
                 mView.onSetRecipes(recipes);
                 mView.stopFresh();
+                cursor += PAGE_SIZE;
             }
         });
-        cursor += PAGE_SIZE;
     }
 
-    @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onScrolled(recyclerView, dx, dy);
+    private void initLoadMoreOb() {
 
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
-            int itemCount = layoutManager.getItemCount();
+        Observable.create(new Observable.OnSubscribe<RecyclerView>() {
+            @Override
+            public void call(Subscriber<? super RecyclerView> subscriber) {
+                loadMoreSub = subscriber;
+            }
+        }).filter(new Func1<RecyclerView, Boolean>() {
+            @Override
+            public Boolean call(RecyclerView recyclerView) {
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
+                    int itemCount = layoutManager.getItemCount();
+                    int lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
 
-            int lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-            if (itemCount - lastPosition < BUFFER_SIZE && !isRefreshing && !isLoading) {
-
-                Logger.v("test", "itemCount = " + itemCount + ";  lastPosition = " + lastPosition + ";  isRefreshing = " + isRefreshing + ";  isLoading = " + isLoading);
+                    return (itemCount - lastPosition < BUFFER_SIZE && !isRefreshing && !isLoading);
+                }
+                return false;
+            }
+        }).map(new Func1<RecyclerView, RecyclerView>() {
+            @Override
+            public RecyclerView call(RecyclerView recyclerView) {
                 isLoading = true;
                 mView.startLoad();
-
-                loadMore();
+                return recyclerView;
             }
-        }
-    }
-
-    private void loadMore() {
-        Observable<List<Recipe>> recipesOb = CookSystem.getInstance().getRecipes(mType, mOrder, cursor, PAGE_SIZE);
-        recipesOb.filter(new Func1<List<Recipe>, Boolean>() {
+        }).flatMap(new Func1<RecyclerView, Observable<List<Recipe>>>() {
+            @Override
+            public Observable<List<Recipe>> call(RecyclerView recyclerView) {
+                return CookSystem.getInstance().getRecipes(mType, mOrder, cursor, PAGE_SIZE);
+            }
+        }).filter(new Func1<List<Recipe>, Boolean>() {
             @Override
             public Boolean call(List<Recipe> recipes) {
                 return !isRefreshing && isLoading;
@@ -102,5 +128,18 @@ public class RecipeListPresenterImpl extends RecipeListPresenter {
                 mView.stopLoad();
             }
         });
+
+
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshSub.onNext(new Object());
+    }
+
+    @Override
+    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+        loadMoreSub.onNext(recyclerView);
     }
 }
