@@ -1,9 +1,11 @@
 package com.lzf.letscook.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by liuzhaofeng on 16/4/30.
  */
-public class User {
+public class User implements Serializable{
 
     private String user_id = "";
 

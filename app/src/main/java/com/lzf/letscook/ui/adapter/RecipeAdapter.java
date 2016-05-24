@@ -1,5 +1,6 @@
-package com.lzf.letscook.ui;
+package com.lzf.letscook.ui.adapter;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.ui.activity.DetailActivity;
 import com.lzf.letscook.util.RecipeUtils;
 
 import java.util.List;
@@ -31,12 +33,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     }
 
     @Override
-    public void onBindViewHolder(RecipeHolder holder, int position) {
-        Recipe recipe = mRecipes.get(position);
+    public void onBindViewHolder(final RecipeHolder holder, int position) {
+        final Recipe recipe = mRecipes.get(position);
 
         holder.titleTv.setText(recipe.getTitle());
         holder.descTv.setText(RecipeUtils.major2String(recipe.getMajor()));
         holder.imgIv.setImageURI(Uri.parse(recipe.getImage()));
+
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(holder.root.getContext(), DetailActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_RECIPE, recipe);
+                holder.root.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -57,13 +68,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
     static final class RecipeHolder extends RecyclerView.ViewHolder{
 
-        public SimpleDraweeView imgIv;
+        View root;
+        SimpleDraweeView imgIv;
         TextView titleTv;
-        public TextView descTv;
+        TextView descTv;
 
         public RecipeHolder(View itemView) {
             super(itemView);
 
+            root = itemView;
             imgIv = (SimpleDraweeView) itemView.findViewById(R.id.recipe_img_iv);
             titleTv = (TextView) itemView.findViewById(R.id.recipe_title_tv);
             descTv = (TextView) itemView.findViewById(R.id.recipe_desc_tv);

@@ -80,7 +80,7 @@ public class ParseUtils {
         String photo_path = jRecipe.optString("photo_path");
         recipe.setPhoto_path(photo_path);
 
-        List<String> tags = parseTags(jRecipe.optJSONArray("tags"));
+        ArrayList<String> tags = parseTags(jRecipe.optJSONArray("tags"));
         if (tags != null) {
             recipe.setTags(tags);
         }
@@ -94,7 +94,7 @@ public class ParseUtils {
         String cookstory = jRecipe.optString("cookstory");
         recipe.setCookstory(cookstory);
 
-        List<CookStep> cookSteps = parseCookSteps(jRecipe.optJSONArray("cookstep"));
+        ArrayList<CookStep> cookSteps = parseCookSteps(jRecipe.optJSONArray("cookstep"));
         if (cookSteps != null) {
             recipe.setSteps(cookSteps);
         }
@@ -108,12 +108,12 @@ public class ParseUtils {
         String clicks = jRecipe.optString("clicks");
         recipe.setClicks(clicks);
 
-        List<Material> major = parseMaterials(jRecipe.optJSONArray("major"));
+        ArrayList<Material> major = parseMaterials(jRecipe.optJSONArray("major"));
         if (major != null) {
             recipe.setMajor(major);
         }
 
-        List<Material> minor = parseMaterials(jRecipe.optJSONArray("minor"));
+        ArrayList<Material> minor = parseMaterials(jRecipe.optJSONArray("minor"));
         if (minor != null) {
             recipe.setMinor(minor);
         }
@@ -154,12 +154,12 @@ public class ParseUtils {
         return recipe;
     }
 
-    private static List<Material> parseMaterials(JSONArray jMaterials) {
+    private static ArrayList<Material> parseMaterials(JSONArray jMaterials) {
         if (jMaterials == null) {
             return null;
         }
 
-        List<Material> materials = new ArrayList<>();
+        ArrayList<Material> materials = new ArrayList<>();
         for (int i = 0; i != jMaterials.length(); i++) {
             JSONObject jMaterial = jMaterials.optJSONObject(i);
             Material material = parseMaterial(jMaterial);
@@ -187,13 +187,13 @@ public class ParseUtils {
         return material;
     }
 
-    private static List<CookStep> parseCookSteps(JSONArray jCooksteps) {
+    private static ArrayList<CookStep> parseCookSteps(JSONArray jCooksteps) {
 
         if (jCooksteps == null) {
             return null;
         }
 
-        List<CookStep> steps = new ArrayList<>();
+        ArrayList<CookStep> steps = new ArrayList<>();
         for (int i = 0; i != jCooksteps.length(); i++) {
             JSONObject jStep = jCooksteps.optJSONObject(i);
             CookStep step = parseCookStep(jStep);
@@ -223,13 +223,13 @@ public class ParseUtils {
 
     }
 
-    private static List<String> parseTags(JSONArray jTags) {
+    private static ArrayList<String> parseTags(JSONArray jTags) {
 
         if (jTags == null) {
             return null;
         }
 
-        List<String> tags = new ArrayList<>();
+        ArrayList<String> tags = new ArrayList<>();
         for (int i = 0; i != jTags.length(); i++) {
             JSONObject jTag = jTags.optJSONObject(i);
             String tag = jTag.optString("text");

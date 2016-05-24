@@ -14,7 +14,6 @@ import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.entity.Recipe;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by liuzhaofeng on 16/5/3.
@@ -28,24 +27,24 @@ public class ParseUtils {
             return null;
         }
 
-        List<String> tags = parseTags(tagC);
+        ArrayList<String> tags = parseTags(tagC);
         recipe.setTags(tags);
 
-        List<CookStep> steps = parseSteps(stepC);
+        ArrayList<CookStep> steps = parseSteps(stepC);
         recipe.setSteps(steps);
 
-        List<Material> majors = parseMaterial(majorC);
+        ArrayList<Material> majors = parseMaterial(majorC);
         recipe.setMajor(majors);
 
-        List<Material> minors = parseMaterial(minorC);
+        ArrayList<Material> minors = parseMaterial(minorC);
         recipe.setMinor(minors);
 
         return recipe;
     }
 
-    private static List<Material> parseMaterial(Cursor c) {
+    private static ArrayList<Material> parseMaterial(Cursor c) {
 
-        List<Material> materials = new ArrayList<>();
+        ArrayList<Material> materials = new ArrayList<>();
         while (c.moveToNext()) {
             String title = c.getString(c.getColumnIndex(MajorContract.TITLE));
             String note = c.getString(c.getColumnIndex(MajorContract.NOTE));
@@ -58,9 +57,9 @@ public class ParseUtils {
         return materials;
     }
 
-    private static List<CookStep> parseSteps(Cursor stepC) {
+    private static ArrayList<CookStep> parseSteps(Cursor stepC) {
 
-        List<CookStep> steps = new ArrayList<>();
+        ArrayList<CookStep> steps = new ArrayList<>();
         while (stepC.moveToNext()) {
             String position = stepC.getString(stepC.getColumnIndex(StepContract.POSITION));
             String content = stepC.getString(stepC.getColumnIndex(StepContract.CONTENT));
@@ -74,9 +73,9 @@ public class ParseUtils {
         return steps;
     }
 
-    private static List<String> parseTags(Cursor tagC) {
+    private static ArrayList<String> parseTags(Cursor tagC) {
 
-        List<String> tags = new ArrayList<>();
+        ArrayList<String> tags = new ArrayList<>();
         while (tagC.moveToNext()) {
             String tag = tagC.getString(tagC.getColumnIndex(TagContract.TEXT));
             tags.add(tag);

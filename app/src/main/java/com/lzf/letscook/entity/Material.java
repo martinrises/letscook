@@ -1,9 +1,11 @@
 package com.lzf.letscook.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by liuzhaofeng on 16/4/30.
  */
-public class Material {
+public class Material implements Serializable{
 
     private String title;
 

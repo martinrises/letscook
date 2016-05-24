@@ -1,11 +1,12 @@
 package com.lzf.letscook.entity;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by liuzhaofeng on 16/4/30.
  */
-public class Recipe {
+public class Recipe implements Serializable{
 
     private String cook_id = "";
     private String title = ""; // 食谱标题
@@ -13,7 +14,7 @@ public class Recipe {
     private String thumb_path = ""; // 食谱 中图
     private String photo_path = ""; // 食谱 大图
 
-    private List<String> tags;
+    private ArrayList<String> tags;
 
     private String author_id = "";
 
@@ -21,7 +22,7 @@ public class Recipe {
 
     private String cookstory = "";
 
-    private List<CookStep> steps;
+    private ArrayList<CookStep> steps;
 
     private String cook_time;
 
@@ -29,9 +30,9 @@ public class Recipe {
 
     private String clicks;
 
-    private List<Material> major;
+    private ArrayList<Material> major;
 
-    private List<Material> minor;
+    private ArrayList<Material> minor;
 
     private String create_time = "";
 
@@ -101,11 +102,11 @@ public class Recipe {
         this.photo_path = photo_path;
     }
 
-    public List<String> getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(ArrayList<String> tags) {
         this.tags = tags;
     }
 
@@ -133,11 +134,11 @@ public class Recipe {
         this.cookstory = cookstory;
     }
 
-    public List<CookStep> getSteps() {
+    public ArrayList<CookStep> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<CookStep> steps) {
+    public void setSteps(ArrayList<CookStep> steps) {
         this.steps = steps;
     }
 
@@ -237,11 +238,11 @@ public class Recipe {
         this.dish_count = dish_count;
     }
 
-    public List<Material> getMinor() {
+    public ArrayList<Material> getMinor() {
         return minor;
     }
 
-    public void setMinor(List<Material> minor) {
+    public void setMinor(ArrayList<Material> minor) {
         this.minor = minor;
     }
 
@@ -269,11 +270,11 @@ public class Recipe {
         this.clicks = clicks;
     }
 
-    public List<Material> getMajor() {
+    public ArrayList<Material> getMajor() {
         return major;
     }
 
-    public void setMajor(List<Material> major) {
+    public void setMajor(ArrayList<Material> major) {
         this.major = major;
     }
 

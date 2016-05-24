@@ -11,10 +11,11 @@ import android.widget.ProgressBar;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.ui.RecipeAdapter;
+import com.lzf.letscook.ui.adapter.RecipeAdapter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
 import com.lzf.letscook.ui.mvp.impl.RecipeListPresenterImpl;
+import com.lzf.letscook.ui.view.RecipeItemDivider;
 import com.lzf.letscook.util.Logger;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
         recipeList.setLayoutManager(llm);
         mAdapter = new RecipeAdapter();
         recipeList.setAdapter(mAdapter);
+        recipeList.addItemDecoration(new RecipeItemDivider());
         recipeList.addOnScrollListener(mPresenter);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);

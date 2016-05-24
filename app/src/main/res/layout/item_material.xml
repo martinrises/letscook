@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_material_name"
+        android:layout_width="0px"
+        android:layout_weight="4"
+        android:layout_height="wrap_content"
+        android:text="鸡蛋"/>
+
+    <TextView
+        android:id="@+id/tv_material_num"
+        android:layout_width="0px"
+        android:layout_weight="6"
+        android:layout_height="wrap_content"
+        android:text="鸡蛋"/>
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="4dip"
+        android:layout_marginBottom="4dip"
+        />
+
+</LinearLayout>
