@@ -47,7 +47,7 @@ public class RecipeItemDivider extends RecyclerView.ItemDecoration {
             int dividerTop = child.getBottom() + params.bottomMargin;
             int dividerBottom = dividerTop + DIVIDER_HEIGHT;
 
-            c.drawLine(dividerLeft, dividerTop, dividerRight, dividerTop, mPaint);
+            c.drawLine(dividerLeft, dividerTop, dividerRight, dividerBottom, mPaint);
         }
     }
 }

@@ -38,7 +38,9 @@
             android:id="@+id/material_major"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2" />
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:orientation="vertical"/>
 
 
     </LinearLayout>
