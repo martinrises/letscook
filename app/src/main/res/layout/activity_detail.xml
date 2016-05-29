@@ -36,12 +36,17 @@
 
         <com.lzf.letscook.ui.view.MaterialView
             android:id="@+id/material_major"
+            style="@style/detail_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
+        <com.lzf.letscook.ui.view.StepView
+            android:id="@+id/step_sv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            style="@style/detail_margin"/>
 
     </LinearLayout>
 

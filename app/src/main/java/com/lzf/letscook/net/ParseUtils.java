@@ -216,7 +216,7 @@ public class ParseUtils {
 
         String thumb = jStep.optString("thumb");
         String image = jStep.optString("image");
-        step.setContent(thumb);
+        step.setThumb(thumb);
         step.setImage(image);
 
         return step;

@@ -10,14 +10,7 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/recipe_img_iv"
-        android:layout_width="120dip"
-        android:layout_height="80dip"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/margin_recipe_item_top_bottom"
-        android:layout_marginLeft="8dip"
-        android:layout_marginTop="@dimen/margin_recipe_item_top_bottom"
-        android:background="@color/bg_img_recipe" />
+        style="@style/item_image" />
 
     <TextView
         android:id="@+id/recipe_title_tv"

@@ -22,7 +22,22 @@
         <item name="android:paddingRight">@dimen/detail_padding_left_right</item>
         <item name="android:paddingTop">@dimen/detail_padding_top_bottom</item>
         <item name="android:paddingBottom">@dimen/detail_padding_top_bottom</item>
+    </style>
 
+    <style name="detail_margin">
+        <item name="android:layout_marginLeft">10dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+    </style>
+
+    <style name="item_image">
+        <item name="android:layout_width">120dip</item>
+        <item name="android:layout_height">80dip</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginBottom">@dimen/margin_recipe_item_top_bottom</item>
+        <item name="android:layout_marginTop">@dimen/margin_recipe_item_top_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/margin_recipe_item_top_left</item>
+        <item name="android:background">@color/bg_img_recipe</item>
     </style>
 
 </resources>
