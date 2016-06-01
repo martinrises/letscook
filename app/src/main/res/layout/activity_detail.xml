@@ -8,50 +8,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/sdv_recipe"
             android:layout_width="match_parent"
             android:layout_height="90dip" />
 
-        <TextView
-            android:id="@+id/tv_detail_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dip"
-            android:text="我是标题"
-            android:textSize="18sp" />
+            android:orientation="vertical"
+            android:background="@android:color/white">
 
-        <TextView
-            android:id="@+id/tv_detail_desc"
-            style="@style/detail_padding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description."
-            android:textSize="15dip" />
+            <TextView
+                android:id="@+id/tv_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:text="我是标题"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_major_detail"
-            style="@style/detail_padding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/major_detail"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="15dip" />
+            <TextView
+                android:id="@+id/tv_detail_desc"
+                style="@style/detail_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description.I'm description."
+                android:textSize="15dip" />
 
-        <com.lzf.letscook.ui.view.MaterialView
-            android:id="@+id/material_major"
-            style="@style/detail_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            <TextView
+                android:id="@+id/tv_major_detail"
+                style="@style/detail_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/major_detail"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="15dip" />
 
-        <com.lzf.letscook.ui.view.StepView
-            android:id="@+id/step_sv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            style="@style/detail_margin"/>
+            <com.lzf.letscook.ui.view.MaterialView
+                android:id="@+id/material_major"
+                style="@style/detail_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <com.lzf.letscook.ui.view.StepView
+                android:id="@+id/step_sv"
+                style="@style/detail_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip" />
+        </LinearLayout>
 
     </LinearLayout>
 

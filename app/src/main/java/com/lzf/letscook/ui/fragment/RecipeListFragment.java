@@ -103,7 +103,6 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
         loadMorePb.post(new Runnable() {
             @Override
             public void run() {
-                Logger.v(TAG, "startLoad()");
                 loadMorePb.setVisibility(View.VISIBLE);
             }
         });
@@ -114,7 +113,6 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
         loadMorePb.post(new Runnable() {
             @Override
             public void run() {
-                Logger.v(TAG, " ###### stopLoad()");
                 loadMorePb.setVisibility(View.GONE);
             }
         });

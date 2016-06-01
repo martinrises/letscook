@@ -48,7 +48,7 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mTitleTv.setText(recipe.getCookstory());
 
         mPhotoRecipe = (SimpleDraweeView) findViewById(R.id.sdv_recipe);
-        mPhotoRecipe.setImageURI(Uri.parse(recipe.getImage()));
+        mPhotoRecipe.setImageURI(Uri.parse(recipe.getPhoto_path()));
     }
 
     @Override
