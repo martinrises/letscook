@@ -1,8 +1,10 @@
 package com.lzf.letscook.ui.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailPresenter;
@@ -21,6 +23,7 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     private StepView mStepView;
     private TextView mDescTv;
     private TextView mTitleTv;
+    private SimpleDraweeView mPhotoRecipe;
 
     private RecipeDetailPresenter mDetailPresenter;
 
@@ -44,6 +47,8 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mTitleTv = (TextView) findViewById(R.id.tv_detail_title);
         mTitleTv.setText(recipe.getCookstory());
 
+        mPhotoRecipe = (SimpleDraweeView) findViewById(R.id.sdv_recipe);
+        mPhotoRecipe.setImageURI(Uri.parse(recipe.getImage()));
     }
 
     @Override
