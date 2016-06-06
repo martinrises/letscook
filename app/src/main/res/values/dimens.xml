@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="margin_recipe_item_top_bottom">24dip</dimen>
+    <dimen name="margin_recipe_item_top_bottom">10dip</dimen>
     <dimen name="margin_recipe_item_left_right">14dip</dimen>
     <dimen name="margin_recipe_title_top">10dip</dimen>
     <dimen name="detail_padding_left_right">10dip</dimen>

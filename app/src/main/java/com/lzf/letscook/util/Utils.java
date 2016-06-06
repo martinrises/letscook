@@ -93,12 +93,8 @@ public class Utils {
     }
 
     public static int parseInt(String s){
-        if(TextUtils.isEmpty(s)){
-            return 0;
-        }
-
         try{
-            return Integer.valueOf(s);
+            return Integer.parseInt(s);
         }catch (Exception e){
             return 0;
         }

@@ -35,8 +35,6 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginBottom">@dimen/margin_recipe_item_top_bottom</item>
-        <item name="android:layout_marginTop">@dimen/margin_recipe_item_top_bottom</item>
-        <item name="android:layout_marginLeft">@dimen/margin_recipe_item_top_left</item>
         <item name="android:background">@color/bg_img_recipe</item>
     </style>
 

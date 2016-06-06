@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="128dip"
     android:background="@android:color/white"
     android:id="@+id/root_recipe_list"
     android:paddingLeft="@dimen/margin_recipe_item_left_right"
     android:paddingRight="@dimen/margin_recipe_item_left_right"
-    android:paddingBottom="@dimen/margin_recipe_title_top">
+    android:paddingBottom="@dimen/margin_recipe_item_top_bottom"
+    android:paddingTop="@dimen/margin_recipe_item_top_bottom">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/recipe_img_iv"
@@ -18,12 +19,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/margin_recipe_title_top"
         android:layout_toLeftOf="@id/recipe_img_iv"
         android:ellipsize="end"
         android:lines="2"
         android:text="testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
-        android:textSize="16dip" />
+        android:textSize="16dip"/>
 
     <TextView
         android:id="@+id/recipe_desc_tv"
@@ -35,6 +35,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
-        android:textSize="14dp" />
+        android:textSize="14dp"/>
 
 </RelativeLayout>

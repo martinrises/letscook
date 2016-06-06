@@ -1,6 +1,7 @@
 package com.lzf.letscook.ui.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,16 +17,18 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.CookStep;
+import com.lzf.letscook.ui.activity.StepsActivity;
+import com.lzf.letscook.ui.fragment.StepsFragment;
 import com.lzf.letscook.util.Utils;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by liuzhaofeng on 16/5/29.
  */
 public class StepView extends LinearLayout {
 
-    private List<CookStep> mSteps;
+    private ArrayList<CookStep> mSteps;
     private LayoutInflater mInflater;
 
     private Paint mPaint;
@@ -56,7 +59,7 @@ public class StepView extends LinearLayout {
         boderPath = new Path();
     }
 
-    public void setSteps(List<CookStep> steps) {
+    public void setSteps(final ArrayList<CookStep> steps) {
         mSteps = steps;
 
         removeAllViews();
@@ -65,10 +68,20 @@ public class StepView extends LinearLayout {
             return;
         }
 
-        for (CookStep step : steps) {
+        for (final CookStep step : steps) {
 
             View itemView = mInflater.inflate(R.layout.item_step, null);
             ((TextView)itemView.findViewById(R.id.step_desc_tv)).setText(step.getPosition() + "." + step.getContent());
+
+            itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), StepsActivity.class);
+                    intent.putExtra(StepsFragment.EXTRA_STEPS, steps);
+                    intent.putExtra(StepsFragment.EXTRA_STEPS_POSITION, (Utils.parseInt(step.getPosition()) - 1));
+                    getContext().startActivity(intent);
+                }
+            });
 
             String thumbStr = step.getThumb();
             SimpleDraweeView stepIv = (SimpleDraweeView) itemView.findViewById(R.id.step_img_iv);
