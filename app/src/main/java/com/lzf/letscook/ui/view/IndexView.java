@@ -53,7 +53,7 @@ public class IndexView extends View {
         mIndex = index;
 
         Rect bound = new Rect();
-        mPaint.getTextBounds(mIndex, 0, 1, bound);
+        mPaint.getTextBounds(mIndex, 0, mIndex.length(), bound);
         mTextWidth = bound.width();
         mTextHeight = bound.height();
 
