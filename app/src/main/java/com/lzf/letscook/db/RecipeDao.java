@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.lzf.letscook.db.contract.FavoriteContract;
 import com.lzf.letscook.db.contract.MajorContract;
 import com.lzf.letscook.db.contract.MinorContract;
 import com.lzf.letscook.db.contract.QueryOrderContract;
 import com.lzf.letscook.db.contract.RecipeContract;
+import com.lzf.letscook.db.contract.ShopContract;
 import com.lzf.letscook.db.contract.StepContract;
 import com.lzf.letscook.db.contract.TagContract;
 import com.lzf.letscook.entity.CookStep;
@@ -196,5 +198,103 @@ public class RecipeDao {
                 }
             }
         }
+    }
+
+    public void addFavorite(String recipeId){
+
+        checkDd();
+
+        String where = FavoriteContract.RECIPE_ID + " = ?";
+        String[] args = {recipeId};
+        ContentValues values = new ContentValues();
+        values.put(FavoriteContract.RECIPE_ID, recipeId);
+        int update = db.update(FavoriteContract.TABLE_NAME, values, where, args);
+        if (update <= 0) {
+            db.insert(FavoriteContract.TABLE_NAME, null, values);
+        }
+    }
+
+    public void removeFavorite(String recipeId){
+
+        checkDd();
+
+        String where = FavoriteContract.RECIPE_ID + "= ?";
+        String[] args = {recipeId};
+        db.delete(FavoriteContract.TABLE_NAME, where, args);
+    }
+
+    public ArrayList<Recipe> getFavoriteRecipes(){
+        checkDd();
+
+        ArrayList<Recipe> favRecipes = new ArrayList<>();
+
+        String[] colunms = {FavoriteContract.RECIPE_ID};
+        Cursor c = null;
+        try{
+            c = db.query(FavoriteContract.TABLE_NAME, colunms, null, null, null, null, null);
+
+            while(c.moveToNext()){
+                String recipeId = c.getString(0);
+                Recipe recipe = getRecipe(recipeId);
+                favRecipes.add(recipe);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            closeCursor(c);
+        }
+        return favRecipes;
+    }
+
+    public void removeShop(String recipeId){
+
+        checkDd();
+
+        String where = ShopContract.RECIPE_ID + "= ?";
+        String[] args = {recipeId};
+        db.delete(ShopContract.TABLE_NAME, where, args);
+    }
+
+    public ArrayList<Recipe> getShopRecipes(){
+        checkDd();
+
+        ArrayList<Recipe> shopRecipes = new ArrayList<>();
+
+        String[] colunms = {ShopContract.RECIPE_ID};
+        Cursor c = null;
+        try{
+            c = db.query(ShopContract.TABLE_NAME, colunms, null, null, null, null, null);
+
+            while(c.moveToNext()){
+                String recipeId = c.getString(0);
+                Recipe recipe = getRecipe(recipeId);
+                shopRecipes.add(recipe);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            closeCursor(c);
+        }
+        return shopRecipes;
+    }
+
+    private boolean buyMaterial(String materialId, boolean isMajor, boolean isBuyed){
+        checkDd();
+
+        String table = isMajor ? MajorContract.TABLE_NAME : MinorContract.TABLE_NAME;
+        ContentValues values = new ContentValues();
+        values.put(MajorContract.IS_BUYED, isBuyed ? 1 : 0);
+        String where = MajorContract._ID + " = ?";
+        String[] args = {materialId};
+        int update = db.update(table, values, where, args);
+        return update > 0;
+    }
+
+    public boolean buyMaterial(String materialId, boolean isMajor){
+        return buyMaterial(materialId, isMajor, true);
+    }
+
+    public boolean unBuyMaterial(String materialId, boolean isMajor){
+        return buyMaterial(materialId, isMajor, false);
     }
 }

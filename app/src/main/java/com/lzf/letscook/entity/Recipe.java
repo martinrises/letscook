@@ -1,5 +1,7 @@
 package com.lzf.letscook.entity;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -309,5 +311,13 @@ public class Recipe implements Serializable{
                 ", comments_count=" + comments_count +
                 ", dish_count=" + dish_count +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Recipe){
+            return TextUtils.equals(this.cook_id, ((Recipe) o).getCook_id());
+        }
+        return super.equals(o);
     }
 }

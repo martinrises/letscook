@@ -13,6 +13,10 @@ public class Material implements Serializable{
 
     private String image;
 
+    private boolean isMajor;
+
+    private boolean isBuyed;
+
     public Material(String title, String note) {
         this.title = title;
         this.note = note;
@@ -46,6 +50,22 @@ public class Material implements Serializable{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isMajor() {
+        return isMajor;
+    }
+
+    public void setMajor(boolean major) {
+        isMajor = major;
+    }
+
+    public boolean isBuyed() {
+        return isBuyed;
+    }
+
+    public void setBuyed(boolean buyed) {
+        isBuyed = buyed;
     }
 
     @Override

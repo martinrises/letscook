@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.lzf.letscook.system.FavSystem;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -26,6 +27,8 @@ public class LetsCook extends Application {
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
         }
+
+        FavSystem.getInstance().init();
     }
 
     public static LetsCook getApp() {

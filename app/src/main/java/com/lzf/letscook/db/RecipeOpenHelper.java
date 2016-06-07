@@ -5,10 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lzf.letscook.LetsCook;
+import com.lzf.letscook.db.contract.FavoriteContract;
 import com.lzf.letscook.db.contract.MajorContract;
 import com.lzf.letscook.db.contract.MinorContract;
 import com.lzf.letscook.db.contract.QueryOrderContract;
 import com.lzf.letscook.db.contract.RecipeContract;
+import com.lzf.letscook.db.contract.ShopContract;
 import com.lzf.letscook.db.contract.StepContract;
 import com.lzf.letscook.db.contract.TagContract;
 
@@ -64,7 +66,8 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             MajorContract.TITLE + " TEXT ," +
             MajorContract.NOTE + " TEXT ," +
             MajorContract.IMAGE + " TEXT ," +
-            MajorContract.RECIPE_ID + " TEXT" +
+            MajorContract.RECIPE_ID + " TEXT ," +
+            MajorContract.IS_BUYED + " TEXT" +
             ")";
 
     private static final String CREATE_MINOR_TABLE = "CREATE TABLE IF NOT EXISTS " + MinorContract.TABLE_NAME +
@@ -72,7 +75,8 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             MinorContract.TITLE + " TEXT ," +
             MinorContract.NOTE + " TEXT ," +
             MinorContract.IMAGE + " TEXT, " +
-            MajorContract.RECIPE_ID + " TEXT" +
+            MinorContract.RECIPE_ID + " TEXT" +
+            MinorContract.IS_BUYED + " TEXT" +
             ")";
 
     private static final String CREATE_QUERY_ORDER_TABLE = "CREATE TABLE IF NOT EXISTS " + QueryOrderContract.TABLE_NAME + "(" + QueryOrderContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -81,8 +85,13 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             QueryOrderContract.QUERY_ORDER + " TEXT" +
             ")";
 
+    private static final String CREATE_FAV_TABLE = "CREATE TABLE IF NOT EXISTS " + FavoriteContract.TABLE_NAME + "(" + FavoriteContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            FavoriteContract.RECIPE_ID + " TEXT, "
+            + ")";
 
-//    private static final String CREATE_MAJOR_TABLE = "CREATE TABLE IF NOT EXISTS " + ;
+    private static final String CREATE_SHOP_TABLE = "CREATE TABLE IF NOT EXISTS " + ShopContract.TABLE_NAME + "(" + ShopContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            ShopContract.RECIPE_ID + " TEXT, "
+            + ")";
 
     private static RecipeOpenHelper sInstance;
 
@@ -105,6 +114,8 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MAJOR_TABLE);
         db.execSQL(CREATE_MINOR_TABLE);
         db.execSQL(CREATE_QUERY_ORDER_TABLE);
+        db.execSQL(CREATE_FAV_TABLE);
+        db.execSQL(CREATE_SHOP_TABLE);
     }
 
     @Override
