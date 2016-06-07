@@ -6,6 +6,7 @@ import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.net.SubscriberHolder;
 import com.lzf.letscook.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -83,5 +84,82 @@ public class DbApi {
                 return null;
             }
         }.executeOnExecutor(EXECUTOR);
+    }
+
+    public static Observable<Boolean> addFavorite(final String recipeId){
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                RecipeDao.getInstance().addFavorite(recipeId);
+                holder.getSubscriber().onNext(Boolean.TRUE);
+                return null;
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
+
+    public static Observable<Boolean> removeFavorite(final String recipeId){
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                RecipeDao.getInstance().removeFavorite(recipeId);
+                holder.getSubscriber().onNext(Boolean.TRUE);
+                return null;
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
+
+    public static Observable<ArrayList<Recipe>> getFavRecipes(){
+
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<ArrayList<Recipe>> ob = Observable.create(new Observable.OnSubscribe<ArrayList<Recipe>>() {
+            @Override
+            public void call(Subscriber<? super ArrayList<Recipe>> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, List<Recipe>>(){
+
+            @Override
+            protected List<Recipe> doInBackground(Void... params) {
+                List<Recipe> recipes = RecipeDao.getInstance().getFavoriteRecipes();
+                return recipes;
+            }
+
+            @Override
+            protected void onPostExecute(List<Recipe> recipes) {
+
+                Subscriber subscriber = holder.getSubscriber();
+                if(subscriber != null){
+                    subscriber.onNext(recipes);
+                }
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
     }
 }

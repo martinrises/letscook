@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lzf.letscook.LetsCook;
+import com.lzf.letscook.db.contract.FavoriteContract;
 import com.lzf.letscook.db.contract.MajorContract;
 import com.lzf.letscook.db.contract.MinorContract;
 import com.lzf.letscook.db.contract.QueryOrderContract;
@@ -81,8 +82,9 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             QueryOrderContract.QUERY_ORDER + " TEXT" +
             ")";
 
+    private static final String CREATE_FAV_TABLE = "CREATE TABLE IF NOT EXISTS " + FavoriteContract.TABLE_NAME + "(" + FavoriteContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            FavoriteContract.RECIPE_ID + " TEXT, ";
 
-//    private static final String CREATE_MAJOR_TABLE = "CREATE TABLE IF NOT EXISTS " + ;
 
     private static RecipeOpenHelper sInstance;
 
@@ -105,6 +107,7 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MAJOR_TABLE);
         db.execSQL(CREATE_MINOR_TABLE);
         db.execSQL(CREATE_QUERY_ORDER_TABLE);
+        db.execSQL(CREATE_FAV_TABLE);
     }
 
     @Override
