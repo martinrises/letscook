@@ -162,4 +162,103 @@ public class DbApi {
 
         return ob;
     }
+
+    public static Observable<ArrayList<Recipe>> getShopRecipes(){
+
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<ArrayList<Recipe>> ob = Observable.create(new Observable.OnSubscribe<ArrayList<Recipe>>() {
+            @Override
+            public void call(Subscriber<? super ArrayList<Recipe>> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, List<Recipe>>(){
+
+            @Override
+            protected List<Recipe> doInBackground(Void... params) {
+                List<Recipe> recipes = RecipeDao.getInstance().getShopRecipes();
+                return recipes;
+            }
+
+            @Override
+            protected void onPostExecute(List<Recipe> recipes) {
+
+                Subscriber subscriber = holder.getSubscriber();
+                if(subscriber != null){
+                    subscriber.onNext(recipes);
+                }
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
+
+    public static Observable<Boolean> removeShopRecipe(final String recipeId){
+
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                RecipeDao.getInstance().removeShop(recipeId);
+                holder.getSubscriber().onNext(Boolean.TRUE);
+                return null;
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
+
+    public static Observable<Boolean> buyMaterial(final String materialId, final boolean isMajor){
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                holder.getSubscriber().onNext(RecipeDao.getInstance().buyMaterial(materialId, isMajor));
+                return null;
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
+
+    public static Observable<Boolean> unBuyMaterial(final String materialId, final boolean isMajor){
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                holder.getSubscriber().onNext(RecipeDao.getInstance().unBuyMaterial(materialId, isMajor));
+                return null;
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
 }

@@ -33,24 +33,28 @@ public class ParseUtils {
         ArrayList<CookStep> steps = parseSteps(stepC);
         recipe.setSteps(steps);
 
-        ArrayList<Material> majors = parseMaterial(majorC);
+        ArrayList<Material> majors = parseMaterial(majorC, true);
         recipe.setMajor(majors);
 
-        ArrayList<Material> minors = parseMaterial(minorC);
+        ArrayList<Material> minors = parseMaterial(minorC, false);
         recipe.setMinor(minors);
 
         return recipe;
     }
 
-    private static ArrayList<Material> parseMaterial(Cursor c) {
+    private static ArrayList<Material> parseMaterial(Cursor c, boolean isMajor) {
 
         ArrayList<Material> materials = new ArrayList<>();
         while (c.moveToNext()) {
             String title = c.getString(c.getColumnIndex(MajorContract.TITLE));
             String note = c.getString(c.getColumnIndex(MajorContract.NOTE));
             String image = c.getString(c.getColumnIndex(MajorContract.IMAGE));
+            int buyedInt = c.getInt(c.getColumnIndex(MajorContract.IS_BUYED));
 
             Material material = new Material(title, note, image);
+            material.setMajor(isMajor);
+            material.setBuyed(buyedInt != 0);
+
             materials.add(material);
         }
 

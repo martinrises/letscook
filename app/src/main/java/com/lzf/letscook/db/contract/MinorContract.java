@@ -12,5 +12,6 @@ public class MinorContract {
     public static final String NOTE = "note";
     public static final String IMAGE = "image";
     public static final String RECIPE_ID = "recipe_id";
+    public static final String IS_BUYED = "is_buyed";
 
 }

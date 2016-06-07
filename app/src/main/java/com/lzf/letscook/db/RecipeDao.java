@@ -10,6 +10,7 @@ import com.lzf.letscook.db.contract.MajorContract;
 import com.lzf.letscook.db.contract.MinorContract;
 import com.lzf.letscook.db.contract.QueryOrderContract;
 import com.lzf.letscook.db.contract.RecipeContract;
+import com.lzf.letscook.db.contract.ShopContract;
 import com.lzf.letscook.db.contract.StepContract;
 import com.lzf.letscook.db.contract.TagContract;
 import com.lzf.letscook.entity.CookStep;
@@ -243,5 +244,57 @@ public class RecipeDao {
             closeCursor(c);
         }
         return favRecipes;
+    }
+
+    public void removeShop(String recipeId){
+
+        checkDd();
+
+        String where = ShopContract.RECIPE_ID + "= ?";
+        String[] args = {recipeId};
+        db.delete(ShopContract.TABLE_NAME, where, args);
+    }
+
+    public ArrayList<Recipe> getShopRecipes(){
+        checkDd();
+
+        ArrayList<Recipe> shopRecipes = new ArrayList<>();
+
+        String[] colunms = {ShopContract.RECIPE_ID};
+        Cursor c = null;
+        try{
+            c = db.query(ShopContract.TABLE_NAME, colunms, null, null, null, null, null);
+
+            while(c.moveToNext()){
+                String recipeId = c.getString(0);
+                Recipe recipe = getRecipe(recipeId);
+                shopRecipes.add(recipe);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            closeCursor(c);
+        }
+        return shopRecipes;
+    }
+
+    private boolean buyMaterial(String materialId, boolean isMajor, boolean isBuyed){
+        checkDd();
+
+        String table = isMajor ? MajorContract.TABLE_NAME : MinorContract.TABLE_NAME;
+        ContentValues values = new ContentValues();
+        values.put(MajorContract.IS_BUYED, isBuyed ? 1 : 0);
+        String where = MajorContract._ID + " = ?";
+        String[] args = {materialId};
+        int update = db.update(table, values, where, args);
+        return update > 0;
+    }
+
+    public boolean buyMaterial(String materialId, boolean isMajor){
+        return buyMaterial(materialId, isMajor, true);
+    }
+
+    public boolean unBuyMaterial(String materialId, boolean isMajor){
+        return buyMaterial(materialId, isMajor, false);
     }
 }
