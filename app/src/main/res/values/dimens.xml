@@ -10,5 +10,5 @@
     <dimen name="detail_padding_left_right">10dip</dimen>
     <dimen name="detail_padding_top_bottom">5dip</dimen>
     <dimen name="margin_recipe_item_top_left">8dip</dimen>
-    <dimen name="height_main_host">68dip</dimen>
+    <dimen name="height_main_host">48dip</dimen>
 </resources>
