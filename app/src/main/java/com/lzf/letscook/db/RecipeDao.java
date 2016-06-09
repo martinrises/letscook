@@ -223,7 +223,7 @@ public class RecipeDao {
         db.delete(FavoriteContract.TABLE_NAME, where, args);
     }
 
-    public ArrayList<Recipe> getFavoriteRecipes(){
+    public ArrayList<Recipe> getFavoriteRecipes(int start, int size){
         checkDd();
 
         ArrayList<Recipe> favRecipes = new ArrayList<>();
@@ -231,7 +231,7 @@ public class RecipeDao {
         String[] colunms = {FavoriteContract.RECIPE_ID};
         Cursor c = null;
         try{
-            c = db.query(FavoriteContract.TABLE_NAME, colunms, null, null, null, null, null);
+            c = db.query(FavoriteContract.TABLE_NAME, colunms, null, null, null, null, null, start + "," + size);
 
             while(c.moveToNext()){
                 String recipeId = c.getString(0);

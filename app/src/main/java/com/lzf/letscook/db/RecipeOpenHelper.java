@@ -75,7 +75,7 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             MinorContract.TITLE + " TEXT ," +
             MinorContract.NOTE + " TEXT ," +
             MinorContract.IMAGE + " TEXT, " +
-            MinorContract.RECIPE_ID + " TEXT" +
+            MinorContract.RECIPE_ID + " TEXT, " +
             MinorContract.IS_BUYED + " TEXT" +
             ")";
 
@@ -86,11 +86,11 @@ public class RecipeOpenHelper extends SQLiteOpenHelper {
             ")";
 
     private static final String CREATE_FAV_TABLE = "CREATE TABLE IF NOT EXISTS " + FavoriteContract.TABLE_NAME + "(" + FavoriteContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            FavoriteContract.RECIPE_ID + " TEXT, "
+            FavoriteContract.RECIPE_ID + " TEXT"
             + ")";
 
     private static final String CREATE_SHOP_TABLE = "CREATE TABLE IF NOT EXISTS " + ShopContract.TABLE_NAME + "(" + ShopContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            ShopContract.RECIPE_ID + " TEXT, "
+            ShopContract.RECIPE_ID + " TEXT"
             + ")";
 
     private static RecipeOpenHelper sInstance;

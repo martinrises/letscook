@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by liuzhaofeng on 16/5/1.
@@ -24,7 +23,7 @@ public class ParseUtils {
      * @param json
      * @return
      */
-    public static List<Recipe> parseRecipes(String json) {
+    public static ArrayList<Recipe> parseRecipes(String json) {
 
         if (TextUtils.isEmpty(json)) {
             return null;
@@ -38,7 +37,7 @@ public class ParseUtils {
                 return null;
             }
 
-            List<Recipe> recipes = new ArrayList<>();
+            ArrayList<Recipe> recipes = new ArrayList<>();
             JSONObject jResult = root.optJSONObject("result");
             JSONArray jRecipes = jResult.optJSONArray("recipes");
             for (int i = 0; i != jRecipes.length(); i++) {

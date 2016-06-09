@@ -14,18 +14,16 @@ import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.adapter.RecipeAdapter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
-import com.lzf.letscook.ui.mvp.impl.RecipeListPresenterImpl;
 import com.lzf.letscook.ui.view.RecipeItemDivider;
-import com.lzf.letscook.util.Logger;
 
 import java.util.List;
 
 /**
  * Created by liuzhaofeng on 16/5/14.
  */
-public class RecipeListFragment extends BaseFragment implements RecipeListView {
+public abstract class BaseRecipeListFragment extends BaseFragment implements RecipeListView {
 
-    public static final String TAG = RecipeListFragment.class.getSimpleName();
+    public static final String TAG = BaseRecipeListFragment.class.getSimpleName();
 
     private RecyclerView recipeList;
     private SwipeRefreshLayout mRefreshLayout;
@@ -37,8 +35,10 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new RecipeListPresenterImpl(this, "减肥食谱", "1");
+        mPresenter = onCreatePresenter();
     }
+
+    protected abstract RecipeListPresenter onCreatePresenter();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

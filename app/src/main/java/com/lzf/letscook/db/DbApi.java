@@ -132,12 +132,12 @@ public class DbApi {
         return ob;
     }
 
-    public static Observable<ArrayList<Recipe>> getFavRecipes(){
+    public static Observable<List<Recipe>> getFavRecipes(final int start, final int size){
 
         final SubscriberHolder holder = new SubscriberHolder<>();
-        Observable<ArrayList<Recipe>> ob = Observable.create(new Observable.OnSubscribe<ArrayList<Recipe>>() {
+        Observable<List<Recipe>> ob = Observable.create(new Observable.OnSubscribe<List<Recipe>>() {
             @Override
-            public void call(Subscriber<? super ArrayList<Recipe>> subscriber) {
+            public void call(Subscriber<? super List<Recipe>> subscriber) {
                 holder.setSubscriber(subscriber);
             }
         });
@@ -146,7 +146,7 @@ public class DbApi {
 
             @Override
             protected List<Recipe> doInBackground(Void... params) {
-                List<Recipe> recipes = RecipeDao.getInstance().getFavoriteRecipes();
+                List<Recipe> recipes = RecipeDao.getInstance().getFavoriteRecipes(start, size);
                 return recipes;
             }
 

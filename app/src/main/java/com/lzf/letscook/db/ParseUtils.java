@@ -212,6 +212,7 @@ public class ParseUtils {
         cv.put(MajorContract.IMAGE, material.getImage());
         cv.put(MajorContract.NOTE, material.getNote());
         cv.put(MajorContract.TITLE, material.getTitle());
+        cv.put(MajorContract.IS_BUYED, material.isBuyed() ? 1 : 0);
         return cv;
     }
 }

@@ -4,7 +4,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.system.CookSystem;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
 import com.lzf.letscook.util.Logger;
@@ -20,17 +19,17 @@ import rx.functions.Func1;
 /**
  * Created by liuzhaofeng on 16/5/14.
  */
-public class RecipeListPresenterImpl extends RecipeListPresenter {
+public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
 
-    public static final String TAG = RecipeListPresenterImpl.class.getSimpleName();
+    public static final String TAG = BaseRecipeListPresenterImpl.class.getSimpleName();
 
     public static final int PAGE_SIZE = 10; // 分页查询，一页的大小
     public static final int BUFFER_SIZE = 5; // 还剩多少开始查询
 
-    private RecipeListView mView;
-    private String mType; // 查询类别 “减肥食谱”
-    private String mOrder; // 查询次序 “1”
-    private int cursor; // 分页开始的游标
+    protected RecipeListView mView;
+    protected String mType; // 查询类别 “减肥食谱”
+    protected String mOrder; // 查询次序 “1”
+    protected int cursor; // 分页开始的游标
 
     private boolean isLoading;
     private boolean isRefreshing;
@@ -38,7 +37,7 @@ public class RecipeListPresenterImpl extends RecipeListPresenter {
     private Subscriber<? super RecyclerView> loadMoreSub;
     private Subscriber refreshSub;
 
-    public RecipeListPresenterImpl(RecipeListView view, String type, String order) {
+    public BaseRecipeListPresenterImpl(RecipeListView view, String type, String order) {
         this.mView = view;
         this.mType = type;
         this.mOrder = order;
@@ -66,7 +65,7 @@ public class RecipeListPresenterImpl extends RecipeListPresenter {
         }).flatMap(new Func1<Object, Observable<List<Recipe>>>() {
             @Override
             public Observable<List<Recipe>> call(Object aVoid) {
-                return CookSystem.getInstance().getRecipes(mType, mOrder, cursor, PAGE_SIZE);
+                return getRecipes();
             }
         }).subscribe(new Action1<List<Recipe>>() {
             @Override
@@ -108,7 +107,7 @@ public class RecipeListPresenterImpl extends RecipeListPresenter {
         }).flatMap(new Func1<RecyclerView, Observable<List<Recipe>>>() {
             @Override
             public Observable<List<Recipe>> call(RecyclerView recyclerView) {
-                return CookSystem.getInstance().getRecipes(mType, mOrder, cursor, PAGE_SIZE);
+                return getRecipes();
             }
         }).filter(new Func1<List<Recipe>, Boolean>() {
             @Override
@@ -142,4 +141,6 @@ public class RecipeListPresenterImpl extends RecipeListPresenter {
         super.onScrolled(recyclerView, dx, dy);
         loadMoreSub.onNext(recyclerView);
     }
+
+    public abstract Observable<List<Recipe>> getRecipes();
 }
