@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">美食·瘦身</string>
     <string name="action_settings">Settings</string>
-    <string name="major_detail">主料</string>
+    <string name="major_shop">主料</string>
+    <string name="minor_shop">辅料</string>
+    <string name="shop_loading">加载中..</string>
+
 </resources>

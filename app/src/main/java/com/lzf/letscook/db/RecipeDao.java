@@ -255,6 +255,20 @@ public class RecipeDao {
         db.delete(ShopContract.TABLE_NAME, where, args);
     }
 
+    public void addShop(String recipeId){
+
+        checkDd();
+
+        ContentValues values = new ContentValues();
+        values.put(ShopContract.RECIPE_ID, recipeId);
+        String where = ShopContract.RECIPE_ID + "= ?";
+        String[] args = {recipeId};
+        int update = db.update(ShopContract.TABLE_NAME, values, where, args);
+        if(update <= 0){
+            db.insert(ShopContract.TABLE_NAME, null, values);
+        }
+    }
+
     public ArrayList<Recipe> getShopRecipes(){
         checkDd();
 

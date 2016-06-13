@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title_shop_recipe"
+        android:gravity="center"
+        android:text="菜谱名称"
+        style="@style/view_shop_dimen"/>
+
+    <TextView
+        android:id="@+id/major_shop_recipe"
+        android:gravity="left|center_vertical"
+        android:text="主料"
+        style="@style/view_shop_dimen"
+        />
+
+</merge>

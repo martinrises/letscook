@@ -38,4 +38,10 @@
         <item name="android:background">@color/bg_img_recipe</item>
     </style>
 
+    <style name="view_shop_dimen">
+        <item name="android:layout_height">19dip</item>
+        <item name="android:layout_width">0px</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
 </resources>

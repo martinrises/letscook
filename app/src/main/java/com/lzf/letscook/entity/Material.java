@@ -17,15 +17,24 @@ public class Material implements Serializable{
 
     private boolean isBuyed;
 
+    private String _id;
+
     public Material(String title, String note) {
         this.title = title;
         this.note = note;
     }
 
-    public Material(String title, String note, String image) {
+    public Material(String _id, String title, String note) {
+        this.title = title;
+        this.note = note;
+        this._id = _id;
+    }
+
+    public Material(String _id, String title, String note, String image) {
         this.title = title;
         this.note = note;
         this.image = image;
+        this._id = _id;
     }
 
     public String getTitle() {
@@ -68,12 +77,11 @@ public class Material implements Serializable{
         isBuyed = buyed;
     }
 
-    @Override
-    public String toString() {
-        return "Material{" +
-                "title='" + title + '\'' +
-                ", note='" + note + '\'' +
-                ", image='" + image + '\'' +
-                '}';
+    public void set_id(String _id){
+        this._id = _id;
+    }
+
+    public String get_id(){
+        return this._id;
     }
 }

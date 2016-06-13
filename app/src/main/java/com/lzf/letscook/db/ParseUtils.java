@@ -50,8 +50,9 @@ public class ParseUtils {
             String note = c.getString(c.getColumnIndex(MajorContract.NOTE));
             String image = c.getString(c.getColumnIndex(MajorContract.IMAGE));
             int buyedInt = c.getInt(c.getColumnIndex(MajorContract.IS_BUYED));
+            String _id = c.getString(c.getColumnIndex(MajorContract._ID));
 
-            Material material = new Material(title, note, image);
+            Material material = new Material(_id, title, note, image);
             material.setMajor(isMajor);
             material.setBuyed(buyedInt != 0);
 

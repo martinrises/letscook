@@ -41,7 +41,6 @@
                 style="@style/detail_padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/major_detail"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15dip" />
 

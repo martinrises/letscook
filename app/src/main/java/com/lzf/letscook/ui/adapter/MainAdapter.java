@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.lzf.letscook.ui.fragment.FavRecipeListFragment;
 import com.lzf.letscook.ui.fragment.MainRecipeListFragment;
+import com.lzf.letscook.ui.fragment.ShopListFragment;
 
 /**
  * Created by asus on 2016/6/8.
@@ -23,6 +24,8 @@ public class MainAdapter extends FragmentPagerAdapter {
                 return new MainRecipeListFragment();
             case 1:
                 return new FavRecipeListFragment();
+            case 2:
+                return new ShopListFragment();
         }
         return new MainRecipeListFragment();
 

@@ -3,7 +3,7 @@ package com.lzf.letscook.system;
 import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 
@@ -14,7 +14,7 @@ public class ShopSystem {
 
     private static ShopSystem sInstance;
 
-    private static ShopSystem getInstance(){
+    public static ShopSystem getInstance(){
         if(sInstance == null){
             sInstance = new ShopSystem();
         }
@@ -24,9 +24,23 @@ public class ShopSystem {
 
     private ShopSystem(){}
 
-    public Observable<ArrayList<Recipe>> getShopRecipes(){
+    public Observable<List<Recipe>> getShopRecipes(){
         return DbApi.getShopRecipes();
     }
 
+    public Observable<Boolean> addShopRecipe(String recipeId){
+        return DbApi.addShopRecipe(recipeId);
+    }
 
+    public Observable<Boolean> removeShopRecipe(String recipeId){
+        return DbApi.removeShopRecipe(recipeId);
+    }
+
+    public Observable<Boolean> buyMaterial(String _id, boolean isMajor){
+        return DbApi.buyMaterial(_id, isMajor);
+    }
+
+    public Observable<Boolean> unbuyMaterial(String _id, boolean isMajor){
+        return DbApi.unBuyMaterial(_id, isMajor);
+    }
 }

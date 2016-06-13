@@ -6,7 +6,6 @@ import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.net.SubscriberHolder;
 import com.lzf.letscook.util.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -163,12 +162,12 @@ public class DbApi {
         return ob;
     }
 
-    public static Observable<ArrayList<Recipe>> getShopRecipes(){
+    public static Observable<List<Recipe>> getShopRecipes(){
 
         final SubscriberHolder holder = new SubscriberHolder<>();
-        Observable<ArrayList<Recipe>> ob = Observable.create(new Observable.OnSubscribe<ArrayList<Recipe>>() {
+        Observable<List<Recipe>> ob = Observable.create(new Observable.OnSubscribe<List<Recipe>>() {
             @Override
-            public void call(Subscriber<? super ArrayList<Recipe>> subscriber) {
+            public void call(Subscriber<? super List<Recipe>> subscriber) {
                 holder.setSubscriber(subscriber);
             }
         });
@@ -188,6 +187,29 @@ public class DbApi {
                 if(subscriber != null){
                     subscriber.onNext(recipes);
                 }
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
+
+    public static Observable<Boolean> addShopRecipe(final String recipeId) {
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                RecipeDao.getInstance().addShop(recipeId);
+                holder.getSubscriber().onNext(Boolean.TRUE);
+                return null;
             }
         }.executeOnExecutor(EXECUTOR);
 
@@ -227,13 +249,17 @@ public class DbApi {
             }
         });
 
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Boolean>(){
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Boolean doInBackground(Void... params) {
+                return RecipeDao.getInstance().buyMaterial(materialId, isMajor);
+            }
 
-                holder.getSubscriber().onNext(RecipeDao.getInstance().buyMaterial(materialId, isMajor));
-                return null;
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                holder.getSubscriber().onNext(aBoolean);
             }
         }.executeOnExecutor(EXECUTOR);
 
@@ -249,16 +275,21 @@ public class DbApi {
             }
         });
 
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Boolean>(){
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Boolean doInBackground(Void... params) {
+                return RecipeDao.getInstance().unBuyMaterial(materialId, isMajor);
+            }
 
-                holder.getSubscriber().onNext(RecipeDao.getInstance().unBuyMaterial(materialId, isMajor));
-                return null;
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                holder.getSubscriber().onNext(aBoolean);
             }
         }.executeOnExecutor(EXECUTOR);
 
         return ob;
     }
+
 }
