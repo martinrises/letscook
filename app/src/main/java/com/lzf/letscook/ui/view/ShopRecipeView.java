@@ -1,8 +1,10 @@
 package com.lzf.letscook.ui.view;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,9 +18,10 @@ import java.util.ArrayList;
 /**
  * Created by liuzhaofeng on 16/6/11.
  */
-public class ShopRecipeView extends LinearLayout{
+public class ShopRecipeView extends CardView{
 
     private Recipe mRecipe;
+    private LinearLayout mContainerLl;
 
     public ShopRecipeView(Context context) {
         this(context, null);
@@ -33,9 +36,14 @@ public class ShopRecipeView extends LinearLayout{
         init();
     }
 
-    private void init() {
 
-        setOrientation(LinearLayout.VERTICAL);
+    private void init() {
+        mContainerLl = new LinearLayout(getContext());
+        mContainerLl.setOrientation(LinearLayout.VERTICAL);
+//        addView(mContainerLl, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        addView(mContainerLl, new FrameLayout.LayoutParams(200, 200));
+
+        setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, getResources().getDisplayMetrics()));
     }
 
     public void setRecipe(Recipe recipe){
@@ -46,29 +54,29 @@ public class ShopRecipeView extends LinearLayout{
 
         TextView nameTv = new TextView(getContext());
         nameTv.setText(mRecipe.getTitle());
-        addView(nameTv, lp);
+        mContainerLl.addView(nameTv, lp);
 
         TextView majorTv = new TextView(getContext());
         majorTv.setText(R.string.major_shop);
-        addView(majorTv);
+        mContainerLl.addView(majorTv);
 
         ArrayList<Material> major = mRecipe.getMajor();
         for(Material m : major){
             ShopItemView shopItemView = new ShopItemView(getContext());
             shopItemView.setMaterial(m);
-            addView(shopItemView, lp);
+            mContainerLl.addView(shopItemView, lp);
         }
 
         ArrayList<Material> minor = mRecipe.getMinor();
         if(!Utils.isCollectionEmpty(minor)){
             TextView minorTv = new TextView(getContext());
             minorTv.setText(R.string.minor_shop);
-            addView(minorTv);
+            mContainerLl.addView(minorTv);
 
             for(Material m : minor){
                 ShopItemView shopItemView = new ShopItemView(getContext());
                 shopItemView.setMaterial(m);
-                addView(shopItemView, lp);
+                mContainerLl.addView(shopItemView, lp);
             }
         }
 
