@@ -40,8 +40,7 @@ public class ShopRecipeView extends CardView{
     private void init() {
         mContainerLl = new LinearLayout(getContext());
         mContainerLl.setOrientation(LinearLayout.VERTICAL);
-//        addView(mContainerLl, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        addView(mContainerLl, new FrameLayout.LayoutParams(200, 200));
+        addView(mContainerLl, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
         setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, getResources().getDisplayMetrics()));
     }
@@ -49,7 +48,7 @@ public class ShopRecipeView extends CardView{
     public void setRecipe(Recipe recipe){
         this.mRecipe = recipe;
 
-        removeAllViews();
+        mContainerLl.removeAllViews();
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 19, getResources().getDisplayMetrics()));
 
         TextView nameTv = new TextView(getContext());
