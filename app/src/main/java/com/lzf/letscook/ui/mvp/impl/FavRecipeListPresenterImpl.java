@@ -1,7 +1,7 @@
 package com.lzf.letscook.ui.mvp.impl;
 
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.system.FavSystem;
+import com.lzf.letscook.system.fav.FavSystem;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
 
 import java.util.List;

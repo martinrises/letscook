@@ -30,7 +30,7 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
     private RecipeAdapter mAdapter;
     private ProgressBar loadMorePb;
 
-    private RecipeListPresenter mPresenter;
+    protected RecipeListPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
