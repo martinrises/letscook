@@ -63,6 +63,7 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
             @Override
             public void onClick(View v) {
                 mDetailPresenter.checkAndChangeLikeStatus(mRecipe);
+
             }
         });
 

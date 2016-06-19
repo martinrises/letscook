@@ -83,7 +83,7 @@
         fab:fab_addButtonPlusIconColor="@color/half_black"
         fab:fab_addButtonSize="mini"
         fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_labelsPosition="right">
+        fab:fab_labelsPosition="left">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_recipe_like"
@@ -92,6 +92,7 @@
             fab:fab_colorNormal="@color/white"
             fab:fab_size="mini"
             fab:fab_icon="@drawable/detail_card_favorited"
+            fab:fab_title="收藏"
             fab:fab_colorPressed="@color/white_pressed"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
@@ -100,6 +101,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_size="mini"
+            fab:fab_title="购物单"
             fab:fab_colorPressed="@color/white_pressed"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
