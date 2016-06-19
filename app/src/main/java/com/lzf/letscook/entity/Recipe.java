@@ -284,7 +284,7 @@ public class Recipe implements Serializable{
         this.major = major;
     }
 
-    public boolean isIsFav() {
+    public boolean isFav() {
         return mIsFav;
     }
 

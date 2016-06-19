@@ -6,10 +6,10 @@ package com.lzf.letscook.ui.mvp.contract;
 public interface RecipeDetailView {
 
     // 收藏了
-    void onLike(String recipeId);
+    void onLike();
 
     // 取消收藏了
-    void onDislike(String recipeId);
+    void onDislike();
 
     // 显示分享的view
     void onShare(String recipeId);

@@ -100,8 +100,12 @@ public class DbApi {
             protected Void doInBackground(Void... params) {
 
                 RecipeDao.getInstance().addFavorite(recipeId);
-                holder.getSubscriber().onNext(Boolean.TRUE);
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                holder.getSubscriber().onNext(Boolean.TRUE);
             }
         }.executeOnExecutor(EXECUTOR);
 
@@ -123,8 +127,12 @@ public class DbApi {
             protected Void doInBackground(Void... params) {
 
                 RecipeDao.getInstance().removeFavorite(recipeId);
-                holder.getSubscriber().onNext(Boolean.TRUE);
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                holder.getSubscriber().onNext(Boolean.TRUE);
             }
         }.executeOnExecutor(EXECUTOR);
 

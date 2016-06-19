@@ -35,10 +35,11 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
 
         mDetailPresenter =  new RecipeDetailPresenterImpl(this);
-
         mRecipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
+
         mMaterialView = (MaterialView) findViewById(R.id.material_major);
         mMaterialView.setMaterials(mRecipe.getMajor());
 
@@ -55,22 +56,25 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mPhotoRecipe.setImageURI(Uri.parse(mRecipe.getPhoto_path()));
 
         mLikeBtn = (FloatingActionButton) findViewById(R.id.btn_recipe_like);
+        mLikeBtn.setIcon(mRecipe.isFav() ? R.drawable.detail_card_favorited: R.drawable.detail_card_favorite);
         mLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDetailPresenter.checkAndChangeLikeStatus(mRecipe.getCook_id());
+                mDetailPresenter.checkAndChangeLikeStatus(mRecipe);
             }
         });
     }
 
     @Override
-    public void onLike(String recipeId) {
-
+    public void onLike() {
+        mRecipe.setIsFav(true);
+        mLikeBtn.setIcon(R.drawable.detail_card_favorited);
     }
 
     @Override
-    public void onDislike(String recipeId) {
-
+    public void onDislike() {
+        mRecipe.setIsFav(false);
+        mLikeBtn.setIcon(R.drawable.detail_card_favorite);
     }
 
     @Override
