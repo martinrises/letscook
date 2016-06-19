@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class ParseUtils {
 
-    public static Recipe parseRecipe(Cursor recipeC, Cursor tagC, Cursor stepC, Cursor majorC, Cursor minorC) {
+    public static Recipe parseRecipe(Cursor recipeC, Cursor tagC, Cursor stepC, Cursor majorC, Cursor minorC, Cursor favC, Cursor shopC) {
 
         Recipe recipe = parseRecipeMain(recipeC);
         if(recipe == null){
@@ -39,7 +39,27 @@ public class ParseUtils {
         ArrayList<Material> minors = parseMaterial(minorC, false);
         recipe.setMinor(minors);
 
+        boolean isFav = parseIsFav(favC);
+        recipe.setIsFav(isFav);
+
+        boolean isInShop = parseIsShop(shopC);
+        recipe.setInShopList(isInShop);
+
         return recipe;
+    }
+
+    private static boolean parseIsShop(Cursor shopC) {
+        if(shopC == null){
+            return false;
+        }
+        return shopC.moveToFirst();
+    }
+
+    private static boolean parseIsFav(Cursor favC) {
+        if(favC == null){
+            return false;
+        }
+        return favC.moveToFirst();
     }
 
     private static ArrayList<Material> parseMaterial(Cursor c, boolean isMajor) {

@@ -83,7 +83,7 @@ public class RecipeDao {
             return null;
         }
 
-        Cursor recipeC = null, tagC = null, stepC = null, majorC = null, minorC = null;
+        Cursor recipeC = null, tagC = null, stepC = null, majorC = null, minorC = null, favC = null, shopC = null;
         try {
             String[] args = {recipe_id};
 
@@ -92,7 +92,10 @@ public class RecipeDao {
             stepC = db.query(StepContract.TABLE_NAME, null, StepContract.RECIPE_ID + "=?", args, null, null, null);
             majorC = db.query(MajorContract.TABLE_NAME, null, MajorContract.RECIPE_ID + "=?", args, null, null, null);
             minorC = db.query(MinorContract.TABLE_NAME, null, MinorContract.RECIPE_ID + "=?", args, null, null, null);
-            return ParseUtils.parseRecipe(recipeC, tagC, stepC, majorC, minorC);
+            favC = db.query(FavoriteContract.TABLE_NAME, null, FavoriteContract.RECIPE_ID + "=?", args, null, null, null);
+            shopC = db.query(ShopContract.TABLE_NAME, null, ShopContract.RECIPE_ID + "=?", args, null, null, null);
+
+            return ParseUtils.parseRecipe(recipeC, tagC, stepC, majorC, minorC, favC, shopC);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -103,6 +106,8 @@ public class RecipeDao {
             closeCursor(stepC);
             closeCursor(majorC);
             closeCursor(minorC);
+            closeCursor(favC);
+            closeCursor(shopC);
         }
         return null;
     }

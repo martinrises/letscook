@@ -60,6 +60,10 @@ public class Recipe implements Serializable{
 
     private int dish_count;
 
+    private boolean mIsFav; // 是否被收藏
+
+    private boolean mIsInShopList; // 是否被加入购物清单
+
     public Recipe(String cook_id) {
         this.cook_id = cook_id;
     }
@@ -280,6 +284,22 @@ public class Recipe implements Serializable{
         this.major = major;
     }
 
+    public boolean isIsFav() {
+        return mIsFav;
+    }
+
+    public void setIsFav(boolean mIsFav) {
+        this.mIsFav = mIsFav;
+    }
+
+    public boolean isInShopList() {
+        return mIsInShopList;
+    }
+
+    public void setInShopList(boolean inShopList) {
+        mIsInShopList = inShopList;
+    }
+
     @Override
     public String toString() {
         return "Recipe{" +
@@ -310,6 +330,8 @@ public class Recipe implements Serializable{
                 ", favo_counts=" + favo_counts +
                 ", comments_count=" + comments_count +
                 ", dish_count=" + dish_count +
+                ", mIsFav=" + mIsFav +
+                ", mIsInShopList=" + mIsInShopList +
                 '}';
     }
 
