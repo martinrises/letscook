@@ -2,9 +2,11 @@ package com.lzf.letscook.ui.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailPresenter;
@@ -24,8 +26,11 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     private TextView mDescTv;
     private TextView mTitleTv;
     private SimpleDraweeView mPhotoRecipe;
+    private FloatingActionButton mLikeBtn;
 
     private RecipeDetailPresenter mDetailPresenter;
+
+    private Recipe mRecipe;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,22 +38,29 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
 
         mDetailPresenter =  new RecipeDetailPresenterImpl(this);
 
-        setContentView(R.layout.activity_detail);
-        Recipe recipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
+        mRecipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
         mMaterialView = (MaterialView) findViewById(R.id.material_major);
-        mMaterialView.setMaterials(recipe.getMajor());
+        mMaterialView.setMaterials(mRecipe.getMajor());
 
         mStepView = (StepView) findViewById(R.id.step_sv);
-        mStepView.setSteps(recipe.getSteps());
+        mStepView.setSteps(mRecipe.getSteps());
 
         mDescTv = (TextView) findViewById(R.id.tv_detail_desc);
-        mDescTv.setText(recipe.getTitle());
+        mDescTv.setText(mRecipe.getTitle());
 
         mTitleTv = (TextView) findViewById(R.id.tv_detail_title);
-        mTitleTv.setText(recipe.getCookstory());
+        mTitleTv.setText(mRecipe.getCookstory());
 
         mPhotoRecipe = (SimpleDraweeView) findViewById(R.id.sdv_recipe);
-        mPhotoRecipe.setImageURI(Uri.parse(recipe.getPhoto_path()));
+        mPhotoRecipe.setImageURI(Uri.parse(mRecipe.getPhoto_path()));
+
+        mLikeBtn = (FloatingActionButton) findViewById(R.id.btn_recipe_like);
+        mLikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDetailPresenter.checkAndChangeLikeStatus(mRecipe.getCook_id());
+            }
+        });
     }
 
     @Override

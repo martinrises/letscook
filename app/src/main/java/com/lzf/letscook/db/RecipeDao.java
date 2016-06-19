@@ -311,4 +311,21 @@ public class RecipeDao {
     public boolean unBuyMaterial(String materialId, boolean isMajor){
         return buyMaterial(materialId, isMajor, false);
     }
+
+    public Boolean isFavorite(String recipeId) {
+        checkDd();
+        Cursor c = null;
+        try{
+            String where = FavoriteContract.RECIPE_ID + "= ?";
+            String[] args = {recipeId};
+            c = db.query(FavoriteContract.TABLE_NAME, null, where, args, null, null, null);
+
+            return c.moveToFirst();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            closeCursor(c);
+        }
+        return false;
+    }
 }

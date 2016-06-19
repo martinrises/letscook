@@ -20,4 +20,7 @@ public interface RecipeDetailPresenter {
 
     // 从购物单中移除
     void removeFromShopList(String recipeId);
+
+    // 收藏按钮被点击一下
+    void checkAndChangeLikeStatus(String recipeId);
 }

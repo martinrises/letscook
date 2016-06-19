@@ -3,7 +3,6 @@ package com.lzf.letscook.system;
 import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 
-import java.util.HashSet;
 import java.util.List;
 
 import rx.Observable;
@@ -14,8 +13,6 @@ import rx.Observable;
 public class FavSystem {
 
     private static FavSystem sInstance;
-
-    private final HashSet<Recipe> favSet = new HashSet<>();
 
     private FavSystem(){}
 

@@ -292,4 +292,29 @@ public class DbApi {
         return ob;
     }
 
+    public static Observable<Boolean> isFavRecipe(final String recipeId) {
+        final SubscriberHolder holder = new SubscriberHolder<>();
+        Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        new AsyncTask<Void, Void, Boolean>(){
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                return RecipeDao.getInstance().isFavorite(recipeId);
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                holder.getSubscriber().onNext(aBoolean);
+            }
+        }.executeOnExecutor(EXECUTOR);
+
+        return ob;
+    }
 }

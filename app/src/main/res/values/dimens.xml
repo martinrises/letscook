@@ -16,4 +16,5 @@
     <dimen name="margin_recipe_shop_card_left_right">3dip</dimen>
     <dimen name="margin_recipe_shop_card_top_bottom">2dip</dimen>
     <dimen name="text_size_shop_major_minor">10dip</dimen>
+    <dimen name="margin_floating_right_bottom">16dp</dimen>
 </resources>
