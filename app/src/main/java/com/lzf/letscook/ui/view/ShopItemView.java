@@ -122,7 +122,7 @@ public class ShopItemView extends LinearLayout {
     public void setMaterial(Material m){
         mMaterial = m;
 
-        mNameTv.setText(mMaterial.getTitle());
+        mNameTv.setText("\u0020\u0020" + mMaterial.getTitle());
         mNumTv.setText(mMaterial.getNote());
 
         invalidate();

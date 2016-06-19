@@ -1,5 +1,6 @@
 package com.lzf.letscook.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -30,7 +31,15 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
 
     public ShopListFragment(){
         mPresenter = new ShopListPresenterImpl(this);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         mLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int marginLR = (int) getResources().getDimension(R.dimen.margin_recipe_shop_card_left_right);
+        int marginTB = (int) getResources().getDimension(R.dimen.margin_recipe_shop_card_top_bottom);
+        mLp.setMargins(marginLR, marginTB, marginLR, marginTB);
     }
 
     @Nullable

@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="bg_img_recipe">#dedede</color>
+
+    <color name="bg_title_shop">#FFCC66</color>
+    <color name="text_shop_major_minor">#DDDDDD</color>
 </resources>
