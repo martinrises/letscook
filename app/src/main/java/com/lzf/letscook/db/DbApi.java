@@ -216,8 +216,12 @@ public class DbApi {
             protected Void doInBackground(Void... params) {
 
                 RecipeDao.getInstance().addShop(recipeId);
-                holder.getSubscriber().onNext(Boolean.TRUE);
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                holder.getSubscriber().onNext(Boolean.TRUE);
             }
         }.executeOnExecutor(EXECUTOR);
 
@@ -240,9 +244,14 @@ public class DbApi {
             protected Void doInBackground(Void... params) {
 
                 RecipeDao.getInstance().removeShop(recipeId);
-                holder.getSubscriber().onNext(Boolean.TRUE);
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                holder.getSubscriber().onNext(Boolean.TRUE);
+            }
+
         }.executeOnExecutor(EXECUTOR);
 
         return ob;

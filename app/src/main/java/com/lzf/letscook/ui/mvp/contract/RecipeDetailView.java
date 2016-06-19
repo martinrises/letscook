@@ -18,8 +18,8 @@ public interface RecipeDetailView {
     void onShareComplete(String recipeId);
 
     // 已添加到购物单
-    void onAddToShopList(String recipeId);
+    void onAddToShopList();
 
     // 从购物单中移除
-    void onRemoveToShopList(String recipeId);
+    void onRemoveToShopList();
 }

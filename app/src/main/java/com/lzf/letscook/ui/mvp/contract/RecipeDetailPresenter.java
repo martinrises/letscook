@@ -25,4 +25,7 @@ public interface RecipeDetailPresenter {
 
     // 收藏按钮被点击一下
     void checkAndChangeLikeStatus(Recipe recipe);
+
+    // 加入购物单 按钮被点击一下
+    void checkAndChangeShopStatus(Recipe recipe);
 }

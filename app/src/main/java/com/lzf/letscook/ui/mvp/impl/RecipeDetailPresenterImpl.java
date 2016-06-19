@@ -1,6 +1,7 @@
 package com.lzf.letscook.ui.mvp.impl;
 
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.system.ShopSystem;
 import com.lzf.letscook.system.fav.FavSystem;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailView;
@@ -21,6 +22,10 @@ public class RecipeDetailPresenterImpl implements RecipeDetailPresenter {
     private Subscriber<? super String> mLikeSubcriber;
     private Subscriber<? super String> mDislikeSubcriber;
 
+    private Subscriber<? super Recipe> mShopSubcriber;
+    private Subscriber<? super String> mAddShopSubcriber;
+    private Subscriber<? super String> mRemoveShopSubcriber;
+
     public RecipeDetailPresenterImpl(RecipeDetailView view) {
         this.mView = view;
 
@@ -31,6 +36,71 @@ public class RecipeDetailPresenterImpl implements RecipeDetailPresenter {
         initFavSubcriber();
         initLikeSubcriber();
         initDislikeSubcriber();
+
+        initShopSubscriber();
+        initAddShopSubcriber();
+        initRemoveShopSubcriber();
+    }
+
+    private void initRemoveShopSubcriber() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                mRemoveShopSubcriber = subscriber;
+            }
+        }).flatMap(new Func1<String, Observable<Boolean>>() {
+            @Override
+            public Observable<Boolean> call(String recipeId) {
+                return ShopSystem.getInstance().removeShopRecipe(recipeId);
+            }
+        }).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if(aBoolean){
+                    mView.onRemoveToShopList();
+                }
+            }
+        });
+    }
+
+    private void initAddShopSubcriber() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                mAddShopSubcriber = subscriber;
+            }
+        }).flatMap(new Func1<String, Observable<Boolean>>() {
+            @Override
+            public Observable<Boolean> call(String recipeId) {
+                return ShopSystem.getInstance().addShopRecipe(recipeId);
+            }
+        }).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if(aBoolean){
+                    mView.onAddToShopList();
+                }
+            }
+        });
+    }
+
+    private void initShopSubscriber() {
+        Observable.create(new Observable.OnSubscribe<Recipe>() {
+            @Override
+            public void call(Subscriber<? super Recipe> subscriber) {
+                mShopSubcriber = subscriber;
+            }
+        }).subscribe(new Action1<Recipe>() {
+            @Override
+            public void call(Recipe recipe) {
+
+                if (!recipe.isInShopList()) {
+                    addToShopList(recipe.getCook_id());
+                } else {
+                    removeFromShopList(recipe.getCook_id());
+                }
+            }
+        });
     }
 
     private void initDislikeSubcriber() {
@@ -47,7 +117,7 @@ public class RecipeDetailPresenterImpl implements RecipeDetailPresenter {
         }).subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     mView.onDislike();
                 }
             }
@@ -68,7 +138,7 @@ public class RecipeDetailPresenterImpl implements RecipeDetailPresenter {
         }).subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     mView.onLike();
                 }
             }
@@ -111,16 +181,21 @@ public class RecipeDetailPresenterImpl implements RecipeDetailPresenter {
 
     @Override
     public void addToShopList(String recipeId) {
-
+        mAddShopSubcriber.onNext(recipeId);
     }
 
     @Override
     public void removeFromShopList(String recipeId) {
-
+        mRemoveShopSubcriber.onNext(recipeId);
     }
 
     @Override
     public void checkAndChangeLikeStatus(Recipe recipe) {
         mFavSubcriber.onNext(recipe);
+    }
+
+    @Override
+    public void checkAndChangeShopStatus(Recipe recipe) {
+        mShopSubcriber.onNext(recipe);
     }
 }

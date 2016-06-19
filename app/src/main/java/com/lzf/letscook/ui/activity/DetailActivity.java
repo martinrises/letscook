@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -27,6 +28,7 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     private TextView mTitleTv;
     private SimpleDraweeView mPhotoRecipe;
     private FloatingActionButton mLikeBtn;
+    private FloatingActionButton mShopBtn;
 
     private RecipeDetailPresenter mDetailPresenter;
 
@@ -63,6 +65,14 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
                 mDetailPresenter.checkAndChangeLikeStatus(mRecipe);
             }
         });
+
+        mShopBtn = (FloatingActionButton) findViewById(R.id.btn_recipe_shop);
+        mShopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDetailPresenter.checkAndChangeShopStatus(mRecipe);
+            }
+        });
     }
 
     @Override
@@ -88,12 +98,14 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     }
 
     @Override
-    public void onAddToShopList(String recipeId) {
-
+    public void onAddToShopList() {
+        mRecipe.setInShopList(true);
+        Toast.makeText(this, "已添加", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onRemoveToShopList(String recipeId) {
-
+    public void onRemoveToShopList() {
+        mRecipe.setInShopList(false);
+        Toast.makeText(this, "已删除", Toast.LENGTH_SHORT).show();
     }
 }
