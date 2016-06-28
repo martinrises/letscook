@@ -12,7 +12,6 @@ import android.view.ViewConfiguration;
  */
 public class AgileViewPager extends ViewPager {
 
-    private int mScrollPointId;
     private float mInitX, mInitY;
     private int mScaledTouchSlop;
 
@@ -34,17 +33,14 @@ public class AgileViewPager extends ViewPager {
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mScrollPointId = MotionEventCompat.getPointerId(ev, 0);
-
                 mInitX = ev.getX();
                 mInitY = ev.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
 
-                int actionIndex = MotionEventCompat.findPointerIndex(ev, mScrollPointId);
-                float x = MotionEventCompat.getX(ev, actionIndex);
-                float y = MotionEventCompat.getY(ev, actionIndex);
+                float x = ev.getX();
+                float y = ev.getY();
                 float dx = x - mInitX;
                 float dy = y - mInitY;
 
