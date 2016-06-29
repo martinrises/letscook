@@ -3,14 +3,17 @@ package com.lzf.letscook.ui.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
+import com.lzf.letscook.util.Logger;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    private static final int TEXT_COLOR_GRAY = 0xff808080;
+    private static final int TEXT_COLOR_BLUE = 0xff00a9d5;
 
     private ViewPager mPager;
     private MainAdapter mAdapter;
@@ -19,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView fav_tab_main;
     private TextView shop_tab_main;
 
-    private final View[] mIndicators = new View[3];
+    private final TextView[] mIndicators = new TextView[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,16 @@ public class MainActivity extends AppCompatActivity {
         mPager.setAdapter(mAdapter);
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+                if(positionOffset <= 0 || positionOffset >= 1){
+                    return;
+                }
+
+                mIndicators[position].setTextColor(getTransitionColor(TEXT_COLOR_BLUE, TEXT_COLOR_GRAY, positionOffset));
+                mIndicators[position + 1].setTextColor(getTransitionColor(TEXT_COLOR_GRAY, TEXT_COLOR_BLUE, positionOffset));
             }
 
             @Override
@@ -53,10 +63,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mIndicators[0].setBackgroundColor(Color.GRAY); // 一开始将第一个选中
+        mIndicators[0].setTextColor(TEXT_COLOR_BLUE);
 
         initIndicators();
 
+    }
+
+    private int getTransitionColor(int src, int tag, float offset) {
+        int r = Color.red(src) + (int) ((Color.red(tag) - Color.red(src)) * offset);
+        int g = Color.green(src) + (int) ((Color.green(tag) - Color.green(src)) * offset);
+        int b = Color.blue(src) + (int) ((Color.blue(tag) - Color.blue(src)) * offset);
+        return Color.argb(0xff, r, g, b);
     }
 
     private void initIndicators() {
@@ -73,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setIndicatorSelected(int position) {
         for(int i = 0 ; i != mIndicators.length; i++){
-            mIndicators[i].setBackgroundColor(i == position ? Color.GRAY : Color.WHITE);
+            mIndicators[i].setTextColor(position == i ? TEXT_COLOR_BLUE : TEXT_COLOR_GRAY);
         }
     }
 }

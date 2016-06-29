@@ -13,10 +13,7 @@
 
         <TextView
             android:id="@+id/list_tab_main"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/tv_main_indicator"
             android:text="菜谱" />
 
         <View
@@ -26,10 +23,7 @@
 
         <TextView
             android:id="@+id/fav_tab_main"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/tv_main_indicator"
             android:text="收藏" />
 
         <View
@@ -39,10 +33,7 @@
 
         <TextView
             android:id="@+id/shop_tab_main"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/tv_main_indicator"
             android:text="清单" />
 
         <View

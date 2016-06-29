@@ -9,7 +9,7 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
+        <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
     </style>
 
@@ -35,6 +35,7 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginBottom">@dimen/margin_recipe_item_top_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/margin_recipe_item_top_bottom</item>
         <item name="android:background">@color/bg_img_recipe</item>
     </style>
 
@@ -47,6 +48,14 @@
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="tv_main_indicator">
+        <item name="android:layout_width">0px</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18dip</item>
     </style>
 
 </resources>
