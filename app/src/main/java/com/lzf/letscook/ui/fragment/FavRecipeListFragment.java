@@ -16,7 +16,7 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
 
     @Override
     protected RecipeListPresenter onCreatePresenter() {
-        return new FavRecipeListPresenterImpl(this, "减肥食谱", "1");
+        return new FavRecipeListPresenterImpl(this, "收藏", "1");
     }
 
     @Override

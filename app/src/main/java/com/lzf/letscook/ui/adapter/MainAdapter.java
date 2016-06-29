@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.lzf.letscook.ui.fragment.FavRecipeListFragment;
-import com.lzf.letscook.ui.fragment.MainRecipeListFragment;
+import com.lzf.letscook.ui.fragment.RecipeListFragment;
 import com.lzf.letscook.ui.fragment.ShopListFragment;
 
 /**
@@ -21,13 +21,13 @@ public class MainAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new MainRecipeListFragment();
+                return new RecipeListFragment();
             case 1:
                 return new FavRecipeListFragment();
             case 2:
                 return new ShopListFragment();
         }
-        return new MainRecipeListFragment();
+        return new RecipeListFragment();
 
     }
 

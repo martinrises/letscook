@@ -1,14 +1,36 @@
 package com.lzf.letscook.ui.fragment;
 
-import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
-import com.lzf.letscook.ui.mvp.impl.MainRecipeListPresenterImpl;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.lzf.letscook.R;
+import com.viewpagerindicator.TitlePageIndicator;
 
 /**
- * Created by liuzhaofeng on 16/6/9.
+ * Created by asus on 2016/6/29.
  */
-public class MainRecipeListFragment extends BaseRecipeListFragment {
+public class MainRecipeListFragment extends BaseFragment {
+
+    private ViewPager mPager;
+    private TitlePageIndicator mIndicator;
+
+    @Nullable
     @Override
-    protected RecipeListPresenter onCreatePresenter() {
-        return new MainRecipeListPresenterImpl(this, "减肥食谱", "1");
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_recipes, null);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mPager = (ViewPager) view.findViewById(R.id.pager_main);
+        mIndicator = (TitlePageIndicator) view.findViewById(R.id.titles_main);
+
+        mPager.setAdapter();
+
+        mIndicator.setViewPager(mPager);
     }
 }
