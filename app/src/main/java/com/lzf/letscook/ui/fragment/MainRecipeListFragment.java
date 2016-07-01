@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lzf.letscook.R;
+import com.lzf.letscook.ui.adapter.RecipesPagerAdapter;
 import com.viewpagerindicator.TitlePageIndicator;
 
 /**
@@ -17,6 +18,7 @@ public class MainRecipeListFragment extends BaseFragment {
 
     private ViewPager mPager;
     private TitlePageIndicator mIndicator;
+    private RecipesPagerAdapter mAdapter;
 
     @Nullable
     @Override
@@ -29,7 +31,8 @@ public class MainRecipeListFragment extends BaseFragment {
         mPager = (ViewPager) view.findViewById(R.id.pager_main);
         mIndicator = (TitlePageIndicator) view.findViewById(R.id.titles_main);
 
-        mPager.setAdapter();
+        mAdapter = new RecipesPagerAdapter(getFragmentManager());
+        mPager.setAdapter(mAdapter);
 
         mIndicator.setViewPager(mPager);
     }

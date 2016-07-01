@@ -1,5 +1,7 @@
 package com.lzf.letscook.ui.adapter;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,11 +13,9 @@ import com.lzf.letscook.ui.fragment.RecipeListFragment;
  */
 public class RecipesPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TYPES = {"减肥食谱", "1", "2"};
+    private static final String[] TYPES = {"减肥食谱", "美容食谱", "健康食谱"};
 
-    private RecipeListFragment f1;
-    private RecipeListFragment f2;
-    private RecipeListFragment f3;
+    private final RecipeListFragment[] mFragments =  new RecipeListFragment[3];
 
     public RecipesPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,15 +23,20 @@ public class RecipesPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
+        if(mFragments[position] == null){
+            Bundle args = generateArgs(TYPES[position], "1");
+            mFragments[position] = new RecipeListFragment();
+            mFragments[position].setArguments(args);
         }
-        return null;
+        return mFragments[position];
+    }
+
+    @NonNull
+    private Bundle generateArgs(String type, String order) {
+        Bundle args = new Bundle();
+        args.putString(RecipeListFragment.ARG_TYPE, type);
+        args.putString(RecipeListFragment.ARG_ORDER, order);
+        return args;
     }
 
     @Override

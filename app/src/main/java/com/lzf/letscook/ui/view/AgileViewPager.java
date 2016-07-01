@@ -25,6 +25,7 @@ public class AgileViewPager extends ViewPager {
     }
 
     private void init() {
+        setOffscreenPageLimit(2);
         mScaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     }
 

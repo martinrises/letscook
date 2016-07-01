@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
-import com.lzf.letscook.util.Logger;
 
 public class MainActivity extends BaseActivity {
 
@@ -37,6 +36,7 @@ public class MainActivity extends BaseActivity {
         mIndicators[2] = shop_tab_main;
 
         mPager = (ViewPager) findViewById(R.id.main_vp);
+        mPager.setOffscreenPageLimit(2);
         mAdapter = new MainAdapter(getSupportFragmentManager());
         mPager.setAdapter(mAdapter);
 

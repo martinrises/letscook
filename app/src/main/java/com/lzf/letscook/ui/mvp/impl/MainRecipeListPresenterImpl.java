@@ -3,6 +3,7 @@ package com.lzf.letscook.ui.mvp.impl;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.system.CookSystem;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
+import com.lzf.letscook.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
