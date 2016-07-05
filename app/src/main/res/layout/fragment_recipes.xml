@@ -2,12 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.viewpagerindicator.TitlePageIndicator
+    <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/titles_main"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent" />
+        app:pstsShouldExpand="true"
+        app:pstsIndicatorColor="@color/blue_text_pager_indicator"
+        app:pstsIndicatorHeight="3dip"
+        app:pstsUnderlineHeight="1px"
+        android:layout_width="match_parent"
+        android:layout_height="48dip" />
 
     <com.lzf.letscook.ui.view.AgileViewPager
         android:id="@+id/pager_main"

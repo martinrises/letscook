@@ -31,6 +31,11 @@ public class RecipesPagerAdapter extends FragmentPagerAdapter {
         return mFragments[position];
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return TYPES[position];
+    }
+
     @NonNull
     private Bundle generateArgs(String type, String order) {
         Bundle args = new Bundle();
