@@ -16,30 +16,16 @@
             style="@style/tv_main_indicator"
             android:text="菜谱" />
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@android:color/black" />
-
         <TextView
             android:id="@+id/fav_tab_main"
             style="@style/tv_main_indicator"
             android:text="收藏" />
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@android:color/black" />
-
         <TextView
             android:id="@+id/shop_tab_main"
             style="@style/tv_main_indicator"
             android:text="清单" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@android:color/black" />
+        
     </LinearLayout>
 
     <View
