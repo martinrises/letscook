@@ -1,8 +1,14 @@
 package com.lzf.letscook.ui.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -45,7 +51,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                if(positionOffset <= 0 || positionOffset >= 1){
+                if (positionOffset <= 0 || positionOffset >= 1) {
                     return;
                 }
 
@@ -77,7 +83,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initIndicators() {
-        for(int i = 0 ; i != mIndicators.length; i++){
+        for (int i = 0; i != mIndicators.length; i++) {
             final int pos = i;
             mIndicators[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,8 +95,26 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setIndicatorSelected(int position) {
-        for(int i = 0 ; i != mIndicators.length; i++){
+        for (int i = 0; i != mIndicators.length; i++) {
             mIndicators[i].setTextColor(position == i ? TEXT_COLOR_BLUE : TEXT_COLOR_GRAY);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }
