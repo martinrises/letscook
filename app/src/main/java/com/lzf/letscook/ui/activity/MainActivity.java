@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ public class MainActivity extends BaseActivity {
     private ViewPager mPager;
     private MainAdapter mAdapter;
 
+    private Toolbar mToolbar;
     private TextView list_tab_main;
     private TextView fav_tab_main;
     private TextView shop_tab_main;
@@ -33,6 +35,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
+
+        mToolbar = (Toolbar) findViewById(R.id.tb_main);
+        setSupportActionBar(mToolbar);
 
         list_tab_main = (TextView) findViewById(R.id.list_tab_main);
         mIndicators[0] = list_tab_main;

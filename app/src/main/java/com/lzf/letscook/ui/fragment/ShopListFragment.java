@@ -69,7 +69,7 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
 
     @Override
     public void onLoadComplete(List<Recipe> recipes) {
-        mPd.dismiss();
+        mPd.dismissAllowingStateLoss();
 
         if(!Utils.isCollectionEmpty(recipes)){
 
