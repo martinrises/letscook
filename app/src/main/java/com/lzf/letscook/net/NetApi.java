@@ -4,7 +4,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.util.Logger;
 import com.lzf.letscook.util.Utils;
 
 import java.util.HashMap;
@@ -40,12 +39,12 @@ public class NetApi {
         RecipeRequest req = new RecipeRequest(Request.Method.POST, url, UrlContainer.getHeaders(), params, new Response.Listener<List<Recipe>>() {
             @Override
             public void onResponse(List<Recipe> response) {
-                notifySubcriber(response, holder, start);
+                notifySubcriber(response, holder);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                notifySubcriber(null, holder, start);
+                notifySubcriber(null, holder);
             }
         });
         ReqQueue.getInstance().add(req);
@@ -53,11 +52,13 @@ public class NetApi {
         return ob;
     }
 
-    private static void notifySubcriber(List<Recipe> response, SubscriberHolder holder, int start) {
-        Logger.v("test", "NetApi >>>>>> " + start+ "   "+ (Utils.isCollectionEmpty(response) ? "" : response.get(0).getCook_id()));
+    private static void notifySubcriber(List<Recipe> response, SubscriberHolder holder) {
         Subscriber sub = holder.getSubscriber();
         if (sub != null) {
             sub.onNext(response);
         }
     }
+
+
+
 }
