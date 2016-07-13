@@ -29,7 +29,7 @@ public class NetApi {
             }
         });
 
-        String url = UrlContainer.getSearchRecipeUrl() + start + "/" + size;
+        String url = UrlContainer.getTagSearchRecipeUrl() + start + "/" + size;
         Map<String, String> params = new HashMap<>();
         params.put("order", order);
         params.put("tag", tag);

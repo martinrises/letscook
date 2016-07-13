@@ -22,6 +22,8 @@ public class UrlContainer {
 
     public static final String TAG_SEARCH = "/recipe/tagsearch/";
 
+    public static final String SEARCH = "/recipe/search/";
+
     public static Random mRandom = new Random();
 
     private static Map<String, String > PARAMS = null;
@@ -61,7 +63,12 @@ public class UrlContainer {
         return params;
     }
 
-    public static String getSearchRecipeUrl(){
+    public static String getTagSearchRecipeUrl(){
         return HOST + TAG_SEARCH;
     }
+
+    public static String getSearchRecipeUrl(){
+        return HOST + SEARCH;
+    }
+
 }

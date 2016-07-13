@@ -4,6 +4,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -15,11 +18,16 @@ import android.widget.TextView;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
+import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
+
+import java.lang.reflect.Field;
 
 public class MainActivity extends BaseActivity {
 
     private static final int TEXT_COLOR_GRAY = 0xff808080;
     private static final int TEXT_COLOR_BLUE = 0xff00a9d5;
+
+    private static final String QUERY_FRAGMENT_TAG = "query_fragment_tag";
 
     private ViewPager mPager;
     private MainAdapter mAdapter;
@@ -30,11 +38,14 @@ public class MainActivity extends BaseActivity {
     private TextView shop_tab_main;
 
     private final TextView[] mIndicators = new TextView[3];
+    private Handler mHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
+
+        initHandler();
 
         mToolbar = (Toolbar) findViewById(R.id.tb_main);
         setSupportActionBar(mToolbar);
@@ -80,6 +91,18 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void initHandler() {
+        try {
+            Field mHandlerField = FragmentActivity.class.getDeclaredField("mHandler");
+            mHandlerField.setAccessible(true);
+            mHandler = (Handler) mHandlerField.get(this);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     private int getTransitionColor(int src, int tag, float offset) {
         int r = Color.red(src) + (int) ((Color.red(tag) - Color.red(src)) * offset);
         int g = Color.green(src) + (int) ((Color.green(tag) - Color.green(src)) * offset);
@@ -114,6 +137,31 @@ public class MainActivity extends BaseActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String keyword) {
+                Fragment queryFragment = getSupportFragmentManager().findFragmentByTag(QUERY_FRAGMENT_TAG);
+                if(queryFragment == null){
+                    queryFragment = new QueryRecipeListFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.main_container, queryFragment, QUERY_FRAGMENT_TAG).addToBackStack(null).commit();
+                }
+
+                final QueryRecipeListFragment f = (QueryRecipeListFragment) queryFragment;
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        f.onSearch(keyword);
+                    }
+                });
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         return true;
     }

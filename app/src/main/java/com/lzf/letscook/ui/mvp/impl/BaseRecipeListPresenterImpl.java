@@ -27,9 +27,9 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     public static final int BUFFER_SIZE = 5; // 还剩多少开始查询
 
     protected RecipeListView mView;
-    protected String mType; // 查询类别 “减肥食谱”
+    protected String mTag; // 查询类别 “减肥食谱”
     protected String mOrder; // 查询次序 “1”
-    protected int cursor; // 分页开始的游标
+    protected int mCursor; // 分页开始的游标
 
     private boolean isLoading;
     private boolean isRefreshing;
@@ -37,9 +37,9 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     private Subscriber<? super RecyclerView> loadMoreSub;
     private Subscriber refreshSub;
 
-    public BaseRecipeListPresenterImpl(RecipeListView view, String type, String order) {
+    public BaseRecipeListPresenterImpl(RecipeListView view, String tag, String order) {
         this.mView = view;
-        this.mType = type;
+        this.mTag = tag;
         this.mOrder = order;
 
         initLoadMoreOb();
@@ -58,7 +58,7 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 // 停止loading的动画，标志位置为false
                 mView.stopLoad();
                 isLoading = false;
-                cursor = 0;
+                mCursor = 0;
                 isRefreshing = true;
                 return aVoid;
             }
@@ -73,7 +73,7 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 isRefreshing = false;
                 mView.onSetRecipes(recipes);
                 mView.stopFresh();
-                cursor += PAGE_SIZE;
+                mCursor += PAGE_SIZE;
             }
         });
     }
@@ -119,8 +119,8 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
             public void call(List<Recipe> recipes) {
 
                 if (!Utils.isCollectionEmpty(recipes)) {
-                    cursor += recipes.size();
-                    Logger.v(TAG, cursor + " >>> " + recipes.get(0).getCook_id());
+                    mCursor += recipes.size();
+                    Logger.v(TAG, mCursor + " >>> " + recipes.get(0).getCook_id());
                     mView.onAppendRecipes(recipes);
                 }
                 isLoading = false;
