@@ -28,10 +28,10 @@ public class CookSystem {
     private CookSystem() {
     }
 
-    public Observable<List<Recipe>> getRecipes(final String query, final String order, final int start, final int size) {
+    public Observable<List<Recipe>> getRecipes(final String tag, final String order, final int start, final int size) {
 
         // 异步查询数据库；
-        return DbApi.getRecipes(query, order, start, size)
+        return DbApi.getRecipes(tag, order, start, size)
                 .flatMap(new Func1<List<Recipe>, Observable<List<Recipe>>>() {
                              @Override
                              public Observable<List<Recipe>> call(List<Recipe> recipes) {
@@ -40,7 +40,7 @@ public class CookSystem {
 
                                  if (Utils.isCollectionEmpty(recipes)) {
 
-                                     return NetApi.getRecipesOnline(query, order, start, size);
+                                     return NetApi.getRecipesOnline(tag, order, start, size);
                                  } else {
 
                                      return Observable.just(recipes);
@@ -54,11 +54,24 @@ public class CookSystem {
                     public List<Recipe> call(List<Recipe> recipes) {
 
                         Logger.v("test", "write >>> " + start);
-                        DbApi.writeRecipes(query, order, start, size, recipes);
+                        DbApi.writeRecipes(tag, order, start, size, recipes);
                         return recipes;
                     }
                 });
 
+    }
+
+    public Observable<List<Recipe>> getRecipesSearch(final String keyword, final String tag, final int start, final int size) {
+        return NetApi.getRecipesSearch(keyword, tag, start, size)
+                .map(new Func1<List<Recipe>, List<Recipe>>() {
+                    @Override
+                    public List<Recipe> call(List<Recipe> recipes) {
+
+                        Logger.v("test", "### getRecipesSearch write >>> " + start);
+                        DbApi.writeRecipes(null, null, start, size, recipes);
+                        return recipes;
+                    }
+                });
     }
 
 }

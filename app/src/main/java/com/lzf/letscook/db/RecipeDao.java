@@ -140,12 +140,14 @@ public class RecipeDao {
 
     private void writeRecipe(String query, String order, int start, int size, Recipe recipe) {
 
-        ContentValues queryOrderValues = ParseUtils.getQueryOrderValues(query, order, start, size, recipe.getCook_id());
-        String where = QueryOrderContract.QUERY_ORDER +" = ? and " + QueryOrderContract.START_SIZE + " = ? and " + QueryOrderContract.RECIPE_ID + " = ?";
-        String[] args = {query + "_" + order, start + "_" + size, recipe.getCook_id()};
-        int cnt = db.update(QueryOrderContract.TABLE_NAME, queryOrderValues, where, args);
-        if (cnt <= 0) {
-            db.insert(QueryOrderContract.TABLE_NAME, null, queryOrderValues);
+        if (!TextUtils.isEmpty(query)) {
+            ContentValues queryOrderValues = ParseUtils.getQueryOrderValues(query, order, start, size, recipe.getCook_id());
+            String where = QueryOrderContract.QUERY_ORDER +" = ? and " + QueryOrderContract.START_SIZE + " = ? and " + QueryOrderContract.RECIPE_ID + " = ?";
+            String[] args = {query + "_" + order, start + "_" + size, recipe.getCook_id()};
+            int cnt = db.update(QueryOrderContract.TABLE_NAME, queryOrderValues, where, args);
+            if (cnt <= 0) {
+                db.insert(QueryOrderContract.TABLE_NAME, null, queryOrderValues);
+            }
         }
 
         ContentValues cv = ParseUtils.getRecipeValues(recipe);

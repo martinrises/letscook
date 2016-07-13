@@ -69,7 +69,7 @@ public class DbApi {
         return ob;
     }
 
-    public static void writeRecipes(final String query, final String order, final int start, final int size, final List<Recipe> recipes) {
+    public static void writeRecipes(final String queryTag, final String order, final int start, final int size, final List<Recipe> recipes) {
         if(Utils.isCollectionEmpty(recipes)){
             return;
         }
@@ -79,7 +79,7 @@ public class DbApi {
             @Override
             protected Void doInBackground(Void... params) {
 
-                RecipeDao.getInstance().writeRecipes(query, order, start, size, recipes);
+                RecipeDao.getInstance().writeRecipes(queryTag, order, start, size, recipes);
                 return null;
             }
         }.executeOnExecutor(EXECUTOR);

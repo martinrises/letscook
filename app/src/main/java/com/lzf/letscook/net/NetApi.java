@@ -18,7 +18,7 @@ import rx.Subscriber;
  */
 public class NetApi {
 
-    public static Observable<List<Recipe>> getRecipesOnline(final String query, final String order, final int start, final int size) {
+    public static Observable<List<Recipe>> getRecipesOnline(final String tag, final String order, final int start, final int size) {
 
         final SubscriberHolder holder = new SubscriberHolder();
         Observable<List<Recipe>> ob = Observable.create(new Observable.OnSubscribe<List<Recipe>>() {
@@ -32,7 +32,7 @@ public class NetApi {
         String url = UrlContainer.getSearchRecipeUrl() + start + "/" + size;
         Map<String, String> params = new HashMap<>();
         params.put("order", order);
-        params.put("tag", query);
+        params.put("tag", tag);
         params.put("client", "7");
         Utils.signParam(url, params);
 
@@ -59,6 +59,38 @@ public class NetApi {
         }
     }
 
+    public static Observable<List<Recipe>> getRecipesSearch(final String keyword, final String tag, final int start, final int size) {
 
+        final SubscriberHolder holder = new SubscriberHolder();
+        Observable<List<Recipe>> ob = Observable.create(new Observable.OnSubscribe<List<Recipe>>() {
+            @Override
+            public void call(Subscriber<? super List<Recipe>> subscriber) {
+
+                holder.setSubscriber(subscriber);
+            }
+        });
+
+        String url = UrlContainer.getSearchRecipeUrl() + start + "/" + size;
+        Map<String, String> params = new HashMap<>();
+        params.put("keyword", keyword);
+        params.put("tag", tag);
+        params.put("client", "7");
+        Utils.signParam(url, params);
+
+        RecipeRequest req = new RecipeRequest(Request.Method.POST, url, UrlContainer.getHeaders(), params, new Response.Listener<List<Recipe>>() {
+            @Override
+            public void onResponse(List<Recipe> response) {
+                notifySubcriber(response, holder);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                notifySubcriber(null, holder);
+            }
+        });
+        ReqQueue.getInstance().add(req);
+
+        return ob;
+    }
 
 }
