@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
 import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
-
-import java.lang.reflect.Field;
 
 public class MainActivity extends BaseActivity {
 
@@ -92,15 +89,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initHandler() {
-        try {
-            Field mHandlerField = FragmentActivity.class.getDeclaredField("mHandler");
-            mHandlerField.setAccessible(true);
-            mHandler = (Handler) mHandlerField.get(this);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        mHandler  = new Handler();
     }
 
     private int getTransitionColor(int src, int tag, float offset) {
