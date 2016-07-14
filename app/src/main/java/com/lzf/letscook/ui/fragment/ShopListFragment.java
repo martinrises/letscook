@@ -3,19 +3,20 @@ package com.lzf.letscook.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.ui.adapter.ShopAdapter;
 import com.lzf.letscook.ui.mvp.contract.ShopListPresenter;
 import com.lzf.letscook.ui.mvp.contract.ShopListView;
 import com.lzf.letscook.ui.mvp.impl.ShopListPresenterImpl;
 import com.lzf.letscook.ui.view.ProgressDialogFragment;
-import com.lzf.letscook.ui.view.ShopRecipeView;
-import com.lzf.letscook.util.Utils;
 
 import java.util.List;
 
@@ -24,22 +25,14 @@ import java.util.List;
  */
 public class ShopListFragment extends BaseFragment implements ShopListView {
 
-    private LinearLayout mContainerLl;
-    private LinearLayout.LayoutParams mLp;
+    private RecyclerView mShopRv;
+    private ShopAdapter mAdapter;
+
     private ProgressDialogFragment mPd;
     private ShopListPresenter mPresenter;
 
     public ShopListFragment(){
         mPresenter = new ShopListPresenterImpl(this);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        int marginLR = (int) getResources().getDimension(R.dimen.margin_recipe_shop_card_left_right);
-        int marginTB = (int) getResources().getDimension(R.dimen.margin_recipe_shop_card_top_bottom);
-        mLp.setMargins(marginLR, marginTB, marginLR, marginTB);
     }
 
     @Nullable
@@ -50,7 +43,27 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mContainerLl = (LinearLayout) view.findViewById(R.id.shop_container_ll);
+        mShopRv = (RecyclerView) view.findViewById(R.id.recipe_list);
+        LinearLayoutManager llm = new LinearLayoutManager(mContext) {
+            @Override
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return super.generateDefaultLayoutParams();
+            }
+
+            @Override
+            public RecyclerView.LayoutParams generateLayoutParams(ViewGroup.LayoutParams lp) {
+                return super.generateLayoutParams(lp);
+            }
+
+            @Override
+            public RecyclerView.LayoutParams generateLayoutParams(Context c, AttributeSet attrs) {
+                return super.generateLayoutParams(c, attrs);
+            }
+        };
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mShopRv.setLayoutManager(llm);
+        mAdapter = new ShopAdapter();
+        mShopRv.setAdapter(mAdapter);
     }
 
     @Override
@@ -71,15 +84,7 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
     public void onLoadComplete(List<Recipe> recipes) {
         mPd.dismissAllowingStateLoss();
 
-        if(!Utils.isCollectionEmpty(recipes)){
-
-            mContainerLl.removeAllViews();
-
-            for(Recipe recipe : recipes){
-                ShopRecipeView item = new ShopRecipeView(mContext);
-                item.setRecipe(recipe);
-                mContainerLl.addView(item, mLp);
-            }
-        }
+        mAdapter.setData(recipes);
+        mAdapter.notifyDataSetChanged();
     }
 }

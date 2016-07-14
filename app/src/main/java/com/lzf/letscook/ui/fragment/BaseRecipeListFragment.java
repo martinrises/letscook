@@ -25,7 +25,7 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
 
     public static final String TAG = BaseRecipeListFragment.class.getSimpleName();
 
-    private RecyclerView recipeList;
+    private RecyclerView mRecipeList;
     private SwipeRefreshLayout mRefreshLayout;
     private RecipeAdapter mAdapter;
     private ProgressBar loadMorePb;
@@ -47,14 +47,14 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        recipeList = (RecyclerView) view.findViewById(R.id.recipe_list);
+        mRecipeList = (RecyclerView) view.findViewById(R.id.recipe_list);
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recipeList.setLayoutManager(llm);
+        mRecipeList.setLayoutManager(llm);
         mAdapter = new RecipeAdapter();
-        recipeList.setAdapter(mAdapter);
-        recipeList.addItemDecoration(new RecipeItemDivider());
-        recipeList.addOnScrollListener(mPresenter);
+        mRecipeList.setAdapter(mAdapter);
+        mRecipeList.addItemDecoration(new RecipeItemDivider());
+        mRecipeList.addOnScrollListener(mPresenter);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
 
