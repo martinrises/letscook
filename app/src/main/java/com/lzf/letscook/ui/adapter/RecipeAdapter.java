@@ -10,6 +10,7 @@ import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.activity.DetailActivity;
 import com.lzf.letscook.ui.view.RecipeItemView;
+import com.lzf.letscook.util.Logger;
 
 import java.util.List;
 
@@ -26,15 +27,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         super.onAttachedToRecyclerView(recyclerView);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
                         int cn = recyclerView.getChildCount();
                         for(int i = 0; i < cn; i++){
-                            View child = recyclerView.getChildAt(i);
-//                            child.fin
+                            RecipeItemView child = (RecipeItemView) recyclerView.getChildAt(i);
+                            RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
+                            int position = lm.getPosition(child);
+                            Logger.v("scaletype", "i = " + i + ", position = " + position);
+                            child.refreshOffset(dx, dy);
                         }
                     }
                 });

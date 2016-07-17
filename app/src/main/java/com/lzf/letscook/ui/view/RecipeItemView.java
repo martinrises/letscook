@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.util.RecipeUtils;
@@ -17,7 +16,7 @@ import com.lzf.letscook.util.RecipeUtils;
  */
 public class RecipeItemView extends RelativeLayout {
 
-    private SimpleDraweeView imgIv;
+    private MoveSimpleDraweeView imgIv;
     private TextView titleTv;
     private TextView descTv;
 
@@ -38,7 +37,7 @@ public class RecipeItemView extends RelativeLayout {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.item_merge_recipe_list, this);
 
-        imgIv = (SimpleDraweeView) findViewById(R.id.recipe_img_iv);
+        imgIv = (MoveSimpleDraweeView) findViewById(R.id.recipe_img_iv);
         titleTv = (TextView) findViewById(R.id.recipe_title_tv);
         descTv = (TextView) findViewById(R.id.recipe_desc_tv);
     }
@@ -47,5 +46,9 @@ public class RecipeItemView extends RelativeLayout {
         titleTv.setText(recipe.getTitle());
         descTv.setText(RecipeUtils.major2String(recipe.getMajor()));
         imgIv.setImageURI(Uri.parse(recipe.getImage()));
+    }
+
+    public void refreshOffset(int dx, int dy) {
+        imgIv.translate(dx, dy);
     }
 }
