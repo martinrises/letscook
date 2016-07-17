@@ -1,11 +1,9 @@
 package com.lzf.letscook.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,7 @@ import com.lzf.letscook.ui.mvp.contract.ShopListPresenter;
 import com.lzf.letscook.ui.mvp.contract.ShopListView;
 import com.lzf.letscook.ui.mvp.impl.ShopListPresenterImpl;
 import com.lzf.letscook.ui.view.ProgressDialogFragment;
+import com.lzf.letscook.util.Utils;
 
 import java.util.List;
 
@@ -24,6 +23,8 @@ import java.util.List;
  * Created by liuzhaofeng on 16/6/12.
  */
 public class ShopListFragment extends BaseFragment implements ShopListView {
+
+    public static final String TIP_FRAGMENT_TAG = "tipFragment_shop";
 
     private RecyclerView mShopRv;
     private ShopAdapter mAdapter;
@@ -44,22 +45,7 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mShopRv = (RecyclerView) view.findViewById(R.id.recipe_list);
-        LinearLayoutManager llm = new LinearLayoutManager(mContext) {
-            @Override
-            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-                return super.generateDefaultLayoutParams();
-            }
-
-            @Override
-            public RecyclerView.LayoutParams generateLayoutParams(ViewGroup.LayoutParams lp) {
-                return super.generateLayoutParams(lp);
-            }
-
-            @Override
-            public RecyclerView.LayoutParams generateLayoutParams(Context c, AttributeSet attrs) {
-                return super.generateLayoutParams(c, attrs);
-            }
-        };
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mShopRv.setLayoutManager(llm);
         mAdapter = new ShopAdapter();
@@ -86,5 +72,9 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
 
         mAdapter.setData(recipes);
         mAdapter.notifyDataSetChanged();
+
+        if(Utils.isCollectionEmpty(recipes)){
+            EmptyTipsFragment.showEmptyTips(0, 0, getFragmentManager(), R.id.base_frag_root, TIP_FRAGMENT_TAG);
+        }
     }
 }

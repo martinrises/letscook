@@ -6,5 +6,6 @@
     <string name="shop_loading">加载中..</string>
     <string name="search_hint">输入菜谱名称</string>
     <string name="tip_query_empty">请输入菜谱名称</string>
+    <string name="tip_fav_empty">您还没有添加收藏</string>
 
 </resources>

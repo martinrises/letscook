@@ -1,9 +1,14 @@
 package com.lzf.letscook.ui.fragment;
 
+import com.lzf.letscook.R;
+import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.system.fav.FavSystem;
 import com.lzf.letscook.system.fav.OnFavChangeListener;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.impl.FavRecipeListPresenterImpl;
+import com.lzf.letscook.util.Utils;
+
+import java.util.List;
 
 /**
  * Created by liuzhaofeng on 16/6/9.
@@ -22,5 +27,14 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
     @Override
     public void onFavChanged(String recipeId, boolean isFav) {
         mPresenter.onRefresh();
+    }
+
+    @Override
+    public void onSetRecipes(List<Recipe> recipes) {
+        super.onSetRecipes(recipes);
+
+        if(Utils.isCollectionEmpty(recipes)){
+            EmptyTipsFragment.showEmptyTips(R.string.tip_fav_empty, 0, getFragmentManager(), R.id.base_frag_root, TIP_FRAGMENT_TAG);
+        }
     }
 }
