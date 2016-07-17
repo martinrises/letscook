@@ -1,18 +1,15 @@
 package com.lzf.letscook.ui.adapter;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.activity.DetailActivity;
-import com.lzf.letscook.util.RecipeUtils;
+import com.lzf.letscook.ui.view.RecipeItemView;
 
 import java.util.List;
 
@@ -25,6 +22,27 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     private LayoutInflater mInflator;
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int cn = recyclerView.getChildCount();
+                        for(int i = 0; i < cn; i++){
+                            View child = recyclerView.getChildAt(i);
+//                            child.fin
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
     public RecipeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(mInflator == null){
             mInflator = LayoutInflater.from(parent.getContext());
@@ -35,17 +53,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     @Override
     public void onBindViewHolder(final RecipeHolder holder, int position) {
         final Recipe recipe = mRecipes.get(position);
-
-        holder.titleTv.setText(recipe.getTitle());
-        holder.descTv.setText(RecipeUtils.major2String(recipe.getMajor()));
-        holder.imgIv.setImageURI(Uri.parse(recipe.getImage()));
-
-        holder.root.setOnClickListener(new View.OnClickListener() {
+        holder.mRiv.setRecipe(recipe);
+        holder.mRiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.root.getContext(), DetailActivity.class);
+                Intent intent = new Intent(holder.mRiv.getContext(), DetailActivity.class);
                 intent.putExtra(DetailActivity.EXTRA_RECIPE, recipe);
-                holder.root.getContext().startActivity(intent);
+                holder.mRiv.getContext().startActivity(intent);
             }
         });
     }
@@ -68,18 +82,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
     static final class RecipeHolder extends RecyclerView.ViewHolder{
 
-        View root;
-        SimpleDraweeView imgIv;
-        TextView titleTv;
-        TextView descTv;
+        RecipeItemView mRiv;
 
         public RecipeHolder(View itemView) {
             super(itemView);
-
-            root = itemView;
-            imgIv = (SimpleDraweeView) itemView.findViewById(R.id.recipe_img_iv);
-            titleTv = (TextView) itemView.findViewById(R.id.recipe_title_tv);
-            descTv = (TextView) itemView.findViewById(R.id.recipe_desc_tv);
+            mRiv = (RecipeItemView) itemView;
         }
     }
 }

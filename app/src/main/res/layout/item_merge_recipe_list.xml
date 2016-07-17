@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/recipe_img_iv"
+        style="@style/item_image" />
+
+    <TextView
+        android:id="@+id/recipe_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/recipe_img_iv"
+        android:ellipsize="end"
+        android:lines="2"
+        android:text="testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+        android:textSize="16dip"/>
+
+    <TextView
+        android:id="@+id/recipe_desc_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/recipe_img_iv"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
+        android:textSize="14dp"/>
+
+</merge>
