@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.view.ShopRecipeView;
-import com.lzf.letscook.util.Logger;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ShopHolder> {
 
     @Override
     public int getItemCount() {
-        Logger.v(TAG, "getItemCount() invoked");
         if(mRecipes == null){
             return 0;
         }
@@ -47,7 +45,6 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ShopHolder> {
     }
 
     public void setData(List<Recipe> recipes){
-        Logger.v(TAG, "setData() invoked");
         mRecipes = recipes;
     }
 

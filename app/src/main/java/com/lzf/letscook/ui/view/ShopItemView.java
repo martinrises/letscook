@@ -1,19 +1,25 @@
 package com.lzf.letscook.ui.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.net.SubscriberHolder;
 import com.lzf.letscook.system.ShopSystem;
 import com.lzf.letscook.util.rx.SubcriberAdapter;
+
+import java.lang.ref.SoftReference;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -31,6 +37,8 @@ public class ShopItemView extends LinearLayout {
     private Paint mPaint;
     private ProgressDialogFragment mProgressDialog;
 
+    private static SoftReference<Bitmap> sBitmapRef;
+
     public ShopItemView(Context context) {
         this(context, null);
     }
@@ -46,13 +54,18 @@ public class ShopItemView extends LinearLayout {
 
     private void init() {
         setOrientation(LinearLayout.HORIZONTAL);
+        int verticalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+        setPadding(0, verticalPadding, 0 , verticalPadding);
+
+        LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
+        lp.weight = 1;
 
         mNameTv = new TextView(getContext());
-        LayoutParams lp = new LayoutParams(0, LayoutParams.MATCH_PARENT);
-        lp.weight = 1;
+        mNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         addView(mNameTv, lp);
 
         mNumTv = new TextView(getContext());
+        mNumTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         addView(mNumTv, lp);
 
         mPaint = new Paint();
@@ -86,7 +99,7 @@ public class ShopItemView extends LinearLayout {
                 if (mProgressDialog == null) {
                     mProgressDialog = new ProgressDialogFragment();
                 }
-                mProgressDialog.showPd(((FragmentActivity)getContext()).getSupportFragmentManager(), "操作中..");
+                mProgressDialog.showPd(((FragmentActivity) getContext()).getSupportFragmentManager(), "操作中..");
                 return Observable.just(view);
             }
         }).flatMap(new Func1<View, Observable<Boolean>>() {
@@ -95,7 +108,7 @@ public class ShopItemView extends LinearLayout {
 
                 if (mMaterial.isBuyed()) {
                     return ShopSystem.getInstance().unbuyMaterial(mMaterial.get_id(), mMaterial.isMajor());
-                }else{
+                } else {
                     return ShopSystem.getInstance().buyMaterial(mMaterial.get_id(), mMaterial.isMajor());
                 }
             }
@@ -106,10 +119,10 @@ public class ShopItemView extends LinearLayout {
                 mProgressDialog.dismiss();
                 return Observable.just(hasBuySuccess);
             }
-        }).subscribe(new SubcriberAdapter<Boolean>(){
+        }).subscribe(new SubcriberAdapter<Boolean>() {
             @Override
             public void onNext(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     mMaterial.setBuyed(!mMaterial.isBuyed());
                     invalidate();
                 }
@@ -119,7 +132,7 @@ public class ShopItemView extends LinearLayout {
 
     }
 
-    public void setMaterial(Material m){
+    public void setMaterial(Material m) {
         mMaterial = m;
 
         mNameTv.setText("\u0020\u0020" + mMaterial.getTitle());
@@ -132,13 +145,20 @@ public class ShopItemView extends LinearLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
 
-        if(mMaterial != null){
-            if(mMaterial.isBuyed()){
+        if (mMaterial != null) {
+            if (mMaterial.isBuyed()) {
 
                 int width = getWidth();
                 int height = getHeight();
 
-                canvas.drawLine(0, height / 2, width, height / 2, mPaint);
+                Bitmap bitmap = null;
+                if (sBitmapRef == null || (bitmap = sBitmapRef.get()) == null) {
+
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.shopping_delete_line);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, width, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()), true);
+                    sBitmapRef = new SoftReference<>(bitmap);
+                }
+                canvas.drawBitmap(bitmap, 0, (height - bitmap.getHeight()) / 2, mPaint);
             }
         }
     }

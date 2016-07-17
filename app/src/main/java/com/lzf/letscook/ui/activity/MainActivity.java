@@ -22,7 +22,7 @@ import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
 public class MainActivity extends BaseActivity {
 
     private static final int TEXT_COLOR_GRAY = 0xff808080;
-    private static final int TEXT_COLOR_BLUE = 0xff00a9d5;
+    private static final int TEXT_COLOR_BLUE = 0xff03A9F4;
 
     private static final String QUERY_FRAGMENT_TAG = "query_fragment_tag";
 

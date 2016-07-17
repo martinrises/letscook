@@ -15,6 +15,10 @@
     <dimen name="pedding_top_bottom_shop_title">5dip</dimen>
     <dimen name="margin_recipe_shop_card_left_right">3dip</dimen>
     <dimen name="margin_recipe_shop_card_top_bottom">2dip</dimen>
-    <dimen name="text_size_shop_major_minor">10dip</dimen>
     <dimen name="margin_floating_right_bottom">16dp</dimen>
+    <dimen name="margin_horizon_shop">5dip</dimen>
+
+    <dimen name="margin_vertical_shop">7dip</dimen>
+    <dimen name="height_name_shop">20dip</dimen>
+    <dimen name="padding_vertival_name_shop">9dip</dimen>
 </resources>

@@ -1,5 +1,6 @@
 package com.lzf.letscook.ui.fragment;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +49,14 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mShopRv.setLayoutManager(llm);
+
+        mShopRv.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.set(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.margin_vertical_shop));
+            }
+        });
+
         mAdapter = new ShopAdapter();
         mShopRv.setAdapter(mAdapter);
     }
