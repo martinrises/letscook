@@ -41,9 +41,14 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
 
     protected abstract RecipeListPresenter onCreatePresenter();
 
+    protected int getLayoutId(){
+        return -1;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recipe_list, null);
+        int layoutId = getLayoutId();
+        return inflater.inflate(layoutId == -1 ? R.layout.fragment_recipe_list : layoutId, null);
     }
 
     @Override

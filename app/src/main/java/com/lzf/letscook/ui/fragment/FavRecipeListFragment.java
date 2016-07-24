@@ -20,6 +20,11 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
     }
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_recipe_list_favorite;
+    }
+
+    @Override
     protected RecipeListPresenter onCreatePresenter() {
         return new FavRecipeListPresenterImpl(this, "收藏", "1");
     }
@@ -34,7 +39,7 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
         super.onSetRecipes(recipes);
 
         if(Utils.isCollectionEmpty(recipes)){
-            EmptyTipsFragment.showEmptyTips(R.string.tip_fav_empty, 0, getFragmentManager(), R.id.base_frag_root, TIP_FRAGMENT_TAG);
+            EmptyTipsFragment.showEmptyTips(R.string.tip_fav_empty, 0, getFragmentManager(), R.id.base_frag_root_fav, TIP_FRAGMENT_TAG);
         }
     }
 }
