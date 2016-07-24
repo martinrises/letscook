@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class FavRecipeListFragment extends BaseRecipeListFragment implements OnFavChangeListener {
 
+    public static final String FAV_TIP_FRAGMENT_TAG = "favTipFragment";
+
     public FavRecipeListFragment(){
         FavSystem.getInstance().addOnFavListener(this);
     }
@@ -29,6 +31,8 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
         return new FavRecipeListPresenterImpl(this, "收藏", "1");
     }
 
+
+
     @Override
     public void onFavChanged(String recipeId, boolean isFav) {
         mPresenter.onRefresh();
@@ -39,7 +43,7 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
         super.onSetRecipes(recipes);
 
         if(Utils.isCollectionEmpty(recipes)){
-            EmptyTipsFragment.showEmptyTips(R.string.tip_fav_empty, 0, getFragmentManager(), R.id.base_frag_root_fav, TIP_FRAGMENT_TAG);
+            EmptyTipsFragment.showEmptyTips(R.string.tip_fav_empty, 0, getFragmentManager(), R.id.base_frag_root_fav, FAV_TIP_FRAGMENT_TAG);
         }
     }
 }

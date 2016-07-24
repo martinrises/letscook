@@ -18,6 +18,11 @@ public class FavRecipeListPresenterImpl extends BaseRecipeListPresenterImpl {
     }
 
     @Override
+    protected void beforeRefresh() {
+        // TODO nothing
+    }
+
+    @Override
     public Observable<List<Recipe>> getRecipes() {
         return FavSystem.getInstance().getFavorite(mCursor, PAGE_SIZE);
     }

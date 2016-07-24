@@ -1,7 +1,11 @@
 package com.lzf.letscook.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 
+import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.net.UrlContainer;
 
 import java.io.UnsupportedEncodingException;
@@ -102,5 +106,32 @@ public class Utils {
 
     public static boolean isCollectionEmpty(Collection c){
         return c == null || c.isEmpty();
+    }
+
+    /**
+     * TODO 判断网络状态是否可用
+     *
+     * @return true: 网络可用 ; false: 网络不可用
+     */
+    public static boolean hasInternet() {
+        ConnectivityManager m = (ConnectivityManager) LetsCook.getApp().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (m == null) {
+            return false;
+        } else {
+            try {
+                NetworkInfo[] info = m.getAllNetworkInfo();
+                if (info != null) {
+                    for (int i = 0; i < info.length; i++) {
+                        if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                            return true;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+
+        }
+        return false;
     }
 }

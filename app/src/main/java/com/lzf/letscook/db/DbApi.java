@@ -85,6 +85,19 @@ public class DbApi {
         }.executeOnExecutor(EXECUTOR);
     }
 
+    public static void clearRecipes(final String queryTag, final String order) {
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                RecipeDao.getInstance().clearRecipes(queryTag, order);
+                return null;
+            }
+        }.executeOnExecutor(EXECUTOR);
+    }
+
     public static Observable<Boolean> addFavorite(final String recipeId){
         final SubscriberHolder holder = new SubscriberHolder<>();
         Observable<Boolean> ob = Observable.create(new Observable.OnSubscribe<Boolean>() {

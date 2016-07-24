@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ShopListFragment extends BaseFragment implements ShopListView {
 
-    public static final String TIP_FRAGMENT_TAG = "tipFragment_shop";
+    public static final String SHOP_TIP_FRAGMENT_TAG = "shopTipFragment";
 
     private RecyclerView mShopRv;
     private ShopAdapter mAdapter;
@@ -83,7 +83,7 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
         mAdapter.notifyDataSetChanged();
 
         if(Utils.isCollectionEmpty(recipes)){
-            EmptyTipsFragment.showEmptyTips(0, 0, getFragmentManager(), R.id.base_frag_root, TIP_FRAGMENT_TAG);
+            EmptyTipsFragment.showEmptyTips(R.string.tip_shop_empty, 0, getFragmentManager(), R.id.base_frag_root_shop, SHOP_TIP_FRAGMENT_TAG);
         }
     }
 }

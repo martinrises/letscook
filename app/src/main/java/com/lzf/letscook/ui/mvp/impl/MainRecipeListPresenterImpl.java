@@ -20,4 +20,6 @@ public class MainRecipeListPresenterImpl extends BaseRecipeListPresenterImpl {
     public Observable<List<Recipe>> getRecipes() {
         return CookSystem.getInstance().getRecipes(mTag, mOrder, mCursor, PAGE_SIZE);
     }
+
+
 }

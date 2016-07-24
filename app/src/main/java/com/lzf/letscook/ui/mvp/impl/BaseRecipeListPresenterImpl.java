@@ -2,7 +2,10 @@ package com.lzf.letscook.ui.mvp.impl;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
+import com.lzf.letscook.LetsCook;
+import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
@@ -62,6 +65,12 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 isRefreshing = true;
                 return aVoid;
             }
+        }).map(new Func1<Object, Object>() {
+            @Override
+            public Object call(Object o) {
+                beforeRefresh();
+                return null;
+            }
         }).flatMap(new Func1<Object, Observable<List<Recipe>>>() {
             @Override
             public Observable<List<Recipe>> call(Object aVoid) {
@@ -76,6 +85,11 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 mCursor += PAGE_SIZE;
             }
         });
+    }
+
+    protected void beforeRefresh() {
+        // 清空db
+        DbApi.clearRecipes(mTag, mOrder);
     }
 
     private void initLoadMoreOb() {
@@ -133,6 +147,12 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
 
     @Override
     public void onRefresh() {
+
+        if(!Utils.hasInternet()){
+            Toast.makeText(LetsCook.getApp(), "网络不可用，请联网重试。", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         refreshSub.onNext(new Object());
     }
 

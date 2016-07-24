@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class BaseRecipeListFragment extends BaseFragment implements RecipeListView {
 
     public static final String TAG = BaseRecipeListFragment.class.getSimpleName();
-    public static final String TIP_FRAGMENT_TAG = "tipFragment";
+
 
     private RecyclerView mRecipeList;
     private SwipeRefreshLayout mRefreshLayout;

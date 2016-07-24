@@ -7,5 +7,6 @@
     <string name="search_hint">输入菜谱名称</string>
     <string name="tip_query_empty">请输入菜谱名称</string>
     <string name="tip_fav_empty">您还没有添加收藏</string>
+    <string name="tip_shop_empty">您还没有添加购物清单</string>
 
 </resources>
