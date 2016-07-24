@@ -26,11 +26,7 @@ public class RecipeItemDivider extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
-        if (parent.getChildAdapterPosition(view) == 0) {
-            return;
-        }
-
-        outRect.top = DIVIDER_HEIGHT;
+        outRect.bottom = DIVIDER_HEIGHT;
     }
 
     @Override
@@ -39,7 +35,7 @@ public class RecipeItemDivider extends RecyclerView.ItemDecoration {
         int dividerRight = parent.getWidth() - parent.getPaddingRight();
 
         int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount - 1; i++) {
+        for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
 
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
