@@ -1,5 +1,6 @@
 package com.lzf.letscook.ui.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,7 +62,9 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
         mRecipeList.setAdapter(mAdapter);
         mRecipeList.addItemDecoration(new RecipeItemDivider());
         mRecipeList.addOnScrollListener(mPresenter);
-        mRecipeList.getRecycledViewPool().setMaxRecycledViews(0, 10);
+        Resources res = getResources();
+        int maxRecycledViews = res.getDisplayMetrics().heightPixels / res.getDimensionPixelSize(R.dimen.height_receip_item) + 2;
+        mRecipeList.getRecycledViewPool().setMaxRecycledViews(0, maxRecycledViews);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
 
