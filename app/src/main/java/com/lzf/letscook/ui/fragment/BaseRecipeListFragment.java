@@ -56,6 +56,7 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
         mRecipeList.setAdapter(mAdapter);
         mRecipeList.addItemDecoration(new RecipeItemDivider());
         mRecipeList.addOnScrollListener(mPresenter);
+        mRecipeList.getRecycledViewPool().setMaxRecycledViews(0, 10);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
 

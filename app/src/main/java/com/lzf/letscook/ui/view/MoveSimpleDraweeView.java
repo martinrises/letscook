@@ -14,6 +14,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 public class MoveSimpleDraweeView extends SimpleDraweeView {
 
     private final Matrix mMatrix = new Matrix();
+    private float mScale = 0;
+    private int mDx, mDy;
+    private String flag = String.valueOf(Math.random()).substring(0, 6);
 
     public MoveSimpleDraweeView(Context context, GenericDraweeHierarchy hierarchy) {
         super(context, hierarchy);
@@ -35,8 +38,26 @@ public class MoveSimpleDraweeView extends SimpleDraweeView {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void translate(int dx, int dy){
+    public void setTranslation(int dx, int dy){
+        mDx = dx;
+        mDy = dy;
+
+        mMatrix.reset();
+        if(mScale != 0){
+            mMatrix.postScale(mScale, mScale, getWidth() / 2, getHeight() / 2);
+        }
         mMatrix.postTranslate(dx, dy);
+        invalidate();
+    }
+
+    public void setScale(float scale){
+        mScale = scale;
+
+        mMatrix.reset();
+        if(mDx != 0 || mDy != 0){
+            mMatrix.postTranslate(mDx, mDy);
+        }
+        mMatrix.postScale(scale, scale, getWidth() / 2, getHeight() / 2);
         invalidate();
     }
 

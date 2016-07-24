@@ -1,6 +1,7 @@
 package com.lzf.letscook.ui.adapter;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.activity.DetailActivity;
 import com.lzf.letscook.ui.view.RecipeItemView;
-import com.lzf.letscook.util.Logger;
 
 import java.util.List;
 
@@ -21,10 +21,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
     private List<Recipe> mRecipes;
     private LayoutInflater mInflator;
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
@@ -35,15 +37,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
                         int cn = recyclerView.getChildCount();
                         for(int i = 0; i < cn; i++){
                             RecipeItemView child = (RecipeItemView) recyclerView.getChildAt(i);
-                            RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
-                            int position = lm.getPosition(child);
-                            Logger.v("scaletype", "i = " + i + ", position = " + position);
-                            child.refreshOffset(dx, dy);
+                            Point p = getTranslation(recyclerView, child);
+                            child.setTranslation(p.x, p.y);
                         }
                     }
                 });
             }
         });
+    }
+
+    private Point getTranslation(RecyclerView recyclerView, RecipeItemView child) {
+        Point p = new Point();
+        float dy = child.getBottom() - recyclerView.getTop();
+        float standardDy = (recyclerView.getHeight() + child.getHeight()) / 2;
+        p.y = (int) (child.getHeight() * (dy - standardDy) / standardDy * 0.2);
+        return p;
     }
 
     @Override
@@ -58,6 +66,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     public void onBindViewHolder(final RecipeHolder holder, int position) {
         final Recipe recipe = mRecipes.get(position);
         holder.mRiv.setRecipe(recipe);
+        holder.mRiv.setScale(1.5f);
+        Point p = getTranslation(mRecyclerView, holder.mRiv);
+        holder.mRiv.setTranslation(p.x, p.y);
         holder.mRiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +77,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
                 holder.mRiv.getContext().startActivity(intent);
             }
         });
+
     }
 
     @Override

@@ -45,10 +45,15 @@ public class RecipeItemView extends RelativeLayout {
     public void setRecipe(Recipe recipe) {
         titleTv.setText(recipe.getTitle());
         descTv.setText(RecipeUtils.major2String(recipe.getMajor()));
-        imgIv.setImageURI(Uri.parse(recipe.getImage()));
+        imgIv.setImageURI(Uri.parse(recipe.getPhoto_path()));
     }
 
-    public void refreshOffset(int dx, int dy) {
-        imgIv.translate(dx, dy);
+    public void setTranslation(int dx, int dy) {
+        imgIv.setTranslation(dx, dy);
     }
+
+    public void setScale(float scale){
+        imgIv.setScale(scale);
+    }
+
 }
