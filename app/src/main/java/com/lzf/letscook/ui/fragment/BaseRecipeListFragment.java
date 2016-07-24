@@ -63,7 +63,7 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
         mRecipeList.addItemDecoration(new RecipeItemDivider());
         mRecipeList.addOnScrollListener(mPresenter);
         Resources res = getResources();
-        int maxRecycledViews = res.getDisplayMetrics().heightPixels / res.getDimensionPixelSize(R.dimen.height_receip_item) + 2;
+        int maxRecycledViews = (res.getDisplayMetrics().heightPixels / res.getDimensionPixelSize(R.dimen.height_receip_item) + 1) * 2;
         mRecipeList.getRecycledViewPool().setMaxRecycledViews(0, maxRecycledViews);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
