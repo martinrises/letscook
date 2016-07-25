@@ -269,6 +269,17 @@ public class RecipeDao {
         String where = ShopContract.RECIPE_ID + "= ?";
         String[] args = {recipeId};
         db.delete(ShopContract.TABLE_NAME, where, args);
+
+        // 将recipe中的食材都置为不买
+        Recipe recipe = getRecipe(recipeId);
+        ArrayList<Material> major = recipe.getMajor();
+        for (Material m : major){
+            unBuyMaterial(m.get_id(), true);
+        }
+        ArrayList<Material> minor = recipe.getMinor();
+        for (Material m : minor){
+            unBuyMaterial(m.get_id(), false);
+        }
     }
 
     public void addShop(String recipeId){
