@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,7 +53,7 @@ public class StepView extends LinearLayout {
         mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mPaint = new Paint();
-        mPaint.setColor(getResources().getColor(R.color.devide_line));
+        mPaint.setColor(getResources().getColor(R.color.divide_line));
         mPaint.setStyle(Paint.Style.STROKE);
 
         boderPath = new Path();
@@ -67,31 +68,48 @@ public class StepView extends LinearLayout {
             return;
         }
 
-        for (final CookStep step : steps) {
+        int size = steps.size();
+        for (int i = 0; i != size; i++) {
 
-            View itemView = mInflater.inflate(R.layout.item_step, null);
-            ((TextView)itemView.findViewById(R.id.step_desc_tv)).setText(step.getPosition() + "." + step.getContent());
+            final CookStep step = steps.get(i);
+            addStepItem(steps, step);
 
-            itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), StepsActivity.class);
-                    intent.putExtra(StepsFragment.EXTRA_STEPS, steps);
-                    intent.putExtra(StepsFragment.EXTRA_STEPS_POSITION, (Utils.parseInt(step.getPosition()) - 1));
-                    getContext().startActivity(intent);
-                }
-            });
-
-            String thumbStr = step.getThumb();
-            SimpleDraweeView stepIv = (SimpleDraweeView) itemView.findViewById(R.id.step_img_iv);
-            if(TextUtils.isEmpty(step.getThumb())){
-                stepIv.setVisibility(View.GONE);
-            }else{
-                stepIv.setImageURI(Uri.parse(thumbStr));
+            if(i != size - 1){
+                addDivideLine();
             }
-
-            addView(itemView);
         }
+    }
+
+    private void addDivideLine() {
+        View v = new View(getContext());
+        v.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+        v.setBackgroundColor(getResources().getColor(R.color.divide_line));
+        addView(v);
+    }
+
+    protected void addStepItem(final ArrayList<CookStep> steps, final CookStep step) {
+        View itemView = mInflater.inflate(R.layout.item_step, null);
+        ((TextView)itemView.findViewById(R.id.step_desc_tv)).setText(step.getPosition() + "." + step.getContent());
+
+        itemView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), StepsActivity.class);
+                intent.putExtra(StepsFragment.EXTRA_STEPS, steps);
+                intent.putExtra(StepsFragment.EXTRA_STEPS_POSITION, (Utils.parseInt(step.getPosition()) - 1));
+                getContext().startActivity(intent);
+            }
+        });
+
+        String thumbStr = step.getThumb();
+        SimpleDraweeView stepIv = (SimpleDraweeView) itemView.findViewById(R.id.step_img_iv);
+        if(TextUtils.isEmpty(step.getThumb())){
+            stepIv.setVisibility(View.GONE);
+        }else{
+            stepIv.setImageURI(Uri.parse(thumbStr));
+        }
+
+        addView(itemView);
     }
 
     @Override

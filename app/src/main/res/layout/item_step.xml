@@ -19,10 +19,4 @@
         android:layout_marginTop="@dimen/margin_recipe_title_top"
         android:layout_toLeftOf="@id/step_img_iv"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@android:color/darker_gray"
-        android:layout_alignParentBottom="true"/>
-
 </RelativeLayout>

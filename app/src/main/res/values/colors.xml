@@ -23,6 +23,6 @@
     <color name="text_start_title_detail">#ffdddddd</color>
     <color name="text_end_title_detail">#ff333333</color>
 
-    <color name="devide_line">#888888</color>
+    <color name="divide_line">#888888</color>
 
 </resources>
