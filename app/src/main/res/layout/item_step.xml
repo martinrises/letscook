@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingLeft="4dip"
     android:paddingRight="4dip"
+    android:paddingTop="10dip"
+    android:paddingBottom="10dip"
     >
 
     <com.facebook.drawee.view.SimpleDraweeView

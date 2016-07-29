@@ -88,7 +88,7 @@ public class StepView extends LinearLayout {
     }
 
     protected void addStepItem(final ArrayList<CookStep> steps, final CookStep step) {
-        View itemView = mInflater.inflate(R.layout.item_step, null);
+        View itemView = mInflater.inflate(R.layout.item_step, this, false);
         ((TextView)itemView.findViewById(R.id.step_desc_tv)).setText(step.getPosition() + "." + step.getContent());
 
         itemView.setOnClickListener(new OnClickListener() {
@@ -103,6 +103,7 @@ public class StepView extends LinearLayout {
 
         String thumbStr = step.getThumb();
         SimpleDraweeView stepIv = (SimpleDraweeView) itemView.findViewById(R.id.step_img_iv);
+
         if(TextUtils.isEmpty(step.getThumb())){
             stepIv.setVisibility(View.GONE);
         }else{
