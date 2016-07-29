@@ -14,10 +14,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
 import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
+import com.lzf.letscook.util.ToastManager;
 import com.lzf.letscook.util.Utils;
 
 public class MainActivity extends BaseActivity {
@@ -165,5 +168,29 @@ public class MainActivity extends BaseActivity {
             }
         });
         return true;
+    }
+
+    private boolean mHasClickBack = false;
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+            if(!mHasClickBack) {
+                // 之前没有按过,则弹toast提示再按一下退出
+                ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.one_more_click_to_exit, Toast.LENGTH_SHORT);
+                mHasClickBack = true;
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mHasClickBack = false;
+                    }
+                }, 2000);
+
+            } else {
+                // 之前有按过，则退出
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
     }
 }
