@@ -81,6 +81,10 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }).subscribe(new Action1<List<Recipe>>() {
             @Override
             public void call(List<Recipe> recipes) {
+                if (Utils.isCollectionEmpty(recipes)) {
+                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
+                }
+
                 isRefreshing = false;
                 mView.onSetRecipes(recipes);
                 mView.stopFresh();
@@ -93,6 +97,8 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         if (Utils.hasInternet()) {
             // 清空db
             DbApi.clearRecipes(mTag, mOrder);
+        } else {
+            ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
         }
     }
 
@@ -130,6 +136,9 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }).filter(new Func1<List<Recipe>, Boolean>() {
             @Override
             public Boolean call(List<Recipe> recipes) {
+                if (Utils.isCollectionEmpty(recipes)) {
+                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
+                }
                 return !isRefreshing && isLoading;
             }
         }).subscribe(new Action1<List<Recipe>>() {
@@ -151,11 +160,6 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
 
     @Override
     public void onRefresh() {
-
-        if(!Utils.hasInternet()){
-            ToastManager.makeAndShowText(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_SHORT);
-        }
-
         refreshSub.onNext(new Object());
     }
 
@@ -164,7 +168,7 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         super.onScrolled(recyclerView, dx, dy);
 
         if(!Utils.hasInternet()){
-            ToastManager.makeAndShowText(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_SHORT);
+            ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
         }
         loadMoreSub.onNext(recyclerView);
     }

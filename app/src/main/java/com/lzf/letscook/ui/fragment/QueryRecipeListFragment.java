@@ -7,6 +7,7 @@ import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.impl.QueryRecipeListPresenterImpl;
+import com.lzf.letscook.util.ToastManager;
 
 /**
  * Created by liuzhaofeng on 16/7/13.
@@ -20,7 +21,7 @@ public class QueryRecipeListFragment extends BaseRecipeListFragment {
 
     public void onSearch(String keyword) {
         if(TextUtils.isEmpty(keyword) || TextUtils.isEmpty(keyword.trim())){
-            Toast.makeText(LetsCook.getApp().getApplicationContext(), R.string.tip_query_empty, Toast.LENGTH_SHORT).show();
+            ToastManager.makeTextAndShow(LetsCook.getApp().getApplicationContext(), R.string.tip_query_empty, Toast.LENGTH_SHORT);
             return;
         }
 

@@ -14,7 +14,7 @@ public class ToastManager {
     private static int mLastResId = Integer.MAX_VALUE;
     private static long mLastShowToastTime = 0;
 
-    public static void makeAndShowText(Context context, @StringRes int resId, @Snackbar.Duration int duration) throws Resources.NotFoundException {
+    public static void makeTextAndShow(Context context, @StringRes int resId, @Snackbar.Duration int duration) throws Resources.NotFoundException {
 
         if(System.currentTimeMillis() - mLastShowToastTime < 1000 && mLastResId == resId){
             return;
