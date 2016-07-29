@@ -24,7 +24,7 @@ public class TrackingLayout extends LinearLayout implements PullToZoomScrollView
 
     private int mLastScrollBottom = Integer.MIN_VALUE;
 
-    private static final int HEIGHT_THRESOLD = 100;
+    private static final int HEIGHT_THRESOLD = 200;
     private static int mInitBgColor, mInitTextColor, mEndTextColor;
 
     public TrackingLayout(Context context) {

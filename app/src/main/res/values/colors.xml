@@ -20,7 +20,9 @@
     <color name="blue_name_shop_pressed">#AD1457</color>
 
     <color name="bg_title_detail">#88202020</color>
-    <color name="text_start_title_detail">#ff000000</color>
-    <color name="text_end_title_detail">#2196F3</color>
+    <color name="text_start_title_detail">#ffdddddd</color>
+    <color name="text_end_title_detail">#ff333333</color>
+
+    <color name="devide_line">#888888</color>
 
 </resources>

@@ -3,7 +3,6 @@ package com.lzf.letscook.ui.view;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.net.Uri;
@@ -53,7 +52,7 @@ public class StepView extends LinearLayout {
         mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mPaint = new Paint();
-        mPaint.setColor(Color.GRAY);
+        mPaint.setColor(getResources().getColor(R.color.devide_line));
         mPaint.setStyle(Paint.Style.STROKE);
 
         boderPath = new Path();
