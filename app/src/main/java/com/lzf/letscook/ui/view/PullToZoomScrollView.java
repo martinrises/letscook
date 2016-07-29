@@ -114,6 +114,8 @@ public class PullToZoomScrollView extends ScrollView{
             mTopView.getLayoutParams().height = mTopViewHeight-t;
 
             mTopView.requestLayout();
+
+            notifyOnHeadMovedOrScaled(mTopViewHeight-t);
         }
     }
 

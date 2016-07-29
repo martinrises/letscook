@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzf.letscook.R;
+import com.lzf.letscook.util.Logger;
 import com.lzf.letscook.util.Utils;
 
 /**
@@ -17,7 +18,7 @@ import com.lzf.letscook.util.Utils;
  */
 public class TrackingLayout extends LinearLayout implements PullToZoomScrollView.onHeadViewMovedOrScaledListener{
 
-    private static final String ALPHA_TAG = "ALPHA_TAG";
+    public static final String ALPHA_TAG = "ALPHA_TAG";
 
     private TextView mFirstChild;
     private int mFirstChildHeight;
@@ -67,6 +68,7 @@ public class TrackingLayout extends LinearLayout implements PullToZoomScrollView
 
         setChildColor(scrollY);
 
+        Logger.v(ALPHA_TAG, "scrollY = " + scrollY);
         this.scrollTo(0, scrollY);
     }
 
