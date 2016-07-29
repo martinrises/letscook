@@ -2,14 +2,13 @@ package com.lzf.letscook.ui.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzf.letscook.R;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * Created by liuzhaofeng on 16/5/20.
  */
-public class MaterialView extends GridLayout {
+public class MaterialView extends LinearLayout {
 
     private List<Material> mMaterials;
     private LayoutInflater mInflater;
@@ -51,9 +50,10 @@ public class MaterialView extends GridLayout {
     }
 
     private void init() {
+        setOrientation(LinearLayout.VERTICAL);
         mInflater = LayoutInflater.from(getContext());
         mPaint = new Paint();
-        mPaint.setColor(Color.GRAY);
+        mPaint.setColor(getResources().getColor(R.color.divide_line));
         mPaint.setStyle(Paint.Style.STROKE);
 
         boderPath = new Path();
@@ -77,9 +77,11 @@ public class MaterialView extends GridLayout {
     }
 
     private void inflateMaterial(List<List<Material>> pairs) {
-        for (List<Material> pair : pairs) {
+        int size = pairs.size();
+        for (int i = 0; i != size; i++) {
 
-            View itemView = mInflater.inflate(R.layout.item_material, null);
+            List<Material> pair = pairs.get(i);
+            View itemView = mInflater.inflate(R.layout.item_material, this, false);
 
             Material m = pair.get(0);
             ((TextView) itemView.findViewById(R.id.tv_material_name)).setText(m.getTitle());
@@ -92,6 +94,12 @@ public class MaterialView extends GridLayout {
             }
 
             this.addView(itemView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            if(i != size - 1){
+                View v = new View(getContext());
+                v.setBackgroundColor(getResources().getColor(R.color.divide_line));
+                this.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+            }
         }
     }
 
