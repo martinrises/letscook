@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -89,7 +90,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initHandler() {
-        mHandler  = new Handler();
+        mHandler = new Handler();
     }
 
     private void initIndicators() {
@@ -123,9 +124,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public boolean onQueryTextSubmit(final String keyword) {
                 Fragment queryFragment = getSupportFragmentManager().findFragmentByTag(QUERY_FRAGMENT_TAG);
-                if(queryFragment == null){
+                if (queryFragment == null) {
                     queryFragment = new QueryRecipeListFragment();
-                    getSupportFragmentManager().beginTransaction().add(R.id.main_container, queryFragment, QUERY_FRAGMENT_TAG).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.main_container, queryFragment, QUERY_FRAGMENT_TAG)
+                            .addToBackStack("QueryFragment")
+                            .commit();
                 }
 
                 final QueryRecipeListFragment f = (QueryRecipeListFragment) queryFragment;
@@ -141,15 +145,25 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                return true;
             }
         });
+        MenuItem item = menu.findItem(R.id.action_search);
+        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
 
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Fragment queryFragment = getSupportFragmentManager().findFragmentByTag(QUERY_FRAGMENT_TAG);
+                if (queryFragment != null) {
+                    getSupportFragmentManager().popBackStack();
+                }
+                return true;
+            }
+        });
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 }
