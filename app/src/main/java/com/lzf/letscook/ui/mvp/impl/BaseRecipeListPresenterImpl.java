@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.lzf.letscook.LetsCook;
+import com.lzf.letscook.R;
 import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
 import com.lzf.letscook.util.Logger;
+import com.lzf.letscook.util.ToastManager;
 import com.lzf.letscook.util.Utils;
 
 import java.util.List;
@@ -88,8 +90,10 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     }
 
     protected void beforeRefresh() {
-        // 清空db
-        DbApi.clearRecipes(mTag, mOrder);
+        if (Utils.hasInternet()) {
+            // 清空db
+            DbApi.clearRecipes(mTag, mOrder);
+        }
     }
 
     private void initLoadMoreOb() {
@@ -149,8 +153,7 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     public void onRefresh() {
 
         if(!Utils.hasInternet()){
-            Toast.makeText(LetsCook.getApp(), "网络不可用，请联网重试。", Toast.LENGTH_SHORT).show();
-            return;
+            ToastManager.makeAndShowText(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_SHORT);
         }
 
         refreshSub.onNext(new Object());
@@ -159,6 +162,10 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
+
+        if(!Utils.hasInternet()){
+            ToastManager.makeAndShowText(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_SHORT);
+        }
         loadMoreSub.onNext(recyclerView);
     }
 
