@@ -2,6 +2,7 @@ package com.lzf.letscook.ui.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +56,12 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mStepView.setSteps(mRecipe.getSteps());
 
         mDescTv = (TextView) findViewById(R.id.tv_detail_desc);
-        mDescTv.setText(mRecipe.getCookstory());
+        String desc = mRecipe.getCookstory();
+        if (TextUtils.isEmpty(desc)) {
+            mDescTv.setVisibility(View.GONE);
+        } else {
+            mDescTv.setText(desc);
+        }
 
         mTitleTv = (TextView) findViewById(R.id.tv_detail_title);
         mTitleTv.setText(mRecipe.getTitle());
