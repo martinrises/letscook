@@ -2,7 +2,6 @@ package com.lzf.letscook.ui.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
 import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
+import com.lzf.letscook.util.Utils;
 
 public class MainActivity extends BaseActivity {
 
@@ -68,8 +68,8 @@ public class MainActivity extends BaseActivity {
                     return;
                 }
 
-                mIndicators[position].setTextColor(getTransitionColor(TEXT_COLOR_BLUE, TEXT_COLOR_GRAY, positionOffset));
-                mIndicators[position + 1].setTextColor(getTransitionColor(TEXT_COLOR_GRAY, TEXT_COLOR_BLUE, positionOffset));
+                mIndicators[position].setTextColor(Utils.getTransitionColor(TEXT_COLOR_BLUE, TEXT_COLOR_GRAY, positionOffset));
+                mIndicators[position + 1].setTextColor(Utils.getTransitionColor(TEXT_COLOR_GRAY, TEXT_COLOR_BLUE, positionOffset));
             }
 
             @Override
@@ -90,13 +90,6 @@ public class MainActivity extends BaseActivity {
 
     private void initHandler() {
         mHandler  = new Handler();
-    }
-
-    private int getTransitionColor(int src, int tag, float offset) {
-        int r = Color.red(src) + (int) ((Color.red(tag) - Color.red(src)) * offset);
-        int g = Color.green(src) + (int) ((Color.green(tag) - Color.green(src)) * offset);
-        int b = Color.blue(src) + (int) ((Color.blue(tag) - Color.blue(src)) * offset);
-        return Color.argb(0xff, r, g, b);
     }
 
     private void initIndicators() {

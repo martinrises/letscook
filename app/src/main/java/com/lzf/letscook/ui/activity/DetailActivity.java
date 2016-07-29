@@ -14,7 +14,9 @@ import com.lzf.letscook.ui.mvp.contract.RecipeDetailPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailView;
 import com.lzf.letscook.ui.mvp.impl.RecipeDetailPresenterImpl;
 import com.lzf.letscook.ui.view.MaterialView;
+import com.lzf.letscook.ui.view.PullToZoomScrollView;
 import com.lzf.letscook.ui.view.StepView;
+import com.lzf.letscook.ui.view.TrackingLayout;
 
 /**
  * Created by liuzhaofeng on 16/5/20.
@@ -42,6 +44,10 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mDetailPresenter =  new RecipeDetailPresenterImpl(this);
         mRecipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
 
+        PullToZoomScrollView pzs = (PullToZoomScrollView) findViewById(R.id.pzs_detail);
+        TrackingLayout tl = (TrackingLayout) findViewById(R.id.tl_detail);
+        pzs.setOnHeadViewMovedOrScaledListener(tl);
+
         mMaterialView = (MaterialView) findViewById(R.id.material_major);
         mMaterialView.setMaterials(mRecipe.getMajor());
 
@@ -49,10 +55,10 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mStepView.setSteps(mRecipe.getSteps());
 
         mDescTv = (TextView) findViewById(R.id.tv_detail_desc);
-        mDescTv.setText(mRecipe.getTitle());
+        mDescTv.setText(mRecipe.getCookstory());
 
         mTitleTv = (TextView) findViewById(R.id.tv_detail_title);
-        mTitleTv.setText(mRecipe.getCookstory());
+        mTitleTv.setText(mRecipe.getTitle());
 
         mPhotoRecipe = (SimpleDraweeView) findViewById(R.id.sdv_recipe);
         mPhotoRecipe.setImageURI(Uri.parse(mRecipe.getPhoto_path()));

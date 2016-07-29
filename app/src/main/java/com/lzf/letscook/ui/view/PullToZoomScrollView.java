@@ -1,7 +1,9 @@
 package com.lzf.letscook.ui.view;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -15,6 +17,9 @@ import android.widget.ScrollView;
  * Created by JIYI on 2015/8/10.
  */
 public class PullToZoomScrollView extends ScrollView{
+
+    private onHeadViewMovedOrScaledListener mOnHeadViewMovedOrScaledListener;
+
     private  boolean isonce;//加载该View的布局时是否是第一次加载，是第一次就让其实现OnMeasure里的代码
 
     private LinearLayout mParentView;//布局的父布局，ScrollView内部只能有一个根ViewGroup，就是此View
@@ -28,6 +33,8 @@ public class PullToZoomScrollView extends ScrollView{
 
     private ObjectAnimator oa;//这个是对象动画，这个在本View里很简单，也很独立，就在这里申明一下，后面有两个方法
     //两个方法是：setT(int t),reset()两个方法用到，其他都和它无关了。
+
+    private boolean isFirstDispatchDraw = true; // 是否是第一次dispatchDraw
 
     /**
      * 初始化获取高度值，并记录
@@ -55,7 +62,7 @@ public class PullToZoomScrollView extends ScrollView{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if(!isonce) {
             mParentView = (LinearLayout) this.getChildAt(0);
-            mTopView = (View) mParentView.getChildAt(0);
+            mTopView = mParentView.getChildAt(0);
             mTopView.getLayoutParams().height = mTopViewHeight;
             isonce=true;
         }
@@ -105,6 +112,7 @@ public class PullToZoomScrollView extends ScrollView{
         scrollTo(0, 0);
         if (t < 0) {
             mTopView.getLayoutParams().height = mTopViewHeight-t;
+
             mTopView.requestLayout();
         }
     }
@@ -118,6 +126,12 @@ public class PullToZoomScrollView extends ScrollView{
         }
         oa = ObjectAnimator.ofInt(this, "t", (int)-distance / 4, 0);
         oa.setDuration(150);
+        oa.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                notifyOnHeadMovedOrScaled(mTopView.getLayoutParams().height);
+            }
+        });
         oa.start();
     }
 
@@ -130,6 +144,7 @@ public class PullToZoomScrollView extends ScrollView{
      */
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+
         super.onScrollChanged(l, t, oldl, oldt);
         mCurrentOffset = t;//右边滑动标签相对于顶端的偏移量
         //当手势上滑，则右侧滚动条下滑，下滑的高度小于TopView的高度，则让TopView的上滑速度小于DownView的上滑速度
@@ -142,5 +157,31 @@ public class PullToZoomScrollView extends ScrollView{
             scrollTo(0,0);
         }
 
+        notifyOnHeadMovedOrScaled(mTopView.getBottom() - t);
+
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+
+        if (isFirstDispatchDraw) {
+            notifyOnHeadMovedOrScaled(mTopView.getHeight());
+            isFirstDispatchDraw = false;
+        }
+    }
+
+    private void notifyOnHeadMovedOrScaled(int t) {
+        if(mOnHeadViewMovedOrScaledListener != null){
+            mOnHeadViewMovedOrScaledListener.onHeadViewMovedOrScaled(t);
+        }
+    }
+
+    public void setOnHeadViewMovedOrScaledListener(onHeadViewMovedOrScaledListener listener){
+        this.mOnHeadViewMovedOrScaledListener = listener;
+    }
+
+    public interface onHeadViewMovedOrScaledListener{
+        void onHeadViewMovedOrScaled(int bottom);
     }
 }

@@ -1,6 +1,7 @@
 package com.lzf.letscook.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
@@ -96,15 +97,15 @@ public class Utils {
         return "";
     }
 
-    public static int parseInt(String s){
-        try{
+    public static int parseInt(String s) {
+        try {
             return Integer.parseInt(s);
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
-    public static boolean isCollectionEmpty(Collection c){
+    public static boolean isCollectionEmpty(Collection c) {
         return c == null || c.isEmpty();
     }
 
@@ -133,5 +134,13 @@ public class Utils {
 
         }
         return false;
+    }
+
+    public static int getTransitionColor(int src, int tag, float offset) {
+        int a = Color.alpha(src) + (int) ((Color.alpha(tag) - Color.alpha(src)) * offset);
+        int r = Color.red(src) + (int) ((Color.red(tag) - Color.red(src)) * offset);
+        int g = Color.green(src) + (int) ((Color.green(tag) - Color.green(src)) * offset);
+        int b = Color.blue(src) + (int) ((Color.blue(tag) - Color.blue(src)) * offset);
+        return Color.argb(a, r, g, b);
     }
 }
