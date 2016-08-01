@@ -117,7 +117,7 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                     int itemCount = layoutManager.getItemCount();
                     int lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
 
-                    return (itemCount - lastPosition < BUFFER_SIZE && !isRefreshing && !isLoading);
+                    return (itemCount - lastPosition < BUFFER_SIZE && !isRefreshing && !isLoading && itemCount >= PAGE_SIZE);
                 }
                 return false;
             }
