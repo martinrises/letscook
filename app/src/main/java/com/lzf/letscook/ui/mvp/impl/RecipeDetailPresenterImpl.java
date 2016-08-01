@@ -1,7 +1,7 @@
 package com.lzf.letscook.ui.mvp.impl;
 
 import com.lzf.letscook.entity.Recipe;
-import com.lzf.letscook.system.ShopSystem;
+import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.system.fav.FavSystem;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailView;

@@ -69,4 +69,8 @@ public class FavSystem {
             l.onFavChanged(recipeId, isFav);
         }
     }
+
+    public void removeOnFavListener(OnFavChangeListener listener) {
+        mOnFavChangeListeners.remove(listener);
+    }
 }

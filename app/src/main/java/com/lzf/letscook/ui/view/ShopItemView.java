@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.net.SubscriberHolder;
-import com.lzf.letscook.system.ShopSystem;
+import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.util.rx.SubcriberAdapter;
 
 import java.lang.ref.SoftReference;

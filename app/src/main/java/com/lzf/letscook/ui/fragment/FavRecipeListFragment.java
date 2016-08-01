@@ -1,5 +1,7 @@
 package com.lzf.letscook.ui.fragment;
 
+import android.os.Bundle;
+
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.system.fav.FavSystem;
@@ -17,8 +19,16 @@ public class FavRecipeListFragment extends BaseRecipeListFragment implements OnF
 
     public static final String FAV_TIP_FRAGMENT_TAG = "favTipFragment";
 
-    public FavRecipeListFragment(){
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         FavSystem.getInstance().addOnFavListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FavSystem.getInstance().removeOnFavListener(this);
     }
 
     @Override

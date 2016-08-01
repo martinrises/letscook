@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.system.shop.OnShopChangeListener;
+import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.ui.adapter.ShopAdapter;
 import com.lzf.letscook.ui.mvp.contract.ShopListPresenter;
 import com.lzf.letscook.ui.mvp.contract.ShopListView;
@@ -23,7 +25,7 @@ import java.util.List;
 /**
  * Created by liuzhaofeng on 16/6/12.
  */
-public class ShopListFragment extends BaseFragment implements ShopListView {
+public class ShopListFragment extends BaseFragment implements ShopListView, OnShopChangeListener {
 
     public static final String SHOP_TIP_FRAGMENT_TAG = "shopTipFragment";
 
@@ -31,10 +33,18 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
     private ShopAdapter mAdapter;
 
     private ProgressDialogFragment mPd;
-    private ShopListPresenter mPresenter;
+    private ShopListPresenter mPresenter = new ShopListPresenterImpl(this);
 
-    public ShopListFragment(){
-        mPresenter = new ShopListPresenterImpl(this);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ShopSystem.getInstance().addOnShopListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ShopSystem.getInstance().removeOnShopListener(this);
     }
 
     @Nullable
@@ -69,6 +79,8 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
 
     @Override
     public void onStartLoad() {
+
+
         if(mPd == null){
             mPd = new ProgressDialogFragment();
         }
@@ -85,5 +97,10 @@ public class ShopListFragment extends BaseFragment implements ShopListView {
         if(Utils.isCollectionEmpty(recipes)){
             EmptyTipsFragment.showEmptyTips(R.string.tip_shop_empty, 0, getFragmentManager(), R.id.base_frag_root_shop, SHOP_TIP_FRAGMENT_TAG);
         }
+    }
+
+    @Override
+    public void onShopChanged(String recipeId, boolean isShop) {
+        mPresenter.startLoad();
     }
 }
