@@ -26,10 +26,19 @@ public class ProgressDialogFragment extends DialogFragment {
     }
 
     public void showPd(FragmentManager fm, String msg){
-        show(fm, "pd");
+
+        try {
+            show(fm, "pd");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showPd(FragmentManager fm, int msgResId){
-        show(fm, "pd");
+        try {
+            show(fm, "pd");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
