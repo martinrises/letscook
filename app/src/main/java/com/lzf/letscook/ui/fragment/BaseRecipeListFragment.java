@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import android.widget.ProgressBar;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.system.fav.FavSystem;
+import com.lzf.letscook.system.fav.OnFavChangeListener;
+import com.lzf.letscook.system.shop.OnShopChangeListener;
+import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.ui.adapter.RecipeAdapter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
@@ -22,7 +27,7 @@ import java.util.List;
 /**
  * Created by liuzhaofeng on 16/5/14.
  */
-public abstract class BaseRecipeListFragment extends BaseFragment implements RecipeListView {
+public abstract class BaseRecipeListFragment extends BaseFragment implements RecipeListView, OnFavChangeListener , OnShopChangeListener{
 
     public static final String TAG = BaseRecipeListFragment.class.getSimpleName();
 
@@ -38,6 +43,8 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = onCreatePresenter();
+        FavSystem.getInstance().addOnFavListener(this);
+        ShopSystem.getInstance().addOnShopListener(this);
     }
 
     protected abstract RecipeListPresenter onCreatePresenter();
@@ -128,4 +135,29 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
         });
     }
 
+    @Override
+    public void onFavChanged(String recipeId, boolean isFav) {
+        List<Recipe> recipes = mAdapter.getRecipes();
+        for (Recipe recipe : recipes) {
+            if(TextUtils.equals(recipe.getCook_id(), recipeId)) {
+                recipe.setIsFav(isFav);
+                break;
+            }
+        }
+
+        onSetRecipes(recipes);
+    }
+
+    @Override
+    public void onShopChanged(String recipeId, boolean isShop) {
+        List<Recipe> recipes = mAdapter.getRecipes();
+        for (Recipe recipe : recipes) {
+            if(TextUtils.equals(recipe.getCook_id(), recipeId)) {
+                recipe.setIsFav(isShop);
+                break;
+            }
+        }
+
+        onSetRecipes(recipes);
+    }
 }

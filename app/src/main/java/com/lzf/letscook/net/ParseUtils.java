@@ -2,6 +2,7 @@ package com.lzf.letscook.net;
 
 import android.text.TextUtils;
 
+import com.lzf.letscook.db.RecipeDao;
 import com.lzf.letscook.entity.CookStep;
 import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.entity.Recipe;
@@ -149,6 +150,8 @@ public class ParseUtils {
 
         int dish_count = jRecipe.optInt("dish_count");
         recipe.setDish_count(dish_count);
+
+        recipe.setIsFav(RecipeDao.getInstance().isFavorite(cook_id));
 
         return recipe;
     }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.system.fav.FavSystem;
-import com.lzf.letscook.system.fav.OnFavChangeListener;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.impl.FavRecipeListPresenterImpl;
 import com.lzf.letscook.util.Utils;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * Created by liuzhaofeng on 16/6/9.
  */
-public class FavRecipeListFragment extends BaseRecipeListFragment implements OnFavChangeListener {
+public class FavRecipeListFragment extends BaseRecipeListFragment {
 
     public static final String FAV_TIP_FRAGMENT_TAG = "favTipFragment";
 
