@@ -355,4 +355,21 @@ public class RecipeDao {
         }
         return false;
     }
+
+    public Boolean isInShopList(String recipeId) {
+        checkDd();
+        Cursor c = null;
+        try{
+            String where = ShopContract.RECIPE_ID + "= ?";
+            String[] args = {recipeId};
+            c = db.query(ShopContract.TABLE_NAME, null, where, args, null, null, null);
+
+            return c.moveToFirst();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            closeCursor(c);
+        }
+        return false;
+    }
 }

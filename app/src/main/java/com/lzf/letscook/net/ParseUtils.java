@@ -153,6 +153,8 @@ public class ParseUtils {
 
         recipe.setIsFav(RecipeDao.getInstance().isFavorite(cook_id));
 
+        recipe.setInShopList(RecipeDao.getInstance().isInShopList(cook_id));
+
         return recipe;
     }
 
