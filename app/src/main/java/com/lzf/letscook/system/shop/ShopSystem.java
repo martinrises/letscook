@@ -3,7 +3,9 @@ package com.lzf.letscook.system.shop;
 import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -16,7 +18,7 @@ public class ShopSystem {
 
     private static ShopSystem sInstance;
 
-    private final ArrayList<OnShopChangeListener> mOnShopChangeListeners = new ArrayList<>();
+    private final ArrayList<SoftReference<OnShopChangeListener>> mOnShopChangeListenerRefs = new ArrayList<>();
 
     public static ShopSystem getInstance() {
         if (sInstance == null) {
@@ -64,7 +66,7 @@ public class ShopSystem {
     }
 
     public void addOnShopListener(OnShopChangeListener listener) {
-        mOnShopChangeListeners.add(listener);
+        mOnShopChangeListenerRefs.add(new SoftReference<>(listener));
     }
 
     private void notifyOnShop(String recipeId) {
@@ -76,12 +78,33 @@ public class ShopSystem {
     }
 
     private void notifyOnShopChange(String recipeId, boolean isShop) {
-        for (OnShopChangeListener l : mOnShopChangeListeners) {
-            l.onShopChanged(recipeId, isShop);
+
+        Iterator<SoftReference<OnShopChangeListener>> it = mOnShopChangeListenerRefs.iterator();
+        while (it.hasNext()) {
+            SoftReference<OnShopChangeListener> ref = it.next();
+            OnShopChangeListener l = ref.get();
+            if (l != null) {
+                l.onShopChanged(recipeId, isShop);
+            } else {
+                it.remove();
+            }
         }
     }
 
     public void removeOnShopListener(OnShopChangeListener listener) {
-        mOnShopChangeListeners.remove(listener);
+
+        Iterator<SoftReference<OnShopChangeListener>> it = mOnShopChangeListenerRefs.iterator();
+        while (it.hasNext()) {
+            SoftReference<OnShopChangeListener> ref = it.next();
+            OnShopChangeListener l = ref.get();
+            if (l != null) {
+                if (l.equals(listener)) {
+                    it.remove();
+                    return;
+                }
+            } else {
+                it.remove();
+            }
+        }
     }
 }

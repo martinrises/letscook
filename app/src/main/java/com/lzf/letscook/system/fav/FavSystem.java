@@ -3,7 +3,9 @@ package com.lzf.letscook.system.fav;
 import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -16,19 +18,19 @@ public class FavSystem {
 
     private static FavSystem sInstance;
 
-    private final ArrayList<OnFavChangeListener> mOnFavChangeListeners = new ArrayList<>();
+    private final ArrayList<SoftReference<OnFavChangeListener>> mOnFavChangeListenerRefs = new ArrayList<>();
 
-    private FavSystem(){
+    private FavSystem() {
     }
 
-    public static FavSystem getInstance(){
-        if(sInstance == null){
+    public static FavSystem getInstance() {
+        if (sInstance == null) {
             sInstance = new FavSystem();
         }
         return sInstance;
     }
 
-    public Observable<Boolean> addFavorite(final String recipeId){
+    public Observable<Boolean> addFavorite(final String recipeId) {
         return DbApi.addFavorite(recipeId).flatMap(new Func1<Boolean, Observable<Boolean>>() {
             @Override
             public Observable<Boolean> call(Boolean aBoolean) {
@@ -38,7 +40,7 @@ public class FavSystem {
         });
     }
 
-    public Observable<Boolean> removeFavorite(final String recipeId){
+    public Observable<Boolean> removeFavorite(final String recipeId) {
         return DbApi.removeFavorite(recipeId).flatMap(new Func1<Boolean, Observable<Boolean>>() {
             @Override
             public Observable<Boolean> call(Boolean aBoolean) {
@@ -53,24 +55,45 @@ public class FavSystem {
     }
 
     public void addOnFavListener(OnFavChangeListener listener) {
-        mOnFavChangeListeners.add(listener);
+        mOnFavChangeListenerRefs.add(new SoftReference<>(listener));
     }
 
-    private void notifyOnLike(String recipeId){
+    private void notifyOnLike(String recipeId) {
         notifyOnFavChange(recipeId, true);
     }
 
-    private void notifyOnDislike(String recipeId){
+    private void notifyOnDislike(String recipeId) {
         notifyOnFavChange(recipeId, false);
     }
 
     private void notifyOnFavChange(String recipeId, boolean isFav) {
-        for(OnFavChangeListener l : mOnFavChangeListeners){
-            l.onFavChanged(recipeId, isFav);
+        Iterator<SoftReference<OnFavChangeListener>> it = mOnFavChangeListenerRefs.iterator();
+        while (it.hasNext()) {
+            SoftReference<OnFavChangeListener> reference = it.next();
+            OnFavChangeListener l = reference.get();
+            if (l != null) {
+                l.onFavChanged(recipeId, isFav);
+            } else {
+                it.remove();
+            }
         }
+
     }
 
     public void removeOnFavListener(OnFavChangeListener listener) {
-        mOnFavChangeListeners.remove(listener);
+
+        Iterator<SoftReference<OnFavChangeListener>> it = mOnFavChangeListenerRefs.iterator();
+        while (it.hasNext()) {
+            SoftReference<OnFavChangeListener> reference = it.next();
+            OnFavChangeListener l = reference.get();
+            if (l != null) {
+                if (l.equals(listener)) {
+                    it.remove();
+                    return;
+                }
+            } else {
+                it.remove();
+            }
+        }
     }
 }
