@@ -24,5 +24,6 @@
     <color name="text_end_title_detail">#ff333333</color>
 
     <color name="divide_line">#888888</color>
+    <color name="dim_float_detail">#aaffffff</color>
 
 </resources>

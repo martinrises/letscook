@@ -1,6 +1,5 @@
 package com.lzf.letscook.ui.activity;
 
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +9,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.mvp.contract.RecipeDetailPresenter;
@@ -31,8 +31,10 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     private TextView mDescTv;
     private TextView mTitleTv;
     private SimpleDraweeView mPhotoRecipe;
+    FloatingActionsMenu mFloatingActionsMenu;
     private FloatingActionButton mLikeBtn;
     private FloatingActionButton mShopBtn;
+    private View mDimBg;
 
     private RecipeDetailPresenter mDetailPresenter;
 
@@ -70,13 +72,35 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mPhotoRecipe = (SimpleDraweeView) findViewById(R.id.sdv_recipe);
         mPhotoRecipe.setImageURI(Uri.parse(mRecipe.getPhoto_path()));
 
+        mDimBg = findViewById(R.id.bg_dim_detail);
+        mDimBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFloatingActionsMenu.collapse();
+            }
+        });
+
+        mFloatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.fam_detail);
+        mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                mDimBg.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                mDimBg.setVisibility(View.GONE);
+            }
+        });
+
+
         mLikeBtn = (FloatingActionButton) findViewById(R.id.btn_recipe_like);
         mLikeBtn.setIcon(mRecipe.isFav() ? R.drawable.detail_card_favorited: R.drawable.detail_card_favorite);
         mLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDetailPresenter.checkAndChangeLikeStatus(mRecipe);
-
+                mFloatingActionsMenu.collapse();
             }
         });
 
@@ -86,6 +110,7 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
             @Override
             public void onClick(View v) {
                 mDetailPresenter.checkAndChangeShopStatus(mRecipe);
+                mFloatingActionsMenu.collapse();
             }
         });
     }
@@ -124,5 +149,14 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         mRecipe.setInShopList(false);
         mShopBtn.setIcon(R.drawable.detail_card_shop);
         Toast.makeText(this, "已删除", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mFloatingActionsMenu.isExpanded()) {
+            super.onBackPressed();
+        } else {
+            mFloatingActionsMenu.collapse();
+        }
     }
 }

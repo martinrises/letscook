@@ -80,8 +80,15 @@
 
     </com.lzf.letscook.ui.view.TrackingLayout>
 
+    <View
+        android:id="@+id/bg_dim_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dim_float_detail"
+        android:visibility="gone"/>
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/right_labels"
+        android:id="@+id/fam_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -93,7 +100,7 @@
         fab:fab_addButtonColorNormal="@color/white"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/half_black"
-        fab:fab_addButtonSize="mini"
+        fab:fab_addButtonSize="normal"
         fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_labelsPosition="left">
 
@@ -103,7 +110,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_size="mini"
+            fab:fab_size="normal"
             fab:fab_title="收藏" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
@@ -112,7 +119,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_size="mini"
+            fab:fab_size="normal"
             fab:fab_title="购物单" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
