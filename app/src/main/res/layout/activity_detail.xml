@@ -103,7 +103,6 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_icon="@drawable/detail_card_favorited"
             fab:fab_size="mini"
             fab:fab_title="收藏" />
 

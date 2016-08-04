@@ -1,5 +1,6 @@
 package com.lzf.letscook.ui.activity;
 
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -80,6 +81,7 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
         });
 
         mShopBtn = (FloatingActionButton) findViewById(R.id.btn_recipe_shop);
+        mShopBtn.setIcon(mRecipe.isInShopList() ? R.drawable.detail_card_shopped: R.drawable.detail_card_shop);
         mShopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,12 +115,14 @@ public class DetailActivity extends BaseActivity implements RecipeDetailView{
     @Override
     public void onAddToShopList() {
         mRecipe.setInShopList(true);
+        mShopBtn.setIcon(R.drawable.detail_card_shopped);
         Toast.makeText(this, "已添加", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRemoveToShopList() {
         mRecipe.setInShopList(false);
+        mShopBtn.setIcon(R.drawable.detail_card_shop);
         Toast.makeText(this, "已删除", Toast.LENGTH_SHORT).show();
     }
 }
