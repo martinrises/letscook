@@ -247,7 +247,7 @@ public class RecipeDao {
         String[] colunms = {FavoriteContract.RECIPE_ID};
         Cursor c = null;
         try{
-            c = db.query(FavoriteContract.TABLE_NAME, colunms, null, null, null, null, null, start + "," + size);
+            c = db.query(FavoriteContract.TABLE_NAME, colunms, null, null, null, null, FavoriteContract._ID + " desc", start + "," + size);
 
             while(c.moveToNext()){
                 String recipeId = c.getString(0);
@@ -304,7 +304,7 @@ public class RecipeDao {
         String[] colunms = {ShopContract.RECIPE_ID};
         Cursor c = null;
         try{
-            c = db.query(ShopContract.TABLE_NAME, colunms, null, null, null, null, null);
+            c = db.query(ShopContract.TABLE_NAME, colunms, null, null, null, null, ShopContract._ID + " desc");
 
             while(c.moveToNext()){
                 String recipeId = c.getString(0);
