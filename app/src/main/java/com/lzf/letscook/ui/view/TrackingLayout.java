@@ -16,7 +16,7 @@ import com.lzf.letscook.util.Utils;
 /**
  * Created by liuzhaofeng on 16/7/26.
  */
-public class TrackingLayout extends LinearLayout implements PullToZoomScrollView.onHeadViewMovedOrScaledListener{
+public class TrackingLayout extends LinearLayout implements PullToZoomScrollView.OnHeadViewMovedOrScaledListener {
 
     public static final String ALPHA_TAG = "ALPHA_TAG";
 
