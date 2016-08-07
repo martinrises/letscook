@@ -1,6 +1,8 @@
 package com.lzf.letscook;
 
 import android.app.Application;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -16,6 +18,9 @@ public class LetsCook extends Application {
 
     private static LetsCook sApp;
 
+    public static int heightPixels;
+    public static int widthPixels;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,9 +32,21 @@ public class LetsCook extends Application {
             Fabric.with(this, new Crashlytics());
         }
 
+        initDisplay();
+
+    }
+
+    private void initDisplay() {
+        Resources res = getResources();
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+
+        heightPixels = displayMetrics.heightPixels;
+        widthPixels = displayMetrics.widthPixels;
     }
 
     public static LetsCook getApp() {
         return sApp;
     }
+
+
 }
