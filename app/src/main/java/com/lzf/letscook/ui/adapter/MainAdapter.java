@@ -13,6 +13,8 @@ import com.lzf.letscook.ui.fragment.ShopListFragment;
  */
 public class MainAdapter extends FragmentPagerAdapter {
 
+    public static final int INDEX_MAIN_RECIPE_LIST = 0;
+
     public MainAdapter(FragmentManager fm) {
         super(fm);
     }

@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
-import com.lzf.letscook.util.Logger;
+import java.util.HashSet;
 
 /**
  * Created by asus on 2016/6/27.
@@ -15,6 +15,8 @@ public class AgileViewPager extends ViewPager {
 
     private float mInitX, mInitY;
     private int mScaledTouchSlop;
+
+    private final HashSet<Integer> mNotInterceptIndexes = new HashSet<>();
 
     public AgileViewPager(Context context) {
         this(context, null);
@@ -54,10 +56,12 @@ public class AgileViewPager extends ViewPager {
         return super.dispatchTouchEvent(ev);
     }
 
+    public void setNotInterceptIndex(int index){
+        this.mNotInterceptIndexes.add(index);
+    }
+
     private boolean shouldIntercept() {
-        boolean b = getCurrentItem() != 0;
-        Logger.v("shouldIntercept_tag", String.valueOf(b));
-        return b;
+        return !mNotInterceptIndexes.contains(getCurrentItem());
     }
 
 }
