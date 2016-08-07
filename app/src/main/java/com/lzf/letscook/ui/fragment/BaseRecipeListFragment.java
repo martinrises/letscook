@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.system.fav.FavSystem;
@@ -70,7 +71,7 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
         mRecipeList.addItemDecoration(new RecipeItemDivider());
         mRecipeList.addOnScrollListener(mPresenter);
         Resources res = getResources();
-        int maxRecycledViews = (res.getDisplayMetrics().heightPixels / res.getDimensionPixelSize(R.dimen.height_receip_item) + 1) * 2;
+        int maxRecycledViews = (LetsCook.heightPixels / res.getDimensionPixelSize(R.dimen.height_receip_item) + 1) * 2;
         mRecipeList.getRecycledViewPool().setMaxRecycledViews(0, maxRecycledViews);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);

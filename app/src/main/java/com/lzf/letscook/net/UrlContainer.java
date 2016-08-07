@@ -5,7 +5,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
 
 import com.lzf.letscook.LetsCook;
 
@@ -44,8 +43,7 @@ public class UrlContainer {
         params.put("sdk", Build.VERSION.SDK_INT + "," + Build.VERSION.RELEASE);
 
         LetsCook app = LetsCook.getApp();
-        DisplayMetrics displayMetrics = app.getResources().getDisplayMetrics();
-        params.put("dpi", displayMetrics.density + "");
+        params.put("dpi", LetsCook.density + "");
 
         TelephonyManager tm = (TelephonyManager) app.getSystemService(Context.TELEPHONY_SERVICE);
         params.put("imei", tm.getDeviceId());
@@ -54,7 +52,7 @@ public class UrlContainer {
         WifiInfo connectionInfo = wm.getConnectionInfo();
         params.put("mac", connectionInfo.getMacAddress());
 
-        params.put("resolution", displayMetrics.heightPixels + "*" + displayMetrics.widthPixels);
+        params.put("resolution", LetsCook.heightPixels + "*" + LetsCook.widthPixels);
         params.put("client", LetsCook.CLIENT_ID + "");
         params.put("version", "121");
         params.put("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");

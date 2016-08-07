@@ -20,6 +20,7 @@ public class LetsCook extends Application {
 
     public static int heightPixels;
     public static int widthPixels;
+    public static float density;
 
     @Override
     public void onCreate() {
@@ -42,6 +43,7 @@ public class LetsCook extends Application {
 
         heightPixels = displayMetrics.heightPixels;
         widthPixels = displayMetrics.widthPixels;
+        density = displayMetrics.density;
     }
 
     public static LetsCook getApp() {
