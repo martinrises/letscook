@@ -20,6 +20,7 @@ import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.R;
 import com.lzf.letscook.ui.adapter.MainAdapter;
 import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
+import com.lzf.letscook.ui.view.AgileViewPager;
 import com.lzf.letscook.util.ToastManager;
 import com.lzf.letscook.util.Utils;
 
@@ -30,7 +31,7 @@ public class MainActivity extends BaseActivity {
 
     private static final String QUERY_FRAGMENT_TAG = "query_fragment_tag";
 
-    private ViewPager mPager;
+    private AgileViewPager mPager;
     private MainAdapter mAdapter;
 
     private Toolbar mToolbar;
@@ -58,8 +59,9 @@ public class MainActivity extends BaseActivity {
         shop_tab_main = (TextView) findViewById(R.id.shop_tab_main);
         mIndicators[2] = shop_tab_main;
 
-        mPager = (ViewPager) findViewById(R.id.main_vp);
+        mPager = (AgileViewPager) findViewById(R.id.main_vp);
         mPager.setOffscreenPageLimit(2);
+        mPager.setNotInterceptIndex(MainAdapter.INDEX_MAIN_RECIPE_LIST);
         mAdapter = new MainAdapter(getSupportFragmentManager());
         mPager.setAdapter(mAdapter);
 
