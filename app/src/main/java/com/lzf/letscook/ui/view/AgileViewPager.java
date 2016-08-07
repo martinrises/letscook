@@ -1,11 +1,12 @@
 package com.lzf.letscook.ui.view;
 
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+
+import com.lzf.letscook.util.Logger;
 
 /**
  * Created by asus on 2016/6/27.
@@ -45,12 +46,18 @@ public class AgileViewPager extends ViewPager {
                 float dx = x - mInitX;
                 float dy = y - mInitY;
 
-                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > mScaledTouchSlop) {
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > mScaledTouchSlop && shouldIntercept()) {
                     return onTouchEvent(ev);
                 }
                 break;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private boolean shouldIntercept() {
+        boolean b = getCurrentItem() != 0;
+        Logger.v("shouldIntercept_tag", String.valueOf(b));
+        return b;
     }
 
 }
