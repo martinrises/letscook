@@ -18,7 +18,8 @@ import android.widget.ScrollView;
  */
 public class PullToZoomScrollView extends ScrollView{
 
-    private onHeadViewMovedOrScaledListener mOnHeadViewMovedOrScaledListener;
+    private OnHeadViewMovedOrScaledListener mOnHeadViewMovedOrScaledListener;
+    private OnScrollListener mOnScrollListener;
 
     private  boolean isonce;//加载该View的布局时是否是第一次加载，是第一次就让其实现OnMeasure里的代码
 
@@ -159,6 +160,10 @@ public class PullToZoomScrollView extends ScrollView{
             scrollTo(0,0);
         }
 
+        if(mOnScrollListener != null){
+            mOnScrollListener.onScroll(l, t, oldl, oldt);
+        }
+
         notifyOnHeadMovedOrScaled(mTopView.getBottom() - t);
 
     }
@@ -179,11 +184,19 @@ public class PullToZoomScrollView extends ScrollView{
         }
     }
 
-    public void setOnHeadViewMovedOrScaledListener(onHeadViewMovedOrScaledListener listener){
+    public void setOnHeadViewMovedOrScaledListener(OnHeadViewMovedOrScaledListener listener){
         this.mOnHeadViewMovedOrScaledListener = listener;
     }
 
-    public interface onHeadViewMovedOrScaledListener{
+    public void setOnScrollListener(OnScrollListener l){
+        this.mOnScrollListener = l;
+    }
+
+    public interface OnHeadViewMovedOrScaledListener {
         void onHeadViewMovedOrScaled(int bottom);
+    }
+
+    public interface OnScrollListener{
+        void onScroll(int l, int t, int oldl, int oldt);
     }
 }
