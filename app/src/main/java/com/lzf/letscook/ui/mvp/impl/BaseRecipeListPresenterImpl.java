@@ -1,5 +1,6 @@
 package com.lzf.letscook.ui.mvp.impl;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -112,18 +113,16 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }).filter(new Func1<RecyclerView, Boolean>() {
             @Override
             public Boolean call(RecyclerView recyclerView) {
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
-                    int itemCount = layoutManager.getItemCount();
-                    int lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-
-                    return (itemCount - lastPosition < BUFFER_SIZE && !isRefreshing && !isLoading && itemCount >= PAGE_SIZE);
-                }
-                return false;
+                return shouldLoadMore(recyclerView);
             }
         }).map(new Func1<RecyclerView, RecyclerView>() {
             @Override
             public RecyclerView call(RecyclerView recyclerView) {
+
+                if(!Utils.hasInternet()){
+                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
+                }
+
                 isLoading = true;
                 mView.startLoad();
                 return recyclerView;
@@ -158,6 +157,25 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
 
     }
 
+    private int mLastRemainItemSize;
+    @NonNull
+    protected Boolean shouldLoadMore(RecyclerView recyclerView) {
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
+            int itemCount = layoutManager.getItemCount();
+            int lastPosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+
+            // 向下超过BUFFER_SIZE 或者 拉到底部的时候，都应该loadmore
+            boolean scrollToLoadMore = itemCount - lastPosition < BUFFER_SIZE && mLastRemainItemSize >= BUFFER_SIZE;
+            boolean isAtBottom = itemCount == (lastPosition + 1);
+            mLastRemainItemSize = itemCount - lastPosition;
+
+            Logger.v("recyclerview.scroll", "itemCount = " + itemCount + ", lastPosition = " + lastPosition);
+            return (!isRefreshing && !isLoading && (scrollToLoadMore || isAtBottom));
+        }
+        return false;
+    }
+
     @Override
     public void onRefresh() {
         refreshSub.onNext(new Object());
@@ -167,10 +185,9 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        if(!Utils.hasInternet()){
-            ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
+        if (dy > 0) {
+            loadMoreSub.onNext(recyclerView);
         }
-        loadMoreSub.onNext(recyclerView);
     }
 
     public abstract Observable<List<Recipe>> getRecipes();
