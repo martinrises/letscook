@@ -123,7 +123,7 @@ public class MainActivity extends BaseActivity {
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -144,6 +144,7 @@ public class MainActivity extends BaseActivity {
                         f.onSearch(keyword);
                     }
                 });
+                searchView.clearFocus();
 
                 return true;
             }
