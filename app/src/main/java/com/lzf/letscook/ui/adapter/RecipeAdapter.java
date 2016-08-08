@@ -19,6 +19,9 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
 
+    private static final float SCALE_RECIPE_ITEM_VIEW = 1.8f;
+    private static final float OFFSET_FACTOR = 0.3f;
+
     private List<Recipe> mRecipes;
     private LayoutInflater mInflator;
     private RecyclerView mRecyclerView;
@@ -50,7 +53,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         Point p = new Point();
         float dy = child.getBottom() - recyclerView.getTop();
         float standardDy = (recyclerView.getHeight() + child.getHeight()) / 2;
-        p.y = (int) (child.getHeight() * (dy - standardDy) / standardDy * 0.2);
+        p.y = (int) (child.getHeight() * (dy - standardDy) / standardDy * OFFSET_FACTOR);
         return p;
     }
 
@@ -66,7 +69,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     public void onBindViewHolder(final RecipeHolder holder, int position) {
         final Recipe recipe = mRecipes.get(position);
         holder.mRiv.setRecipe(recipe);
-        holder.mRiv.setScale(1.5f);
+        holder.mRiv.setScale(SCALE_RECIPE_ITEM_VIEW);
         Point p = getTranslation(mRecyclerView, holder.mRiv);
         holder.mRiv.setTranslation(p.x, p.y);
         holder.mRiv.setOnClickListener(new View.OnClickListener() {
