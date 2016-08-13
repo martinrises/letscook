@@ -1,9 +1,12 @@
 package com.lzf.letscook.net;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
 import com.lzf.letscook.LetsCook;
@@ -45,12 +48,18 @@ public class UrlContainer {
         LetsCook app = LetsCook.getApp();
         params.put("dpi", LetsCook.density + "");
 
-        TelephonyManager tm = (TelephonyManager) app.getSystemService(Context.TELEPHONY_SERVICE);
-        params.put("imei", tm.getDeviceId());
+        if(ContextCompat.checkSelfPermission(LetsCook.getApp(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
+            TelephonyManager tm = (TelephonyManager) app.getSystemService(Context.TELEPHONY_SERVICE);
+            params.put("imei", tm.getDeviceId());
+        }
 
-        WifiManager wm = (WifiManager) app.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo connectionInfo = wm.getConnectionInfo();
-        params.put("mac", connectionInfo.getMacAddress());
+        try {
+            WifiManager wm = (WifiManager) app.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo connectionInfo = wm.getConnectionInfo();
+            params.put("mac", connectionInfo.getMacAddress());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         params.put("resolution", LetsCook.heightPixels + "*" + LetsCook.widthPixels);
         params.put("client", LetsCook.CLIENT_ID + "");
