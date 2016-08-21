@@ -8,7 +8,6 @@ import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.entity.Recipe;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class ParseUtils {
 
             return recipes;
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

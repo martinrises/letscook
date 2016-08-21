@@ -125,6 +125,9 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }).subscribe(new Action1<List<Recipe>>() {
             @Override
             public void call(List<Recipe> recipes) {
+                if(Utils.isCollectionEmpty(recipes)){
+                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.no_related_recipe, Toast.LENGTH_SHORT);
+                }
                 resetRefreshState();
                 mView.onSetRecipes(recipes);
                 mCursor += PAGE_SIZE;
@@ -175,8 +178,9 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 public void call(List<Recipe> recipes) {
 
                     if (!Utils.isCollectionEmpty(recipes)) {
-                        Logger.v(TAG, mCursor + " >>> " + recipes.get(0).getCook_id());
                         mView.onAppendRecipes(recipes);
+                    } else {
+                        ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.no_more_recipe, Toast.LENGTH_SHORT);
                     }
                     resetLoadmoreState(recipes);
                 }
