@@ -4,6 +4,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.util.Logger;
 import com.lzf.letscook.util.Utils;
 
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class NetApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                notifySubcriber(null, holder);
+                notifySubcriberError(error, holder);;
             }
         });
         ReqQueue.getInstance().add(req);
@@ -56,6 +57,15 @@ public class NetApi {
         Subscriber sub = holder.getSubscriber();
         if (sub != null) {
             sub.onNext(response);
+        }
+    }
+
+    private static void notifySubcriberError(VolleyError error, SubscriberHolder holder) {
+        Logger.v("error_test", "netapi fail");
+        Subscriber sub = holder.getSubscriber();
+        if (sub != null) {
+            Logger.v("error_test", "sub != null");
+            sub.onError(error);
         }
     }
 
@@ -85,7 +95,7 @@ public class NetApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                notifySubcriber(null, holder);
+                notifySubcriberError(error, holder);
             }
         });
         ReqQueue.getInstance().add(req);

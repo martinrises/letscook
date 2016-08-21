@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.R;
-import com.lzf.letscook.db.DbApi;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.mvp.contract.RecipeListPresenter;
 import com.lzf.letscook.ui.mvp.contract.RecipeListView;
@@ -77,28 +76,31 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }).flatMap(new Func1<Object, Observable<List<Recipe>>>() {
             @Override
             public Observable<List<Recipe>> call(Object aVoid) {
-                return getRecipes();
+                return getRecipes(true);
             }
         }).subscribe(new Action1<List<Recipe>>() {
             @Override
             public void call(List<Recipe> recipes) {
-                if (Utils.isCollectionEmpty(recipes)) {
-                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
-                }
-
-                isRefreshing = false;
+                resetRefreshState();
                 mView.onSetRecipes(recipes);
-                mView.stopFresh();
                 mCursor += PAGE_SIZE;
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
+                resetRefreshState();
             }
         });
     }
 
+    protected void resetRefreshState() {
+        isRefreshing = false;
+        mView.stopFresh();
+    }
+
     protected void beforeRefresh() {
-        if (Utils.hasInternet()) {
-            // 清空db
-            DbApi.clearRecipes(mTag, mOrder);
-        } else {
+        if (!Utils.hasInternet()) {
             ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
         }
     }
@@ -130,31 +132,42 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }).flatMap(new Func1<RecyclerView, Observable<List<Recipe>>>() {
             @Override
             public Observable<List<Recipe>> call(RecyclerView recyclerView) {
-                return getRecipes();
+                return getRecipes(false);
             }
         }).filter(new Func1<List<Recipe>, Boolean>() {
             @Override
             public Boolean call(List<Recipe> recipes) {
-                if (Utils.isCollectionEmpty(recipes)) {
-                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
-                }
                 return !isRefreshing && isLoading;
             }
         }).subscribe(new Action1<List<Recipe>>() {
             @Override
             public void call(List<Recipe> recipes) {
 
+                Logger.v("error_test", "获取菜谱成功");
                 if (!Utils.isCollectionEmpty(recipes)) {
-                    mCursor += recipes.size();
                     Logger.v(TAG, mCursor + " >>> " + recipes.get(0).getCook_id());
                     mView.onAppendRecipes(recipes);
                 }
-                isLoading = false;
-                mView.stopLoad();
+                resetLoadmoreState(recipes);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Logger.v("error_test", "网络获取菜谱失败");
+                ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
+                resetLoadmoreState(null);
             }
         });
 
 
+    }
+
+    protected void resetLoadmoreState(List<Recipe> recipes) {
+        if (!Utils.isCollectionEmpty(recipes)) {
+            mCursor += recipes.size();
+        }
+        isLoading = false;
+        mView.stopLoad();
     }
 
     private int mLastRemainItemSize;
@@ -190,5 +203,5 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         }
     }
 
-    public abstract Observable<List<Recipe>> getRecipes();
+    public abstract Observable<List<Recipe>> getRecipes(boolean isRefresh);
 }

@@ -4,6 +4,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.util.Logger;
 
@@ -58,5 +59,10 @@ public class RecipeRequest extends Request<List<Recipe>> {
         if(mListener != null){
             mListener.onResponse(response);
         }
+    }
+
+    @Override
+    public void deliverError(VolleyError error) {
+        super.deliverError(error);
     }
 }
