@@ -17,7 +17,6 @@ import com.lzf.letscook.util.Utils;
 import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -39,25 +38,53 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
     private boolean isLoading;
     private boolean isRefreshing;
 
-    private Subscriber<? super RecyclerView> loadMoreSub;
-    private Subscriber refreshSub;
-
     public BaseRecipeListPresenterImpl(RecipeListView view, String tag, String order) {
         this.mView = view;
         this.mTag = tag;
         this.mOrder = order;
-
-        initLoadMoreOb();
-        initRefreshOb();
     }
 
-    private void initRefreshOb() {
-        Observable.create(new Observable.OnSubscribe<Object>() {
-            @Override
-            public void call(Subscriber<? super Object> subscriber) {
-                refreshSub = subscriber;
-            }
-        }).map(new Func1<Object, Object>() {
+    protected void resetRefreshState() {
+        isRefreshing = false;
+        mView.stopFresh();
+    }
+
+    protected void beforeRefresh() {
+        if (!Utils.hasInternet()) {
+            ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
+        }
+    }
+
+    protected void resetLoadmoreState(List<Recipe> recipes) {
+        if (!Utils.isCollectionEmpty(recipes)) {
+            mCursor += recipes.size();
+        }
+        isLoading = false;
+        mView.stopLoad();
+    }
+
+    private int mLastRemainItemSize;
+    @NonNull
+    protected Boolean shouldLoadMore(RecyclerView recyclerView) {
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
+            int itemCount = layoutManager.getItemCount();
+            int lastPosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+
+            // 向下超过BUFFER_SIZE 或者 拉到底部的时候，都应该loadmore
+            boolean scrollToLoadMore = itemCount - lastPosition < BUFFER_SIZE && mLastRemainItemSize >= BUFFER_SIZE;
+            boolean isAtBottom = itemCount == (lastPosition + 1);
+            mLastRemainItemSize = itemCount - lastPosition;
+
+            Logger.v("recyclerview.scroll", "itemCount = " + itemCount + ", lastPosition = " + lastPosition);
+            return (!isRefreshing && !isLoading && (scrollToLoadMore || isAtBottom));
+        }
+        return false;
+    }
+
+    @Override
+    public void onRefresh() {
+        Observable.just(System.currentTimeMillis()).map(new Func1<Object, Object>() {
             @Override
             public Object call(Object aVoid) {
                 // 停止loading的动画，标志位置为false
@@ -94,112 +121,55 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         });
     }
 
-    protected void resetRefreshState() {
-        isRefreshing = false;
-        mView.stopFresh();
-    }
-
-    protected void beforeRefresh() {
-        if (!Utils.hasInternet()) {
-            ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
-        }
-    }
-
-    private void initLoadMoreOb() {
-
-        Observable.create(new Observable.OnSubscribe<RecyclerView>() {
-            @Override
-            public void call(Subscriber<? super RecyclerView> subscriber) {
-                loadMoreSub = subscriber;
-            }
-        }).filter(new Func1<RecyclerView, Boolean>() {
-            @Override
-            public Boolean call(RecyclerView recyclerView) {
-                return shouldLoadMore(recyclerView);
-            }
-        }).map(new Func1<RecyclerView, RecyclerView>() {
-            @Override
-            public RecyclerView call(RecyclerView recyclerView) {
-
-                if(!Utils.hasInternet()){
-                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
-                }
-
-                isLoading = true;
-                mView.startLoad();
-                return recyclerView;
-            }
-        }).flatMap(new Func1<RecyclerView, Observable<List<Recipe>>>() {
-            @Override
-            public Observable<List<Recipe>> call(RecyclerView recyclerView) {
-                return getRecipes(false);
-            }
-        }).filter(new Func1<List<Recipe>, Boolean>() {
-            @Override
-            public Boolean call(List<Recipe> recipes) {
-                return !isRefreshing && isLoading;
-            }
-        }).subscribe(new Action1<List<Recipe>>() {
-            @Override
-            public void call(List<Recipe> recipes) {
-
-                Logger.v("error_test", "获取菜谱成功");
-                if (!Utils.isCollectionEmpty(recipes)) {
-                    Logger.v(TAG, mCursor + " >>> " + recipes.get(0).getCook_id());
-                    mView.onAppendRecipes(recipes);
-                }
-                resetLoadmoreState(recipes);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Logger.v("error_test", "网络获取菜谱失败");
-                ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
-                resetLoadmoreState(null);
-            }
-        });
-
-
-    }
-
-    protected void resetLoadmoreState(List<Recipe> recipes) {
-        if (!Utils.isCollectionEmpty(recipes)) {
-            mCursor += recipes.size();
-        }
-        isLoading = false;
-        mView.stopLoad();
-    }
-
-    private int mLastRemainItemSize;
-    @NonNull
-    protected Boolean shouldLoadMore(RecyclerView recyclerView) {
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
-            int itemCount = layoutManager.getItemCount();
-            int lastPosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
-
-            // 向下超过BUFFER_SIZE 或者 拉到底部的时候，都应该loadmore
-            boolean scrollToLoadMore = itemCount - lastPosition < BUFFER_SIZE && mLastRemainItemSize >= BUFFER_SIZE;
-            boolean isAtBottom = itemCount == (lastPosition + 1);
-            mLastRemainItemSize = itemCount - lastPosition;
-
-            Logger.v("recyclerview.scroll", "itemCount = " + itemCount + ", lastPosition = " + lastPosition);
-            return (!isRefreshing && !isLoading && (scrollToLoadMore || isAtBottom));
-        }
-        return false;
-    }
-
-    @Override
-    public void onRefresh() {
-        refreshSub.onNext(new Object());
-    }
-
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
         if (dy > 0) {
-            loadMoreSub.onNext(recyclerView);
+            Observable.just(recyclerView).filter(new Func1<RecyclerView, Boolean>() {
+                @Override
+                public Boolean call(RecyclerView recyclerView) {
+                    return shouldLoadMore(recyclerView);
+                }
+            }).map(new Func1<RecyclerView, RecyclerView>() {
+                @Override
+                public RecyclerView call(RecyclerView recyclerView) {
+
+                    if(!Utils.hasInternet()){
+                        ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
+                    }
+
+                    isLoading = true;
+                    mView.startLoad();
+                    return recyclerView;
+                }
+            }).flatMap(new Func1<RecyclerView, Observable<List<Recipe>>>() {
+                @Override
+                public Observable<List<Recipe>> call(RecyclerView recyclerView) {
+                    return getRecipes(false);
+                }
+            }).filter(new Func1<List<Recipe>, Boolean>() {
+                @Override
+                public Boolean call(List<Recipe> recipes) {
+                    return !isRefreshing && isLoading;
+                }
+            }).subscribe(new Action1<List<Recipe>>() {
+                @Override
+                public void call(List<Recipe> recipes) {
+
+                    if (!Utils.isCollectionEmpty(recipes)) {
+                        Logger.v(TAG, mCursor + " >>> " + recipes.get(0).getCook_id());
+                        mView.onAppendRecipes(recipes);
+                    }
+                    resetLoadmoreState(recipes);
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.get_recipes_fail, Toast.LENGTH_SHORT);
+                    resetLoadmoreState(null);
+                }
+            });
         }
     }
 
