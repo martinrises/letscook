@@ -49,10 +49,28 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
         mView.stopFresh();
     }
 
-    protected void beforeRefresh() {
-        if (!Utils.hasInternet()) {
+    protected boolean beforeRefresh() {
+        boolean hasInternet = checkIntenetAndShowTips();
+        if (!hasInternet) {
+            resetRefreshState();
+        }
+        return hasInternet;
+    }
+
+    protected Boolean beforeLoad() {
+        boolean hasInternet = checkIntenetAndShowTips();
+        if (!hasInternet) {
+            resetLoadmoreState(null);
+        }
+        return hasInternet;
+    }
+
+    private boolean checkIntenetAndShowTips() {
+        boolean hasInternet = Utils.hasInternet();
+        if (!hasInternet) {
             ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
         }
+        return hasInternet;
     }
 
     protected void resetLoadmoreState(List<Recipe> recipes) {
@@ -94,11 +112,10 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 isRefreshing = true;
                 return aVoid;
             }
-        }).map(new Func1<Object, Object>() {
+        }).filter(new Func1<Object, Boolean>() {
             @Override
-            public Object call(Object o) {
-                beforeRefresh();
-                return null;
+            public Boolean call(Object o) {
+                return beforeRefresh();
             }
         }).flatMap(new Func1<Object, Observable<List<Recipe>>>() {
             @Override
@@ -131,14 +148,14 @@ public abstract class BaseRecipeListPresenterImpl extends RecipeListPresenter {
                 public Boolean call(RecyclerView recyclerView) {
                     return shouldLoadMore(recyclerView);
                 }
+            }).filter(new Func1<RecyclerView, Boolean>() {
+                @Override
+                public Boolean call(RecyclerView recyclerView) {
+                    return beforeLoad();
+                }
             }).map(new Func1<RecyclerView, RecyclerView>() {
                 @Override
                 public RecyclerView call(RecyclerView recyclerView) {
-
-                    if(!Utils.hasInternet()){
-                        ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.net_not_available, Toast.LENGTH_LONG);
-                    }
-
                     isLoading = true;
                     mView.startLoad();
                     return recyclerView;

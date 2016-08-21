@@ -18,8 +18,8 @@ public class FavRecipeListPresenterImpl extends BaseRecipeListPresenterImpl {
     }
 
     @Override
-    protected void beforeRefresh() {
-        // TODO nothing
+    protected boolean beforeRefresh() {
+        return true;
     }
 
     @Override
