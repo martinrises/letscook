@@ -10,6 +10,8 @@
     <string name="tip_shop_empty">您还没有添加购物清单</string>
     <string name="net_not_available">网络不可用，请联网重试。</string>
     <string name="get_recipes_fail">菜谱获取失败</string>
+    <string name="no_related_recipe">没有搜索到相关菜谱</string>
+    <string name="no_more_recipe">没有更多菜谱了</string>
     <string name="one_more_click_to_exit">再按一次退出</string>
 
 </resources>
