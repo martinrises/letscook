@@ -17,8 +17,12 @@ public class MainRecipeListPresenterImpl extends BaseRecipeListPresenterImpl {
     }
 
     @Override
-    public Observable<List<Recipe>> getRecipes() {
-        return CookSystem.getInstance().getRecipes(mTag, mOrder, mCursor, PAGE_SIZE);
+    public Observable<List<Recipe>> getRecipes(boolean isRefresh) {
+        if (!isRefresh) {
+            return CookSystem.getInstance().getRecipes(mTag, mOrder, mCursor, PAGE_SIZE);
+        } else {
+            return CookSystem.getInstance().refreshRecipes(mTag, mOrder, mCursor, PAGE_SIZE);
+        }
     }
 
 

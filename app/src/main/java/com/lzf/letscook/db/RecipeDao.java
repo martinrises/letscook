@@ -138,13 +138,13 @@ public class RecipeDao {
         }
     }
 
-    public void clearRecipes(String query, String order){
+    public int clearRecipes(String query, String order){
         checkDd();
 
         String table = QueryOrderContract.TABLE_NAME;
         String where = QueryOrderContract.QUERY_ORDER + " = ?";
         String[] args = {query + "_" + order};
-        db.delete(table, where, args);
+        return db.delete(table, where, args);
     }
 
     private void writeRecipe(String query, String order, int start, int size, Recipe recipe) {

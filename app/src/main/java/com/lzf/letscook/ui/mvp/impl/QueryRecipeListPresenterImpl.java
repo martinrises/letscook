@@ -20,7 +20,7 @@ public class QueryRecipeListPresenterImpl extends BaseRecipeListPresenterImpl {
     }
 
     @Override
-    public Observable<List<Recipe>> getRecipes() {
+    public Observable<List<Recipe>> getRecipes(boolean isRefresh) {
         return CookSystem.getInstance().getRecipesSearch(mKeyword, mTag, mCursor, PAGE_SIZE);
     }
 

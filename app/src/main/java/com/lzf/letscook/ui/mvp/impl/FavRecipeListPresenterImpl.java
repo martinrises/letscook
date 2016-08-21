@@ -23,7 +23,7 @@ public class FavRecipeListPresenterImpl extends BaseRecipeListPresenterImpl {
     }
 
     @Override
-    public Observable<List<Recipe>> getRecipes() {
+    public Observable<List<Recipe>> getRecipes(boolean isRrefresh) {
         return FavSystem.getInstance().getFavorite(mCursor, PAGE_SIZE);
     }
 }

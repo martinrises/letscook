@@ -61,6 +61,35 @@ public class CookSystem {
 
     }
 
+    public Observable<List<Recipe>> refreshRecipes(final String tag, final String order, final int start, final int size) {
+
+        // 异步查询数据库；
+        return NetApi.getRecipesOnline(tag, order, start, size).
+                filter(new Func1<List<Recipe>, Boolean>() {
+                    @Override
+                    public Boolean call(List<Recipe> recipes) {
+                        return !Utils.isCollectionEmpty(recipes);
+                    }
+                }).flatMap(new Func1<List<Recipe>, Observable<List<Recipe>>>() {
+            @Override
+            public Observable<List<Recipe>> call(final List<Recipe> recipes) {
+                return DbApi.clearRecipes(tag, order).map(new Func1<Integer, List<Recipe>>() {
+                    @Override
+                    public List<Recipe> call(Integer integer) {
+                        return recipes;
+                    }
+                });
+            }
+        }).map(new Func1<List<Recipe>, List<Recipe>>() {
+            @Override
+            public List<Recipe> call(List<Recipe> recipes) {
+                DbApi.writeRecipes(tag, order, start, size, recipes);
+                return recipes;
+            }
+        });
+
+    }
+
     public Observable<List<Recipe>> getRecipesSearch(final String keyword, final String tag, final int start, final int size) {
         return NetApi.getRecipesSearch(keyword, tag, start, size)
                 .map(new Func1<List<Recipe>, List<Recipe>>() {
