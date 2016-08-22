@@ -9,12 +9,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Material;
 import com.lzf.letscook.entity.Recipe;
+import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.ui.activity.DetailActivity;
 import com.lzf.letscook.util.Utils;
 
@@ -27,6 +29,8 @@ public class ShopRecipeView extends CardView{
 
     private Recipe mRecipe;
     private LinearLayout mContainerLl;
+    private LinearLayout mDelContainer;
+    private ImageButton mDelBtn;
 
     public ShopRecipeView(Context context) {
         this(context, null);
@@ -54,7 +58,6 @@ public class ShopRecipeView extends CardView{
         this.mRecipe = recipe;
 
         mContainerLl.removeAllViews();
-//        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 19, getResources().getDisplayMetrics()));
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         TextView nameTv = new TextView(getContext());
@@ -107,6 +110,27 @@ public class ShopRecipeView extends CardView{
             }
         }
 
+        // 删除的小按钮
+        if(mDelBtn == null) {
+            initDelBtn();
+        }
+        mContainerLl.addView(mDelContainer, lp);
+    }
+
+    protected void initDelBtn() {
+        mDelContainer = new LinearLayout(getContext());
+        mDelContainer.setOrientation(LinearLayout.HORIZONTAL);
+        mDelContainer.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+        mDelBtn = new ImageButton(getContext());
+        mDelBtn.setImageResource(R.mipmap.ic_launcher);
+        mDelContainer.addView(mDelBtn, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        mDelBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShopSystem.getInstance().removeShopRecipe(mRecipe.getCook_id()).subscribe();
+            }
+        });
     }
 
     private void setMajorTvStyle(TextView majorTv){
