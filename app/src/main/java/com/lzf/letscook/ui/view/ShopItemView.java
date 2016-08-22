@@ -15,14 +15,12 @@ import android.widget.TextView;
 
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Material;
-import com.lzf.letscook.net.SubscriberHolder;
 import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.util.rx.SubcriberAdapter;
 
 import java.lang.ref.SoftReference;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 
 /**
@@ -76,60 +74,46 @@ public class ShopItemView extends LinearLayout {
     }
 
     private void initClickObserver() {
-
-        final SubscriberHolder<View> subHolder = new SubscriberHolder();
-        Observable<View> ob = Observable.create(new Observable.OnSubscribe<View>() {
-            @Override
-            public void call(Subscriber<? super View> subscriber) {
-                subHolder.setSubscriber(subscriber);
-            }
-        });
-
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Subscriber<? super View> sub = subHolder.getSubscriber();
-                sub.onNext(v);
+                Observable.just(v).flatMap(new Func1<View, Observable<View>>() {
+                    @Override
+                    public Observable<View> call(View view) {
+                        if (mProgressDialog == null) {
+                            mProgressDialog = new ProgressDialogFragment();
+                        }
+                        mProgressDialog.showPd(((FragmentActivity) getContext()).getSupportFragmentManager(), "操作中..");
+                        return Observable.just(view);
+                    }
+                }).flatMap(new Func1<View, Observable<Boolean>>() {
+                    @Override
+                    public Observable<Boolean> call(View view) {
+
+                        if (mMaterial.isBuyed()) {
+                            return ShopSystem.getInstance().unbuyMaterial(mMaterial.get_id(), mMaterial.isMajor());
+                        } else {
+                            return ShopSystem.getInstance().buyMaterial(mMaterial.get_id(), mMaterial.isMajor());
+                        }
+                    }
+                }).flatMap(new Func1<Boolean, Observable<Boolean>>() {
+                    @Override
+                    public Observable<Boolean> call(Boolean hasBuySuccess) {
+
+                        mProgressDialog.dismiss();
+                        return Observable.just(hasBuySuccess);
+                    }
+                }).subscribe(new SubcriberAdapter<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if (aBoolean) {
+                            mMaterial.setBuyed(!mMaterial.isBuyed());
+                            invalidate();
+                        }
+                    }
+                });
             }
         });
-
-        ob.flatMap(new Func1<View, Observable<View>>() {
-            @Override
-            public Observable<View> call(View view) {
-                if (mProgressDialog == null) {
-                    mProgressDialog = new ProgressDialogFragment();
-                }
-                mProgressDialog.showPd(((FragmentActivity) getContext()).getSupportFragmentManager(), "操作中..");
-                return Observable.just(view);
-            }
-        }).flatMap(new Func1<View, Observable<Boolean>>() {
-            @Override
-            public Observable<Boolean> call(View view) {
-
-                if (mMaterial.isBuyed()) {
-                    return ShopSystem.getInstance().unbuyMaterial(mMaterial.get_id(), mMaterial.isMajor());
-                } else {
-                    return ShopSystem.getInstance().buyMaterial(mMaterial.get_id(), mMaterial.isMajor());
-                }
-            }
-        }).flatMap(new Func1<Boolean, Observable<Boolean>>() {
-            @Override
-            public Observable<Boolean> call(Boolean hasBuySuccess) {
-
-                mProgressDialog.dismiss();
-                return Observable.just(hasBuySuccess);
-            }
-        }).subscribe(new SubcriberAdapter<Boolean>() {
-            @Override
-            public void onNext(Boolean aBoolean) {
-                if (aBoolean) {
-                    mMaterial.setBuyed(!mMaterial.isBuyed());
-                    invalidate();
-                }
-            }
-        });
-
-
     }
 
     public void setMaterial(Material m) {
