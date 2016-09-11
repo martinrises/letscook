@@ -35,7 +35,7 @@ public class EmptyTipsFragment extends BaseFragment {
             args.putInt(EmptyTipsFragment.ARGS_MSG, msgId);
             args.putInt(EmptyTipsFragment.ARGS_ICON, iconId);
             tipFragment.setArguments(args);
-            fm.beginTransaction().add(containerId, tipFragment, tag).commit();
+            fm.beginTransaction().add(containerId, tipFragment, tag).commitAllowingStateLoss();
         }
     }
 

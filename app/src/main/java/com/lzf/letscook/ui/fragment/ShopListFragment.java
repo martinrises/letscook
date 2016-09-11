@@ -103,4 +103,9 @@ public class ShopListFragment extends BaseFragment implements ShopListView, OnSh
     public void onShopChanged(String recipeId, boolean isShop) {
         mPresenter.startLoad();
     }
+
+    @Override
+    public void onShopCleared() {
+        mPresenter.startLoad();
+    }
 }

@@ -16,7 +16,7 @@ import rx.Subscriber;
 
 /**
  * DB操作服务类
- *
+ * <p/>
  * Created by liuzhaofeng on 16/5/4.
  */
 public class DbApi {
@@ -29,12 +29,12 @@ public class DbApi {
     private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(128);
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(MIN_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue);
 
-    public static Observable<List<Recipe>> getRecipes(final String query, final String order, final int start, final int size){
+    public static Observable<List<Recipe>> getRecipes(final String query, final String order, final int start, final int size) {
 
         Observable.OnSubscribe<List<Recipe>> onSubscribe = new Observable.OnSubscribe<List<Recipe>>() {
             @Override
             public void call(final Subscriber<? super List<Recipe>> subscriber) {
-                new AsyncTask<Void, Void, List<Recipe>>(){
+                new AsyncTask<Void, Void, List<Recipe>>() {
 
                     @Override
                     protected List<Recipe> doInBackground(Void... params) {
@@ -53,11 +53,11 @@ public class DbApi {
     }
 
     public static void writeRecipes(final String queryTag, final String order, final int start, final int size, final List<Recipe> recipes) {
-        if(Utils.isCollectionEmpty(recipes)){
+        if (Utils.isCollectionEmpty(recipes)) {
             return;
         }
 
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
@@ -92,12 +92,12 @@ public class DbApi {
 
     }
 
-    public static Observable<Boolean> addFavorite(final String recipeId){
+    public static Observable<Boolean> addFavorite(final String recipeId) {
 
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Void>(){
+                new AsyncTask<Void, Void, Void>() {
 
                     @Override
                     protected Void doInBackground(Void... params) {
@@ -116,12 +116,12 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static Observable<Boolean> removeFavorite(final String recipeId){
+    public static Observable<Boolean> removeFavorite(final String recipeId) {
 
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Void>(){
+                new AsyncTask<Void, Void, Void>() {
 
                     @Override
                     protected Void doInBackground(Void... params) {
@@ -141,12 +141,12 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static Observable<List<Recipe>> getFavRecipes(final int start, final int size){
+    public static Observable<List<Recipe>> getFavRecipes(final int start, final int size) {
 
         Observable.OnSubscribe<List<Recipe>> onSubscribe = new Observable.OnSubscribe<List<Recipe>>() {
             @Override
             public void call(final Subscriber<? super List<Recipe>> subscriber) {
-                new AsyncTask<Void, Void, List<Recipe>>(){
+                new AsyncTask<Void, Void, List<Recipe>>() {
 
                     @Override
                     protected List<Recipe> doInBackground(Void... params) {
@@ -164,12 +164,12 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static Observable<List<Recipe>> getShopRecipes(){
+    public static Observable<List<Recipe>> getShopRecipes() {
 
         Observable.OnSubscribe<List<Recipe>> onSubscribe = new Observable.OnSubscribe<List<Recipe>>() {
             @Override
             public void call(final Subscriber<? super List<Recipe>> subscriber) {
-                new AsyncTask<Void, Void, List<Recipe>>(){
+                new AsyncTask<Void, Void, List<Recipe>>() {
 
                     @Override
                     protected List<Recipe> doInBackground(Void... params) {
@@ -192,7 +192,7 @@ public class DbApi {
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Void>(){
+                new AsyncTask<Void, Void, Void>() {
 
                     @Override
                     protected Void doInBackground(Void... params) {
@@ -212,12 +212,12 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static Observable<Boolean> removeShopRecipe(final String recipeId){
+    public static Observable<Boolean> removeShopRecipe(final String recipeId) {
 
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Void>(){
+                new AsyncTask<Void, Void, Void>() {
 
                     @Override
                     protected Void doInBackground(Void... params) {
@@ -238,12 +238,35 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static Observable<Boolean> buyMaterial(final String materialId, final boolean isMajor){
+    public static Observable<Boolean> clearShopRecipes() {
+        Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
+
+            @Override
+            public void call(final Subscriber<? super Boolean> subscriber) {
+                new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        RecipeDao.getInstance().clearShop();
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        subscriber.onNext(true);
+                    }
+                }.executeOnExecutor(EXECUTOR);
+            }
+        };
+        return Observable.create(onSubscribe);
+    }
+
+    public static Observable<Boolean> buyMaterial(final String materialId, final boolean isMajor) {
 
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Boolean>(){
+                new AsyncTask<Void, Void, Boolean>() {
 
                     @Override
                     protected Boolean doInBackground(Void... params) {
@@ -261,12 +284,12 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static Observable<Boolean> unBuyMaterial(final String materialId, final boolean isMajor){
+    public static Observable<Boolean> unBuyMaterial(final String materialId, final boolean isMajor) {
 
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Boolean>(){
+                new AsyncTask<Void, Void, Boolean>() {
 
                     @Override
                     protected Boolean doInBackground(Void... params) {
@@ -288,7 +311,7 @@ public class DbApi {
         Observable.OnSubscribe<Boolean> onSubscribe = new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
-                new AsyncTask<Void, Void, Boolean>(){
+                new AsyncTask<Void, Void, Boolean>() {
 
                     @Override
                     protected Boolean doInBackground(Void... params) {

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">美食·瘦身</string>
     <string name="action_search">搜索</string>
+    <string name="action_delete">删除所有购物单</string>
     <string name="major_shop">主料</string>
     <string name="minor_shop">辅料</string>
     <string name="shop_loading">加载中..</string>

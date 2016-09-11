@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.view.ShopRecipeView;
+import com.lzf.letscook.util.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ShopHolder> {
     private static final String TAG = ShopAdapter.class.getSimpleName();
 
     private LayoutInflater mInflator;
-    private List<Recipe> mRecipes;
+    private final List<Recipe> mRecipes = new ArrayList<>();
 
     @Override
     public ShopHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,14 +40,22 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ShopHolder> {
 
     @Override
     public int getItemCount() {
+        int cnt = 0;
         if(mRecipes == null){
-            return 0;
+//            return 0;
+            cnt = 0;
         }
-        return mRecipes.size();
+//        return mRecipes.size();
+        cnt = mRecipes.size();
+        Logger.v(TAG, "ShopAdapter.getItemCount() >>> " + cnt);
+        return cnt;
     }
 
     public void setData(List<Recipe> recipes){
-        mRecipes = recipes;
+        mRecipes.clear();
+        if(recipes != null) {
+            mRecipes.addAll(recipes);
+        }
     }
 
     static final class ShopHolder extends RecyclerView.ViewHolder{

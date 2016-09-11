@@ -7,4 +7,5 @@ public interface OnShopChangeListener {
 
     void onShopChanged(String recipeId, boolean isShop);
 
+    void onShopCleared();
 }

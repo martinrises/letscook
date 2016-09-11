@@ -26,30 +26,30 @@ import java.util.List;
  */
 public class RecipeDao {
 
-    private SQLiteDatabase db ;
+    private SQLiteDatabase db;
 
     private static RecipeDao sInstance;
 
-    private RecipeDao(){
+    private RecipeDao() {
         db = RecipeOpenHelper.getInstance().getWritableDatabase();
     }
 
-    public static RecipeDao getInstance(){
-        if(sInstance == null){
+    public static RecipeDao getInstance() {
+        if (sInstance == null) {
             sInstance = new RecipeDao();
         }
         return sInstance;
     }
 
-    public List<Recipe> getRecipes(String query, String order, int start, int size){
+    public List<Recipe> getRecipes(String query, String order, int start, int size) {
 
         checkDd();
 
-        if(TextUtils.isEmpty(query) || TextUtils.isEmpty(order)){
+        if (TextUtils.isEmpty(query) || TextUtils.isEmpty(order)) {
             return null;
         }
 
-        List<Recipe> recipes = new  ArrayList<>();
+        List<Recipe> recipes = new ArrayList<>();
 
         Cursor recipeC = null;
         try {
@@ -57,12 +57,12 @@ public class RecipeDao {
             String[] args = new String[]{query + "_" + order, start + "_" + size};
             recipeC = db.query(QueryOrderContract.TABLE_NAME, null, selection, args, null, null, null);
 
-            while(recipeC.moveToNext()){
+            while (recipeC.moveToNext()) {
 
                 String recipe_id = recipeC.getString(recipeC.getColumnIndex(QueryOrderContract.RECIPE_ID));
                 Recipe recipe = getRecipe(recipe_id);
 
-                if(recipe != null){
+                if (recipe != null) {
                     recipes.add(recipe);
                 }
             }
@@ -79,7 +79,7 @@ public class RecipeDao {
 
     private Recipe getRecipe(String recipe_id) {
 
-        if(TextUtils.isEmpty(recipe_id)){
+        if (TextUtils.isEmpty(recipe_id)) {
             return null;
         }
 
@@ -113,32 +113,32 @@ public class RecipeDao {
     }
 
     private void closeCursor(Cursor cursor) {
-        if(cursor != null){
+        if (cursor != null) {
             cursor.close();
         }
     }
 
-    private void checkDd(){
-        if(db == null || !db.isOpen()){
+    private void checkDd() {
+        if (db == null || !db.isOpen()) {
             db = RecipeOpenHelper.getInstance().getWritableDatabase();
         }
     }
 
     public void writeRecipes(String query, String order, int start, int size, List<Recipe> recipes) {
 
-        if(Utils.isCollectionEmpty(recipes))
+        if (Utils.isCollectionEmpty(recipes))
             return;
 
         checkDd();
 
         // 数据插入DB
-        for (Recipe recipe : recipes){
+        for (Recipe recipe : recipes) {
 
             writeRecipe(query, order, start, size, recipe);
         }
     }
 
-    public int clearRecipes(String query, String order){
+    public int clearRecipes(String query, String order) {
         checkDd();
 
         String table = QueryOrderContract.TABLE_NAME;
@@ -151,7 +151,7 @@ public class RecipeDao {
 
         if (!TextUtils.isEmpty(query)) {
             ContentValues queryOrderValues = ParseUtils.getQueryOrderValues(query, order, start, size, recipe.getCook_id());
-            String where = QueryOrderContract.QUERY_ORDER +" = ? and " + QueryOrderContract.START_SIZE + " = ? and " + QueryOrderContract.RECIPE_ID + " = ?";
+            String where = QueryOrderContract.QUERY_ORDER + " = ? and " + QueryOrderContract.START_SIZE + " = ? and " + QueryOrderContract.RECIPE_ID + " = ?";
             String[] args = {query + "_" + order, start + "_" + size, recipe.getCook_id()};
             int cnt = db.update(QueryOrderContract.TABLE_NAME, queryOrderValues, where, args);
             if (cnt <= 0) {
@@ -170,7 +170,7 @@ public class RecipeDao {
         List<String> tags = recipe.getTags();
         String cook_id = recipe.getCook_id();
         if (tags != null) {
-            for(String tag : tags){
+            for (String tag : tags) {
 
                 ContentValues tagCv = ParseUtils.getTagValues(cook_id, tag);
                 String tagWhere = TagContract.RECIPE_ID + "=? and " + TagContract.TEXT + "=?";
@@ -183,14 +183,14 @@ public class RecipeDao {
         }
 
         List<CookStep> steps = recipe.getSteps();
-        if(steps != null){
-            for (CookStep step : steps){
+        if (steps != null) {
+            for (CookStep step : steps) {
                 ContentValues stepCv = ParseUtils.getStepValues(cook_id, step);
                 String stepWhere = StepContract.RECIPE_ID + "= ? and " + StepContract.POSITION + "=?";
                 String[] stepArgs = {recipe.getCook_id(), step.getPosition()};
                 int stepCnt = db.update(StepContract.TABLE_NAME, stepCv, stepWhere, stepArgs);
                 if (stepCnt <= 0) {
-                    db.insert(StepContract.TABLE_NAME , null, stepCv);
+                    db.insert(StepContract.TABLE_NAME, null, stepCv);
                 }
             }
         }
@@ -201,12 +201,12 @@ public class RecipeDao {
     }
 
     private void writeMaterial(String cook_id, List<Material> major, String tableName) {
-        if(major != null){
+        if (major != null) {
 
-            for(Material material : major){
+            for (Material material : major) {
 
                 ContentValues materialCv = ParseUtils.getMaterialValues(cook_id, material);
-                String where = MajorContract.RECIPE_ID + " = ? and " + MajorContract.TITLE  + "= ?";
+                String where = MajorContract.RECIPE_ID + " = ? and " + MajorContract.TITLE + "= ?";
                 String[] args = {cook_id, material.getTitle()};
                 int cnt = db.update(tableName, materialCv, where, args);
                 if (cnt <= 0) {
@@ -216,7 +216,7 @@ public class RecipeDao {
         }
     }
 
-    public void addFavorite(String recipeId){
+    public void addFavorite(String recipeId) {
 
         checkDd();
 
@@ -230,7 +230,7 @@ public class RecipeDao {
         }
     }
 
-    public void removeFavorite(String recipeId){
+    public void removeFavorite(String recipeId) {
 
         checkDd();
 
@@ -239,30 +239,30 @@ public class RecipeDao {
         db.delete(FavoriteContract.TABLE_NAME, where, args);
     }
 
-    public ArrayList<Recipe> getFavoriteRecipes(int start, int size){
+    public ArrayList<Recipe> getFavoriteRecipes(int start, int size) {
         checkDd();
 
         ArrayList<Recipe> favRecipes = new ArrayList<>();
 
         String[] colunms = {FavoriteContract.RECIPE_ID};
         Cursor c = null;
-        try{
+        try {
             c = db.query(FavoriteContract.TABLE_NAME, colunms, null, null, null, null, FavoriteContract._ID + " desc", start + "," + size);
 
-            while(c.moveToNext()){
+            while (c.moveToNext()) {
                 String recipeId = c.getString(0);
                 Recipe recipe = getRecipe(recipeId);
                 favRecipes.add(recipe);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeCursor(c);
         }
         return favRecipes;
     }
 
-    public void removeShop(String recipeId){
+    public void removeShop(String recipeId) {
 
         checkDd();
 
@@ -273,16 +273,24 @@ public class RecipeDao {
         // 将recipe中的食材都置为不买
         Recipe recipe = getRecipe(recipeId);
         ArrayList<Material> major = recipe.getMajor();
-        for (Material m : major){
+        for (Material m : major) {
             unBuyMaterial(m.get_id(), true);
         }
         ArrayList<Material> minor = recipe.getMinor();
-        for (Material m : minor){
+        for (Material m : minor) {
             unBuyMaterial(m.get_id(), false);
         }
     }
 
-    public void addShop(String recipeId){
+    public void clearShop() {
+        checkDd();
+        ArrayList<Recipe> shopRecipes = getShopRecipes();
+        for (Recipe recipe : shopRecipes) {
+            removeShop(recipe.getCook_id());
+        }
+    }
+
+    public void addShop(String recipeId) {
 
         checkDd();
 
@@ -291,35 +299,35 @@ public class RecipeDao {
         String where = ShopContract.RECIPE_ID + "= ?";
         String[] args = {recipeId};
         int update = db.update(ShopContract.TABLE_NAME, values, where, args);
-        if(update <= 0){
+        if (update <= 0) {
             db.insert(ShopContract.TABLE_NAME, null, values);
         }
     }
 
-    public ArrayList<Recipe> getShopRecipes(){
+    public ArrayList<Recipe> getShopRecipes() {
         checkDd();
 
         ArrayList<Recipe> shopRecipes = new ArrayList<>();
 
         String[] colunms = {ShopContract.RECIPE_ID};
         Cursor c = null;
-        try{
+        try {
             c = db.query(ShopContract.TABLE_NAME, colunms, null, null, null, null, ShopContract._ID + " desc");
 
-            while(c.moveToNext()){
+            while (c.moveToNext()) {
                 String recipeId = c.getString(0);
                 Recipe recipe = getRecipe(recipeId);
                 shopRecipes.add(recipe);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeCursor(c);
         }
         return shopRecipes;
     }
 
-    private boolean buyMaterial(String materialId, boolean isMajor, boolean isBuyed){
+    private boolean buyMaterial(String materialId, boolean isMajor, boolean isBuyed) {
         checkDd();
 
         String table = isMajor ? MajorContract.TABLE_NAME : MinorContract.TABLE_NAME;
@@ -331,26 +339,26 @@ public class RecipeDao {
         return update > 0;
     }
 
-    public boolean buyMaterial(String materialId, boolean isMajor){
+    public boolean buyMaterial(String materialId, boolean isMajor) {
         return buyMaterial(materialId, isMajor, true);
     }
 
-    public boolean unBuyMaterial(String materialId, boolean isMajor){
+    public boolean unBuyMaterial(String materialId, boolean isMajor) {
         return buyMaterial(materialId, isMajor, false);
     }
 
     public Boolean isFavorite(String recipeId) {
         checkDd();
         Cursor c = null;
-        try{
+        try {
             String where = FavoriteContract.RECIPE_ID + "= ?";
             String[] args = {recipeId};
             c = db.query(FavoriteContract.TABLE_NAME, null, where, args, null, null, null);
 
             return c.moveToFirst();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeCursor(c);
         }
         return false;
@@ -359,15 +367,15 @@ public class RecipeDao {
     public Boolean isInShopList(String recipeId) {
         checkDd();
         Cursor c = null;
-        try{
+        try {
             String where = ShopContract.RECIPE_ID + "= ?";
             String[] args = {recipeId};
             c = db.query(ShopContract.TABLE_NAME, null, where, args, null, null, null);
 
             return c.moveToFirst();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeCursor(c);
         }
         return false;
