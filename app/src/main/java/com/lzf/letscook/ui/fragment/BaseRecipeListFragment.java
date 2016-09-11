@@ -161,4 +161,9 @@ public abstract class BaseRecipeListFragment extends BaseFragment implements Rec
 
         onSetRecipes(recipes);
     }
+
+    @Override
+    public void onShopCleared() {
+        // TODO nothing
+    }
 }

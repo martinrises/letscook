@@ -8,7 +8,6 @@ import com.lzf.letscook.ui.mvp.contract.ShopListView;
 import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -19,22 +18,13 @@ public class ShopListPresenterImpl implements ShopListPresenter {
 
     private ShopListView mView;
 
-    private Subscriber mRefreshSub;
-
     public ShopListPresenterImpl(ShopListView view){
         this.mView = view;
-
-        initRefreshOb();
     }
 
-    private void initRefreshOb() {
-
-        Observable.create(new Observable.OnSubscribe<Object>() {
-            @Override
-            public void call(Subscriber<? super Object> subscriber) {
-                mRefreshSub = subscriber;
-            }
-        }).map(new Func1<Object, Object>() {
+    @Override
+    public void startLoad() {
+        Observable.just(System.currentTimeMillis()).map(new Func1<Object, Object>() {
             @Override
             public Object call(Object aVoid) {
                 mView.onStartLoad();
@@ -51,11 +41,5 @@ public class ShopListPresenterImpl implements ShopListPresenter {
                 mView.onLoadComplete(recipes);
             }
         });
-    }
-
-
-    @Override
-    public void startLoad() {
-        mRefreshSub.onNext(new Object());
     }
 }

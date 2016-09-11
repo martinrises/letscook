@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -57,6 +58,15 @@ public class ShopSystem {
         });
     }
 
+    public Observable<Boolean> clearShopRecipes() {
+        return DbApi.clearShopRecipes().doOnNext(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                notifyClearShopRecipes();
+            }
+        });
+    }
+
     public Observable<Boolean> buyMaterial(String _id, boolean isMajor) {
         return DbApi.buyMaterial(_id, isMajor);
     }
@@ -78,13 +88,25 @@ public class ShopSystem {
     }
 
     private void notifyOnShopChange(String recipeId, boolean isShop) {
-
         Iterator<SoftReference<OnShopChangeListener>> it = mOnShopChangeListenerRefs.iterator();
         while (it.hasNext()) {
             SoftReference<OnShopChangeListener> ref = it.next();
             OnShopChangeListener l = ref.get();
             if (l != null) {
                 l.onShopChanged(recipeId, isShop);
+            } else {
+                it.remove();
+            }
+        }
+    }
+
+    private void notifyClearShopRecipes() {
+        Iterator<SoftReference<OnShopChangeListener>> it = mOnShopChangeListenerRefs.iterator();
+        while (it.hasNext()) {
+            SoftReference<OnShopChangeListener> ref = it.next();
+            OnShopChangeListener l = ref.get();
+            if (l != null) {
+                l.onShopCleared();
             } else {
                 it.remove();
             }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.lzf.letscook.LetsCook;
 import com.lzf.letscook.R;
+import com.lzf.letscook.system.shop.ShopSystem;
 import com.lzf.letscook.ui.adapter.MainAdapter;
 import com.lzf.letscook.ui.fragment.QueryRecipeListFragment;
 import com.lzf.letscook.ui.view.AgileViewPager;
@@ -30,6 +31,9 @@ public class MainActivity extends BaseActivity {
     private static final int TEXT_COLOR_BLUE = 0xff03A9F4;
 
     private static final String QUERY_FRAGMENT_TAG = "query_fragment_tag";
+    private static final int SHOP_FRAGMENT_INDEX = 2;
+
+    private int mLastPagerIndex = -1;
 
     private AgileViewPager mPager;
     private MainAdapter mAdapter;
@@ -80,7 +84,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if (mLastPagerIndex == SHOP_FRAGMENT_INDEX || position == SHOP_FRAGMENT_INDEX) {
+                    invalidateOptionsMenu();
+                }
                 setIndicatorSelected(position);
+                mLastPagerIndex = position;
             }
 
             @Override
@@ -119,8 +127,29 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        boolean shouldShowDeleteMenuItem = mPager.getCurrentItem() == SHOP_FRAGMENT_INDEX;
+        menuInflater.inflate(shouldShowDeleteMenuItem ? R.menu.menu_main_shop : R.menu.menu_main, menu);
 
+        if(shouldShowDeleteMenuItem) {
+            initDeleteShopMenuItem(menu);
+        }
+
+        initSearchMenuItem(menu);
+        return true;
+    }
+
+    private void initDeleteShopMenuItem(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_delete_shop_list);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ShopSystem.getInstance().clearShopRecipes().subscribe();
+                return true;
+            }
+        });
+    }
+
+    protected void initSearchMenuItem(Menu menu) {
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -170,14 +199,14 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
-        return true;
     }
 
     private boolean mHasClickBack = false;
+
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-            if(!mHasClickBack) {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            if (!mHasClickBack) {
                 // 之前没有按过,则弹toast提示再按一下退出
                 ToastManager.makeTextAndShow(LetsCook.getApp(), R.string.one_more_click_to_exit, Toast.LENGTH_SHORT);
                 mHasClickBack = true;
