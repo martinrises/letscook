@@ -32,6 +32,8 @@ public class ShopRecipeView extends CardView{
     private LinearLayout mDelContainer;
     private ImageButton mDelBtn;
 
+    private int mWidthHeightBtnDelete = 0;
+
     public ShopRecipeView(Context context) {
         this(context, null);
     }
@@ -52,6 +54,8 @@ public class ShopRecipeView extends CardView{
         addView(mContainerLl, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
         setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, getResources().getDisplayMetrics()));
+
+        mWidthHeightBtnDelete = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
     }
 
     public void setRecipe(Recipe recipe){
@@ -122,7 +126,10 @@ public class ShopRecipeView extends CardView{
         mDelContainer.setOrientation(LinearLayout.HORIZONTAL);
         mDelContainer.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
         mDelBtn = new ImageButton(getContext());
-        mDelBtn.setImageResource(R.mipmap.ic_launcher);
+        mDelBtn.setBackgroundResource(android.R.color.transparent);
+        mDelBtn.setLayoutParams(new ViewGroup.LayoutParams(mWidthHeightBtnDelete, mWidthHeightBtnDelete));
+//        mDelBtn.setImageResource(R.drawable.action_delete_shop_selecotor);
+        mDelBtn.setImageResource(R.drawable.btn_delete_shop_selector);
         mDelContainer.addView(mDelBtn, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         mDelBtn.setOnClickListener(new OnClickListener() {
