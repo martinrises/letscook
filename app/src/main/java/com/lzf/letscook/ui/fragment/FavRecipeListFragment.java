@@ -53,6 +53,8 @@ public class FavRecipeListFragment extends BaseRecipeListFragment {
 
         if(Utils.isCollectionEmpty(recipes)){
             EmptyTipsFragment.showEmptyTips(R.string.tip_fav_empty, 0, getFragmentManager(), R.id.base_frag_root_fav, FAV_TIP_FRAGMENT_TAG);
+        } else {
+            EmptyTipsFragment.hideEmptyTips(getFragmentManager(), FAV_TIP_FRAGMENT_TAG);
         }
     }
 }
