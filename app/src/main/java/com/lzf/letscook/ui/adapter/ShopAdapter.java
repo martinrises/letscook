@@ -25,6 +25,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ShopHolder> {
 
     @Override
     public ShopHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Logger.v(TAG, "onCreateViewHolder");
         if(mInflator == null){
             mInflator = LayoutInflater.from(parent.getContext());
         }
@@ -35,20 +36,16 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ShopHolder> {
 
     @Override
     public void onBindViewHolder(ShopHolder holder, int position) {
+        Logger.v(TAG, "onBindViewHolder");
         holder.mShopRecipeView.setRecipe(mRecipes.get(position));
     }
 
     @Override
     public int getItemCount() {
-        int cnt = 0;
         if(mRecipes == null){
-//            return 0;
-            cnt = 0;
+            return 0;
         }
-//        return mRecipes.size();
-        cnt = mRecipes.size();
-        Logger.v(TAG, "ShopAdapter.getItemCount() >>> " + cnt);
-        return cnt;
+        return mRecipes.size();
     }
 
     public void setData(List<Recipe> recipes){

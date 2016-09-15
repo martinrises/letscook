@@ -27,6 +27,9 @@ public class EmptyTipsFragment extends BaseFragment {
     private int mIconId;
 
     public static void showEmptyTips(int msgId, int iconId, FragmentManager fm, int containerId, String tag) {
+        if(fm == null) {
+            return;
+        }
         Fragment tipFragment = fm.findFragmentByTag(tag);
 
         if(tipFragment == null){
@@ -36,6 +39,18 @@ public class EmptyTipsFragment extends BaseFragment {
             args.putInt(EmptyTipsFragment.ARGS_ICON, iconId);
             tipFragment.setArguments(args);
             fm.beginTransaction().add(containerId, tipFragment, tag).commitAllowingStateLoss();
+        } else {
+            fm.beginTransaction().show(tipFragment).commitAllowingStateLoss();
+        }
+    }
+
+    public static void hideEmptyTips(FragmentManager fm, String tag) {
+        if(fm == null) {
+            return;
+        }
+        Fragment tipFragment = fm.findFragmentByTag(tag);
+        if(tipFragment != null) {
+            fm.beginTransaction().hide(tipFragment).commitAllowingStateLoss();
         }
     }
 

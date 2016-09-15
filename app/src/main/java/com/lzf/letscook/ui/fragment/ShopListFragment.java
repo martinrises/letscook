@@ -96,6 +96,8 @@ public class ShopListFragment extends BaseFragment implements ShopListView, OnSh
 
         if(Utils.isCollectionEmpty(recipes)){
             EmptyTipsFragment.showEmptyTips(R.string.tip_shop_empty, 0, getFragmentManager(), R.id.base_frag_root_shop, SHOP_TIP_FRAGMENT_TAG);
+        } else {
+            EmptyTipsFragment.hideEmptyTips(getFragmentManager(), SHOP_TIP_FRAGMENT_TAG);
         }
     }
 
