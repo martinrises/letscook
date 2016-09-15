@@ -11,9 +11,7 @@ import com.lzf.letscook.R;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.ui.activity.DetailActivity;
 import com.lzf.letscook.ui.view.RecipeItemView;
-import com.lzf.letscook.util.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
     private static final float SCALE_RECIPE_ITEM_VIEW = 1.8f;
     private static final float OFFSET_FACTOR = 0.3f;
 
-    private final List<Recipe> mRecipes = new ArrayList<>();
+    private List<Recipe> mRecipes;
     private LayoutInflater mInflator;
     private RecyclerView mRecyclerView;
 
@@ -40,7 +38,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
                     @Override
                     public void run() {
                         int cn = recyclerView.getChildCount();
-                        for (int i = 0; i < cn; i++) {
+                        for(int i = 0; i < cn; i++){
                             RecipeItemView child = (RecipeItemView) recyclerView.getChildAt(i);
                             Point p = getTranslation(recyclerView, child);
                             child.setTranslation(p.x, p.y);
@@ -61,7 +59,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
     @Override
     public RecipeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (mInflator == null) {
+        if(mInflator == null){
             mInflator = LayoutInflater.from(parent.getContext());
         }
         return new RecipeHolder(mInflator.inflate(R.layout.item_recipe_list, null));
@@ -87,24 +85,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
     @Override
     public int getItemCount() {
-        if (mRecipes == null) {
+        if(mRecipes == null){
             return 0;
         }
         return mRecipes.size();
     }
 
-    public void setData(List<Recipe> recipes) {
-        mRecipes.clear();
-        if (!Utils.isCollectionEmpty(recipes)) {
-            mRecipes.addAll(recipes);
-        }
+    public void setData(List<Recipe> recipes){
+        mRecipes = recipes;
     }
 
-    public List<Recipe> getRecipes() {
+    public List<Recipe> getRecipes(){
         return mRecipes;
     }
 
-    static final class RecipeHolder extends RecyclerView.ViewHolder {
+    static final class RecipeHolder extends RecyclerView.ViewHolder{
 
         RecipeItemView mRiv;
 
