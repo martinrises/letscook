@@ -70,13 +70,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
         final Recipe recipe = mRecipes.get(position);
         holder.mRiv.setRecipe(recipe);
         holder.mRiv.setScale(SCALE_RECIPE_ITEM_VIEW);
-        holder.mRiv.post(new Runnable() {
-            @Override
-            public void run() {
-                Point p = getTranslation(mRecyclerView, holder.mRiv);
-                holder.mRiv.setTranslation(p.x, p.y);
-            }
-        });
+        Point p = getTranslation(mRecyclerView, holder.mRiv);
+        holder.mRiv.setTranslation(p.x, p.y);
         holder.mRiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
