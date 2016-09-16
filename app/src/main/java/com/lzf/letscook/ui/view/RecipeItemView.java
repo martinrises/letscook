@@ -49,7 +49,9 @@ public class RecipeItemView extends RelativeLayout {
     }
 
     public void setTranslation(int dx, int dy) {
-        imgIv.setTranslation(dx, dy);
+        if (imgIv.getTranslationX() != dx || imgIv.getTranslationY() != dy) {
+            imgIv.setTranslation(dx, dy);
+        }
     }
 
     public void setScale(float scale){
