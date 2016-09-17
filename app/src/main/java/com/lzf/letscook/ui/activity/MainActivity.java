@@ -28,7 +28,7 @@ import com.lzf.letscook.util.Utils;
 public class MainActivity extends BaseActivity {
 
     private static final int TEXT_COLOR_GRAY = 0xff808080;
-    private static final int TEXT_COLOR_BLUE = 0xff03A9F4;
+    private static final int TEXT_COLOR_PINK = 0xFFFF4081;
 
     private static final String QUERY_FRAGMENT_TAG = "query_fragment_tag";
     private static final int SHOP_FRAGMENT_INDEX = 2;
@@ -78,8 +78,8 @@ public class MainActivity extends BaseActivity {
                     return;
                 }
 
-                mIndicators[position].setTextColor(Utils.getTransitionColor(TEXT_COLOR_BLUE, TEXT_COLOR_GRAY, positionOffset));
-                mIndicators[position + 1].setTextColor(Utils.getTransitionColor(TEXT_COLOR_GRAY, TEXT_COLOR_BLUE, positionOffset));
+                mIndicators[position].setTextColor(Utils.getTransitionColor(TEXT_COLOR_PINK, TEXT_COLOR_GRAY, positionOffset));
+                mIndicators[position + 1].setTextColor(Utils.getTransitionColor(TEXT_COLOR_GRAY, TEXT_COLOR_PINK, positionOffset));
             }
 
             @Override
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-        mIndicators[0].setTextColor(TEXT_COLOR_BLUE);
+        mIndicators[0].setTextColor(TEXT_COLOR_PINK);
 
         initIndicators();
 
@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity {
 
     private void setIndicatorSelected(int position) {
         for (int i = 0; i != mIndicators.length; i++) {
-            mIndicators[i].setTextColor(position == i ? TEXT_COLOR_BLUE : TEXT_COLOR_GRAY);
+            mIndicators[i].setTextColor(position == i ? TEXT_COLOR_PINK : TEXT_COLOR_GRAY);
         }
     }
 

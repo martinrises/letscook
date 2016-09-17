@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#FFE61A5F</color>
+    <color name="colorPrimaryDark">#FFFF4081</color>
+    <color name="colorAccent">#FFFF4081</color>
 
     <color name="bg_img_recipe">#dedede</color>
 
@@ -14,7 +14,7 @@
     <color name="half_black">#808080</color>
     <color name="text_tip">#808080</color>
     <color name="black_semi_transparent">#B2000000</color>
-    <color name="blue_text_pager_indicator">#ff00a9d5</color>
+    <color name="blue_text_pager_indicator">#FFFF4081</color>
 
     <color name="blue_name_shop_normal">#2196F3</color>
     <color name="blue_name_shop_pressed">#AD1457</color>
