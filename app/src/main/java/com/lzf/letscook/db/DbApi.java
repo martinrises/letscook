@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.lzf.letscook.entity.Recipe;
 import com.lzf.letscook.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -52,16 +53,18 @@ public class DbApi {
         return Observable.create(onSubscribe);
     }
 
-    public static void writeRecipes(final String queryTag, final String order, final int start, final int size, final List<Recipe> recipes) {
+    public static void writeRecipes(final String queryTag, final String order, final int start, final int size, List<Recipe> recipes) {
         if (Utils.isCollectionEmpty(recipes)) {
             return;
         }
 
+        final ArrayList<Recipe> temp = new ArrayList<>();
+        temp.addAll(recipes);
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
-                RecipeDao.getInstance().writeRecipes(queryTag, order, start, size, recipes);
+                RecipeDao.getInstance().writeRecipes(queryTag, order, start, size, temp);
                 return null;
             }
         }.executeOnExecutor(EXECUTOR);
